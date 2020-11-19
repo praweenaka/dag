@@ -1,0 +1,263 @@
+body
+{
+	margin-left: 0;
+	margin-top: 0;
+	margin-right: 0;
+	margin: 0px;
+	padding-top: 0;
+	padding-right: 0px;
+	padding-bottom: 0px;
+	padding-left: 0px;
+	  background-color: #F4F4F4;
+	font-family: Adelon-Regular, Tahoma, Verdana, Arial, Sans-serif, sans;
+	
+	
+   
+}
+ul {
+				list-style: none;
+				padding: 0;
+				margin: 0 auto;
+				height: 363px;
+  				width: 600px;
+			}
+			li {
+				height: 363px;
+				width: 304px;
+				text-align: center;
+				cursor: pointer;
+			}
+				li img {
+					width: 100%;
+				}
+				li.roundabout-in-focus {
+					cursor: default;
+				}
+			li span {
+				display: block;
+				padding-top: 100px;
+			}
+			
+			
+.menu
+{
+	font-family: Century Gothic;
+	font-weight: Regular;
+	font-size: 13pt;
+	color: #7d7d7d;
+	
+}
+
+
+.menu  A:link {text-decoration: none; color: #7d7d7d;}
+.menu  A:visited {text-decoration: none; color: #7d7d7d;}
+
+
+
+.download_links A:link {text-decoration: none; color: #ffffff;}
+.download_links A:visited {text-decoration: none; color: #ffffff}
+.download_links A:hover {text-decoration: none; color: #ffcf0d;}
+
+.Text
+{
+	font-family: Arial;
+	font-weight: normal;
+	font-size: 11pt;
+	color: #000000;
+	letter-spacing: 2px;
+    padding-top: 4px;
+	padding-left: 5px;
+}
+
+.Textinner
+{
+	font-family: Adelon-Regular;
+	font-weight: normal;
+	font-size: 12pt;
+	color: #000000;
+	letter-spacing: 1px; 
+	
+}
+.contacttxt
+{
+	font-family: Adelon-Regular;
+	font-weight: normal;
+	font-size: 13pt;
+	color: #09384b;
+	letter-spacing: 1px; 
+	
+}
+.contacttxt  A:link {text-decoration: none; color: #09384b;}
+.contacttxt  A:visited {text-decoration: none; color: #09384b;}
+.contact
+{
+	font-family: Adelon-Regular;
+	font-weight: normal;
+	font-size: 14pt;
+	color: #cf9f3d;
+	letter-spacing: 1px; 
+	
+}
+
+
+.download_links
+{
+	font-family: Century Gothic;
+	font-weight: lighter;
+	font-size: 14pt;
+	color: #ffffff;
+}
+
+.download_title
+{
+	font-family: Arial;
+	font-weight: bold;
+	font-size: 13pt;
+	color: #ffcf0d;
+	letter-spacing: 2px;
+	font-style: normal;
+	padding-top: 4px;
+	padding-left: 5px;
+}
+
+.download_docu_title
+{
+	font-family: Arial;
+	font-weight: bold;
+	font-size: 11pt;
+	color: #000000;
+	letter-spacing: 1px;
+	font-style: normal;
+	padding-top: 4px;
+	padding-left: 5px;
+}
+
+.fingerprint
+{
+	font-family: Arial;
+	font-weight: bold;
+	font-size: 11pt;
+	color: #4083da;
+	letter-spacing: 1px;
+	font-style: normal;
+	padding-top: 4px;
+	padding-left: 5px;
+}
+
+.products_title
+{
+	font-family: Century Gothic;
+	font-weight: lighter;
+	font-size: 14pt;
+	color: #ffcf0d;
+
+}
+
+.products_text
+{
+	font-family: Arial;
+	font-weight: normal;
+	font-size: 11pt;
+	color: #000000;
+
+}
+.lowerlinks
+{
+	font-family: Adelon-Regular;
+	font-weight: normal;
+	font-size: 12pt;
+	color: #a3e3fe;
+	letter-spacing: 1px;
+}
+
+
+
+.copyright
+{
+	font-family: Arial;
+	font-weight: lighter;
+	font-size: 9pt;
+	color: #4083db;
+	letter-spacing: 1px;
+}
+
+.copyright  A:link {text-decoration: none; color: #babdbe;}
+.copyright  A:visited {text-decoration: none; color: #babdbe;}
+
+.dashedLine
+{
+	font-family: Arial;
+	font-weight: normal;
+	font-size: 14pt;
+	color: #FFF;
+	letter-spacing: normal;
+}
+
+.download_href
+{
+	font-family: Arial;
+	font-weight: normal;
+	font-size: 11pt;
+	color: #000000;
+	letter-spacing: normal;
+	padding-top: 4px;
+	padding-left: 5px;
+}
+.download_href A:link {text-decoration: none; color: #000000;}
+.download_href A:visited {text-decoration: none; color:#000000;}
+.download_href A:active {text-decoration: none; color: #000000;}
+.download_href A:hover {text-decoration: none; color: #4083da;}
+
+
+
+ .chk
+{
+    position:relative;left:-4px; top:-4px;
+}
+
+
+
+/* Generic Utility */
+.hide { position: absolute; top: -9999px; left: -9999px; }
+
+
+/* Specific to example one */
+
+#example-one { background: #eee; padding: 10px; margin: 0 0 20px 0; -moz-box-shadow: 0 0 5px #666; -webkit-box-shadow: 0 0 5px #666; }
+
+#example-one .nav { overflow: hidden; margin: 0 0 10px 0; }
+#example-one .nav li { width: 97px; float: left; margin: 0 10px 0 0; }
+#example-one .nav li.last { margin-right: 0; }
+#example-one .nav li a { display: block; padding: 5px; background: #959290; color: white; font-size: 10px; text-align: center; border: 0; }
+#example-one .nav li a:hover { background-color: #111; }
+
+#example-one ul { list-style: none; }
+#example-one ul li a { display: block; border-bottom: 1px solid #666; padding: 4px; color: #666; }
+#example-one ul li a:hover { background: #fe4902; color: white; }
+#example-one ul li:last-child a { border: none; }
+
+#example-one ul li.nav-one a.current, #example-one ul.featured li a:hover { background-color: #0575f4; color: white; }
+#example-one ul li.nav-two a.current, #example-one ul.core li a:hover { background-color: #d30000; color: white; }
+#example-one ul li.nav-three a.current, #example-one ul.jquerytuts li a:hover { background-color: #8d01b0; color: white; }
+#example-one ul li.nav-four a.current, #example-one ul.classics li a:hover { background-color: #FE4902; color: white; }
+
+#example-one ul li.nav-five a.current, #example-one ul.classics li a:hover { background-color: #FE4902; color: white; }
+
+/* Specific to example two */
+
+#example-two .list-wrap { background: #eee; padding: 10px; margin: 0 0 15px 0; }
+
+#example-two ul { list-style: none; }
+#example-two ul li a { display: block; border-bottom: 1px solid #666; padding: 4px; color: #666; }
+#example-two ul li a:hover { background: #333; color: white; }
+#example-two ul li:last-child a { border: none; }
+
+#example-two .nav { overflow: hidden; }
+#example-two .nav li { width: 97px; float: left; margin: 0 10px 0 0; }
+#example-two .nav li.last { margin-right: 0; }
+#example-two .nav li a { display: block; padding: 5px; background: #666; color: white; font-size: 10px; text-align: center; border: 0; }
+
+#example-two li a.current,#example-two li a.current:hover { background-color: #eee !important; color: black; }
+#example-two .nav li a:hover, #example-two .nav li a:focus { background: #999;}
+
+html { overflow-y: scroll; }
