@@ -52,6 +52,9 @@ if (isset($_GET['url'])) {
     if ($_GET['url'] == "tyremanufacture") {
         include_once './tyremanufacture.php';
     }
+    if ($_GET['url'] == "invoice") {
+        include_once './invoice.php';
+    }
 
 
 //////////////////////////////////
