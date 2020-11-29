@@ -157,7 +157,7 @@ function save()
 
     if (xmlHttp.readyState == 4 || xmlHttp.readyState == "complete")
     {
-        
+
 
         if (xmlHttp.responseText == "Saved") {
          document.getElementById('msg_box').innerHTML = "<div class='alert alert-success' role='alert'><span class='center-block'>Saved</span></div>";
@@ -192,7 +192,7 @@ function del_item(id)
     xmlHttp.setRequestHeader("Content-length", params.length);
     xmlHttp.setRequestHeader("Connection", "close");
 
-    xmlHttp.onreadystatechange = save;
+    xmlHttp.onreadystatechange = del;
 
     xmlHttp.send(params);
 
@@ -200,6 +200,21 @@ function del_item(id)
 
 }
 
+
+function del() {
+    var XMLAddress1;
+
+    if (xmlHttp.readyState == 4 || xmlHttp.readyState == "complete") {
+
+        XMLAddress1 = xmlHttp.responseXML.getElementsByTagName("sales_table");
+        document.getElementById('itemdetails').innerHTML = XMLAddress1[0].childNodes[0].nodeValue;
+        
+        document.getElementById('serialno').value = "";
+        document.getElementById('make').value = ""; 
+
+        
+    }
+}
 
 function custno(code)
 {

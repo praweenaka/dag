@@ -41,20 +41,22 @@ if ($_POST["Command"] == "add_tmp") {
     $ResponseXML .= "<salesdetails>";
     
     if ($_POST['Command1'] == "add") {
-
+        $i="";
         // $sql3 = "delete from t_jobcard_tmp   where jobno='".$_POST['code']."' and tmp_no='".$_POST['uniq']."'  ";
         // $result3 = $conn->query($sql3);
-        $i=1;
-        $sql2 = "insert into t_jobcard_tmp(jobno,cardno,datein,cuscode,cusname,datefini,address1,treadpattern,serialno,make,tsize,j_type,STEP,tmp_no) values ('" . $_POST['code'] . "', '" . $_POST['jobref'] .'/'.$i . "', '" . $_POST['sdate'] . "', '" . $_POST['cus_code'] . "', '" . $_POST['cus_name'] . "', '" . $_POST['fsdate'] . "', '" . $_POST['address'] . "', '" . $_POST['pattern'] . "', '" . $_POST['serialno'] . "', '" . $_POST['make'] . "', '" . $_POST['size'] . "', '" . $_POST['type'] . "','0', '" . $_POST['uniq'] . "')"; 
+        
+
+        
+        $sql2 = "insert into t_jobcard_tmp(jobno,cardno,datein,cuscode,cusname,datefini,address1,treadpattern,serialno,make,tsize,j_type,STEP,tmp_no) values ('" . $_POST['code'] . "', '" . $_POST['jobref']  . "', '" . $_POST['sdate'] . "', '" . $_POST['cus_code'] . "', '" . $_POST['cus_name'] . "', '" . $_POST['fsdate'] . "', '" . $_POST['address'] . "', '" . $_POST['pattern'] . "', '" . $_POST['serialno'] . "', '" . $_POST['make'] . "', '" . $_POST['size'] . "', '" . $_POST['type'] . "','0', '" . $_POST['uniq'] . "')"; 
         $result2 = $conn->query($sql2);
 
-        $conn->commit();
+
         // echo "Saved";
-        $i=$i+1;
+
     }
     if ($_POST['Command1'] == "del") {
 
-        $sql = "delete from t_jobcard_tmp   where id='".$_POST['id']."'"; 
+        $sql = "delete from t_jobcard_tmp   where id='".$_POST['id']."'";  
         $result = $conn->query($sql);
     }
 
@@ -97,6 +99,7 @@ if ($_POST["Command"] == "add_tmp") {
     $ResponseXML .= "</salesdetails>";
 
     echo $ResponseXML;
+    $conn->commit();
 } catch (Exception $e) {
     $conn->rollBack();
     echo $e;
@@ -116,11 +119,12 @@ if ($_POST["Command"] == "save_item") {
         if ($row = $result->fetch()) {
             exit("Already Saved Job No...!!!");
         }
-
+        $i=1;
         $sqltmp= "select * from t_jobcard_tmp where jobno='".$_POST['code']."' and tmp_no='".$_POST['uniq']."'";
         foreach ($conn->query($sqltmp) as $rowtmp) {
-            $sql2 = "insert into t_jobcard(jobno,cardno,datein,cuscode,cusname,datefini,address1,treadpattern,serialno,make,tsize,j_type,STEP) values ('" . $_POST['code'] . "', '" . $rowtmp['cardno'] . "', '" . $rowtmp['datefini'] . "', '" . $rowtmp['cuscode'] . "', '" . $rowtmp['cusname'] . "', '" . $rowtmp['datefini'] . "', '" . $rowtmp['address1'] . "', '" . $rowtmp['treadpattern'] . "', '" . $rowtmp['serialno'] . "', '" . $rowtmp['make'] . "', '" . $rowtmp['tsize'] . "', '" . $rowtmp['j_type'] . "','" . $rowtmp['STEP'] . "')"; 
+            $sql2 = "insert into t_jobcard(jobno,cardno,datein,cuscode,cusname,datefini,address1,treadpattern,serialno,make,tsize,j_type,STEP) values ('" . $_POST['code'] . "', '" . $rowtmp['cardno'].'/'.$i . "', '" . $rowtmp['datefini'] . "', '" . $rowtmp['cuscode'] . "', '" . $rowtmp['cusname'] . "', '" . $rowtmp['datefini'] . "', '" . $rowtmp['address1'] . "', '" . $rowtmp['treadpattern'] . "', '" . $rowtmp['serialno'] . "', '" . $rowtmp['make'] . "', '" . $rowtmp['tsize'] . "', '" . $rowtmp['j_type'] . "','" . $rowtmp['STEP'] . "')"; 
             $result2 = $conn->query($sql2); 
+            $i= $i+1;
         }
 
         $sql = "delete from t_jobcard_tmp   where jobno='".$_POST['code']."' and tmp_no='".$_POST['uniq']."'";
@@ -183,25 +187,25 @@ if ($_GET["Command"] == "pass_quot") {
     $sql1 = "Select * from t_jobcard where jobno ='" . $cuscode . "'"; 
     foreach ($conn->query($sql1) as $row) {
 
-       $ResponseXML .= "<tr>
-       <td style=\"width:200px;\">" . $row['jobno'] . "</td>
-       <td style=\"width:200px;\">" . $row['cardno'] . "</td> 
-       <td style=\"width:200px;\">" . $row['cusname'] . "</td> 
-       <td style=\"width:200px;\">" . $row['datefini'] . "</td> 
-       <td style=\"width:200px;\">" . $row['make'] . "</td> 
-       <td style=\"width:200px;\">" . $row['tsize'] . "</td> 
-       <td style=\"width:200px;\">" . $row['serialno'] . "</td> 
-       <td style=\"width:200px;\">" . $row['treadpattern'] . "</td> 
-       <td style=\"width:200px;\">" . $row['j_type'] . "</td>  
-       <td><button   onClick=\"del_item('" . $row['id'] . "')\" type=\"button\" class=\"btn btn-danger btnDelete btn-sm\">Remove</button>
-       </td>
-       </tr>";  
-   }
+     $ResponseXML .= "<tr>
+     <td style=\"width:200px;\">" . $row['jobno'] . "</td>
+     <td style=\"width:200px;\">" . $row['cardno'] . "</td> 
+     <td style=\"width:200px;\">" . $row['cusname'] . "</td> 
+     <td style=\"width:200px;\">" . $row['datefini'] . "</td> 
+     <td style=\"width:200px;\">" . $row['make'] . "</td> 
+     <td style=\"width:200px;\">" . $row['tsize'] . "</td> 
+     <td style=\"width:200px;\">" . $row['serialno'] . "</td> 
+     <td style=\"width:200px;\">" . $row['treadpattern'] . "</td> 
+     <td style=\"width:200px;\">" . $row['j_type'] . "</td>  
+     <td><button   onClick=\"del_item('" . $row['id'] . "')\" type=\"button\" class=\"btn btn-danger btnDelete btn-sm\">Remove</button>
+     </td>
+     </tr>";  
+ }
 
-   $ResponseXML .= "   </table>]]></sales_table>"; 
+ $ResponseXML .= "   </table>]]></sales_table>"; 
 
-   $ResponseXML .= "</salesdetails>";
-   echo $ResponseXML;
+ $ResponseXML .= "</salesdetails>";
+ echo $ResponseXML;
 }
 
 ?>
