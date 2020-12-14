@@ -23,16 +23,14 @@ include_once './connection_sql.php';
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.1.3/css/bootstrap.css">
     <link rel="stylesheet" href="https://cdn.datatables.net/1.10.19/css/dataTables.bootstrap4.min.css">
 
-
-
-    <!-- <script language="JavaScript" src="js/search_joborder.js"></script> -->
+ 
 
     <script language="JavaScript" src="https://code.jquery.com/jquery-3.3.1.js"></script>
     <script language="JavaScript" src="https://cdn.datatables.net/1.10.19/js/jquery.dataTables.min.js"></script>
     <script language="JavaScript" src="https://cdn.datatables.net/1.10.19/js/dataTables.bootstrap4.min.js"></script>
 
 
-    <script language="JavaScript" src="js/jobcart.js"></script> 
+    <script language="JavaScript" src="js/customer.js"></script> 
 
 
 
@@ -54,26 +52,23 @@ include_once './connection_sql.php';
         <table id="testTable"  class="table table-bordered">
             <?php
 
-            $sql2 = "SELECT * from t_jobcard where STEP='0' group by  jobno ";
+            $sql2 = "SELECT * from vendor where cancel='0' ";
 
             echo "<table id='example'  class='table table-bordered' style='font-size: 14px;'>";
 
             echo "<thead><tr>";
-            echo "<th>JOb NO</th>";
-            echo "<th>CARD NO</th>";
-            echo "<th>Customer Name</th>"; 
-            echo "<th>Date Finished</th>";
-
+            echo "<th>CUS CODE</th>";
+            echo "<th>CUS NAME</th>";
+            echo "<th>ADDRESS</th>"; 
 
             echo "</tr></thead><tbody>";
 
             foreach ($conn->query($sql2) as $row) { 
-                $cuscode = $row['jobno']; 
+                $cuscode = $row['CODE']; 
                 echo "<tr>               
-                <td onclick=\"custno('$cuscode', '$stname');\">" . $row['jobno'] . "</a></td>
-                <td onclick=\"custno('$cuscode', '$stname');\">" . $row['cardno'] . "</a></td>
-                <td onclick=\"custno('$cuscode', '$stname');\">" . $row['cusname'] . "</a></td>
-                <td onclick=\"custno('$cuscode', '$stname');\">" . $row['datefini'] . "</a></td> 
+                <td onclick=\"custno('$cuscode', '$stname');\">" . $row['CODE'] . "</a></td>
+                <td onclick=\"custno('$cuscode', '$stname');\">" . $row['NAME'] . "</a></td>
+                <td onclick=\"custno('$cuscode', '$stname');\">" . $row['ADD1'] . "</a></td>  
                 </tr>";
             }
             ?>

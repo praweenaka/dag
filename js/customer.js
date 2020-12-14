@@ -27,7 +27,17 @@ function new_inv() {
         return;
     }
 
-    var url = "treadpattern_data.php";
+    document.getElementById('code').value = "";
+    document.getElementById('title').value = "";
+    document.getElementById('name').value = "";
+    document.getElementById('shopname').value = "";
+    document.getElementById('nic').value = "";
+    document.getElementById('land').value = "";
+    document.getElementById('mobile').value = "";
+    document.getElementById('address').value = ""; 
+    document.getElementById('msg_box').innerHTML = "";
+    
+    var url = "customer_data.php";
     var params = "Command=" + "getdt";
     params = params + "&ls=" + "new";
     // params = params + "&uniq=" + document.getElementById('uniq').value; 
@@ -50,15 +60,15 @@ function assign_dt() {
         XMLAddress1 = xmlHttp.responseXML.getElementsByTagName("id");
         var idno = XMLAddress1[0].childNodes[0].nodeValue;
         if (idno.length === 1) {
-            idno = "T/0000" + idno;
+            idno = "C/0000" + idno;
         } else if (idno.length === 2) {
-            idno = "T/000" + idno;
+            idno = "C/000" + idno;
         } else if (idno.length === 3) {
-            idno = "T/00" + idno;
+            idno = "C/00" + idno;
         } else if (idno.length === 4) {
-            idno = "T/0" + idno;
+            idno = "C/0" + idno;
         } else if (idno.length === 5) {
-            idno = "T/" + idno;
+            idno = "C/" + idno;
         }
 
         document.getElementById("code").value = idno;
@@ -81,11 +91,16 @@ function save_inv()
         return;
     }
 
-    var url = 'treadpattern_data.php';
+    var url = 'customer_data.php';
     var params = 'Command=' + 'save_inv';
     params = params + '&code=' + document.getElementById('code').value;
-    params = params + '&pattern=' + document.getElementById('pattern').value;
-    params = params + '&uniq=' + document.getElementById('uniq').value; 
+    params = params + '&title=' + document.getElementById('title').value;
+    params = params + '&name=' + document.getElementById('name').value;
+    params = params + '&shopname=' + document.getElementById('shopname').value; 
+    params = params + '&nic=' + document.getElementById('nic').value; 
+    params = params + '&land=' + document.getElementById('land').value; 
+    params = params + '&mobile=' + document.getElementById('mobile').value; 
+    params = params + '&address=' + document.getElementById('address').value;  
     xmlHttp.open("POST", url, true);
     xmlHttp.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
     xmlHttp.setRequestHeader("Content-length", params.length);
@@ -106,12 +121,12 @@ function save()
     if (xmlHttp.readyState == 4 || xmlHttp.readyState == "complete")
     {
         if (xmlHttp.responseText == "Saved") {
-           document.getElementById('msg_box').innerHTML = "<div class='alert alert-success' role='alert'><span class='center-block'>Saved</span></div>";
-           setTimeout("location.reload(true);", 500);
-       } else {
-         document.getElementById('msg_box').innerHTML = "<div class='alert alert-warning' role='alert'><span class='center-block'>" + xmlHttp.responseText + "</span></div>";
+         document.getElementById('msg_box').innerHTML = "<div class='alert alert-success' role='alert'><span class='center-block'>Saved</span></div>";
+         setTimeout("location.reload(true);", 500);
+     } else {
+       document.getElementById('msg_box').innerHTML = "<div class='alert alert-warning' role='alert'><span class='center-block'>" + xmlHttp.responseText + "</span></div>";
 
-     }
+   }
 
- }
+}
 }

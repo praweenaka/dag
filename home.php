@@ -1,3 +1,4 @@
+
 <?php
 include './CheckCookie.php';
 require_once ('connection_sql.php');
@@ -28,32 +29,29 @@ if (isset($_GET['url'])) {
     if ($_GET['url'] == "change_pass") {
         include_once './change_pass.php';
     }
-    if ($_GET['url'] == "addfiles") {
-        include_once './addfiles.php';
+    if ($_GET['url'] == "jobcart") {
+        include_once './jobcart.php';
     }
-    if ($_GET['url'] == "fileview") {
-        include_once './fileview.php';
-    }
-    if ($_GET['url'] == "accountants") {
-        include_once './accountants.php';
-    } 
-
-    
-    
     if ($_GET['url'] == "treadpattern") {
         include_once './treadpattern.php';
     }
     if ($_GET['url'] == "sizemaster") {
         include_once './sizemaster.php';
     }
-    if ($_GET['url'] == "jobcart") {
-        include_once './jobcart.php';
-    }
-    if ($_GET['url'] == "tyremanufacture") {
-        include_once './tyremanufacture.php';
-    }
     if ($_GET['url'] == "invoice") {
         include_once './invoice.php';
+    }
+    if ($_GET['url'] == "dag") {
+        include_once './dag.php';
+    }
+    if ($_GET['url'] == "customer") {
+        include_once './customer.php';
+    }
+    if ($_GET['url'] == "onhandlist") {
+        include_once './onhandlist.php';
+    }
+    if ($_GET['url'] == "pro_list") {
+        include_once './pro_list.php';
     }
 
 
@@ -86,7 +84,7 @@ include_once './footer.php';
 <?php
 include './autocomple_gl.php';
 ?>
-<script src="js/comman.js"></script>
+
 
 <script src="plugins/bootstrap-datepicker/js/bootstrap-datepicker.min.js"></script>
 <!-- <script src="js/comman.js"></script> -->
@@ -97,7 +95,7 @@ include './autocomple_gl.php';
 <script>
 
 // $(function() {
-// 	FastClick.attach(document.body);
+//  FastClick.attach(document.body);
 // });
 $(function () {
     $(document).ready(function () {

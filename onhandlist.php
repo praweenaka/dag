@@ -4,7 +4,7 @@
 
     <div class="box box-primary">
         <div class="box-header with-border">
-            <h3 class="box-title">JOB CART LIST</h3>
+            <h3 class="box-title">ONHAND LIST</h3>
         </div>
         <form role="form" class="form-horizontal">
             <div class="box-body">
@@ -24,14 +24,14 @@
 
                        <tr>
                         <th>#</th>
-                        <th>CARD NO</th>
-                        <th>JOB NO</th>  
+                        <th>DATE</th>   
                         <th>CUSTOMER</th>
-                        <th>MAKE</th>
-                        <th>SIZE</th> 
+                        <th>JOB NO</th>
+                        <th>MAKE</th> 
+                        <th>SIZE</th>  
                         <th>SERIAL NO</th>  
-                        <th>TYPE</th>  
-                        <th>PEN</th>  
+                        <th>REMARK</th>  
+                        <th></th>  
                     </tr>
                 </thead>
 
@@ -41,32 +41,26 @@
                     $i=1;
                     include './connection_sql.php';
 
-                    $sql = "select * from t_jobcard WHERE STEP='0'  ";
+                    $sql = "select * from dag_item WHERE flag='0' and cancel='0' ";
 
 
                     foreach ($conn->query($sql) as $row) {
 
 
-
-
                         ?>
                         <tr>
                             <td><?php echo $i; ?></td>
-                            <td><?php echo $row['cardno']; ?></td>
-                            <td><?php echo $row['jobno']; ?></td>   
+                            <td><?php echo $row['sdate']; ?></td>   
                             <td><?php echo $row['cuscode'].'-'.$row['cusname']; ?></td>   
-                            <td><?php echo $row['make']; ?></td> 
-                            <td><?php echo $row['tsize']; ?></td>   
+                            <td><?php echo $row['refno']; ?></td> 
+                            <td><?php echo $row['marker']; ?></td>   
+                            <td><?php echo $row['size']; ?></td>   
                             <td><?php echo $row['serialno']; ?></td>   
-                            <td><?php echo $row['j_type']; ?></td>  
-                            <td><select id='pen' onblur="uptype(<?php echo $row['id']; ?>);"  class ="form-control input-sm" >
-                                <option value="YES">YES</option>";
-                                <option value="NO">NO</option>";
-
-                            </select>
+                            <td><?php echo $row['remark']; ?></td>  
+                            <td> <a onclick="sendproduction('<?php echo $row['refno']; ?>');" class="btn btn-primary">
+                                <span class="fa fa-mail-forward"></span> &nbsp; SEND TO PRODUCTION
+                            </a> 
                         </td>   
-                        <td><?php echo $row['PEN']; ?></td>    
-
 
 
                     </tr>
@@ -95,7 +89,7 @@
         alert("Browser does not support HTTP Request");
         return;
     }
-    var url = "credit_note_app_data.php";                                 
+    var url = "onhandlist_data.php";                                 
     var params ="Command="+"search";    
     params = params + "&search=" + document.getElementById('search').value;
 
@@ -129,20 +123,19 @@ function re_search()
 
 
 
-function uptype(cdate) {
-
+function sendproduction(cdate) {
+ 
     xmlHttp = GetXmlHttpObject();
     if (xmlHttp == null) {
         alert("Browser does not support HTTP Request");
         return;
     }
-    alert('s');
+    
     var msg = confirm("Do you want to Continue this ! ");
     if (msg == true) {
-        var url = "tyremanufacture_data.php";
-        var params ="Command="+"uptype";    
-        params = params + "&id=" + cdate;
-        params = params + "&pen=" + document.getElementById('pen').value;
+        var url = "onhandlist_data.php";
+        var params ="Command="+"sendproduction";    
+        params = params + "&refno=" + cdate; 
 
         xmlHttp.open("POST", url, true);
 
@@ -168,46 +161,5 @@ function item_del() {
     }
 }
 
-
-
-function uptype1() {
-    // var msg = confirm("Do you want to Insert This ! ");
-    // if (msg == true) {
-        xmlHttp = GetXmlHttpObject();
-        if (xmlHttp == null) {
-            alert("Browser does not support HTTP Request");
-            return;
-        }
-        // document.getElementById('msg_box').innerHTML = "";
-
-        var url = "tyremanufacture_data.php";
-        var params = "Command=" + "uptype1";
-
-        var count = document.getElementById('item_count').value;
-        params = params + "&count=" + count;
-        var i = 1;
-        while (count > i) {
-
-            var id = "id" + i;
-            var pen = "pen" + i; 
-
-
-            params = params + '&' + id + '=' + document.getElementById(id).value;
-            params = params + '&' + pen + '=' + document.getElementById(pen).value; 
-
-            i = i + 1;
-        }
-
-        xmlHttp.open("POST", url, true);
-
-        xmlHttp.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
-        xmlHttp.setRequestHeader("Content-length", params.length);
-        xmlHttp.setRequestHeader("Connection", "close");
-
-        // xmlHttp.onreadystatechange = salessaveresult;
-
-        xmlHttp.send(params);
-    }
-// }
 
 </script>
