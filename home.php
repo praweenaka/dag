@@ -53,6 +53,12 @@ if (isset($_GET['url'])) {
     if ($_GET['url'] == "pro_list") {
         include_once './pro_list.php';
     }
+    if ($_GET['url'] == "comp_list") {
+        include_once './comp_list.php';
+    }
+    if ($_GET['url'] == "reject_list") {
+        include_once './reject_list.php';
+    }
 
 
 //////////////////////////////////

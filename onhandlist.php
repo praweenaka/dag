@@ -57,7 +57,7 @@
                             <td><?php echo $row['size']; ?></td>   
                             <td><?php echo $row['serialno']; ?></td>   
                             <td><?php echo $row['remark']; ?></td>  
-                            <td> <a onclick="sendproduction('<?php echo $row['refno']; ?>');" class="btn btn-primary">
+                            <td> <a onclick="sendproduction('<?php echo $row['id']; ?>');" class="btn btn-primary">
                                 <span class="fa fa-mail-forward"></span> &nbsp; SEND TO PRODUCTION
                             </a> 
                         </td>   
@@ -135,7 +135,7 @@ function sendproduction(cdate) {
     if (msg == true) {
         var url = "onhandlist_data.php";
         var params ="Command="+"sendproduction";    
-        params = params + "&refno=" + cdate; 
+        params = params + "&id=" + cdate; 
 
         xmlHttp.open("POST", url, true);
 

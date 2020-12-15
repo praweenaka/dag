@@ -13,7 +13,7 @@ if ($_POST["Command"] == "sendproduction") {
         $conn->beginTransaction();
         
 
-        $sql = "UPDATE dag_item set flag='1'  where refno='" . $_POST['refno'] . "'";
+        $sql = "UPDATE dag_item set flag='1',onhand_date='" . date("Y-m-d") . "'  where id='" . $_POST['id'] . "'";
         $result = $conn->query($sql); 
 
         $conn->commit();

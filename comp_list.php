@@ -4,7 +4,7 @@
 
     <div class="box box-primary">
         <div class="box-header with-border">
-            <h3 class="box-title">PRODUCTION LIST</h3>
+            <h3 class="box-title">COMPLETE LIST</h3>
         </div>
         <form role="form" class="form-horizontal">
             <div class="box-body">
@@ -31,6 +31,11 @@
                         <th>SIZE</th>  
                         <th>SERIAL NO</th>  
                         <th>REMARK</th>  
+                        <th>AMOUNT</th>  
+                        <th>REPAIR</th>  
+                        <th>TOTAL</th>  
+                        <th>SEND DATE</th> 
+                        <th>FINISH</th>   
                         <th></th>  
                     </tr>
                 </thead>
@@ -57,9 +62,14 @@
                             <td><?php echo $row['size']; ?></td>   
                             <td><?php echo $row['serialno']; ?></td>   
                             <td><?php echo $row['remark']; ?></td>  
+                            <td><?php echo $row['amount']; ?></td>  
+                            <td><?php echo $row['repair']; ?></td>  
+                            <td><?php echo $row['total']; ?></td>  
+                            <td><?php echo $row['onhand_date']; ?></td>  
+                            <td><?php echo $row['pro_date']; ?></td>  
                             <td colspan='1' style= 'text-align: center;'>
                                 <a href="#detail<?php echo $row['id']; ?>" data-toggle="modal" class="btn btn-primary btn-sm" style= 'text-align: center;color:white;'><span class="glyphicon glyphicon-fullscreen"></span> View</a>
-                                <?php include ('pro_list_view.php'); ?>
+                                <?php include ('com_list_view.php'); ?>
                             </td>
                         </td>   
 
@@ -80,7 +90,7 @@
 
 </section>
 
-<script src="js/pro_list.js"></script>
+<script src="js/comp_list.js"></script>
 <script>
 
    function search1() {

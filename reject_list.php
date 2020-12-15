@@ -58,7 +58,7 @@
                             <td><?php echo $row['serialno']; ?></td>   
                             <td><?php echo $row['remark']; ?></td>  
                             <td colspan='1' style= 'text-align: center;'>
-                                <a href="#detail<?php echo $row['id']; ?>" data-toggle="modal" class="btn btn-primary btn-sm" style= 'text-align: center;color:white;'><span class="glyphicon glyphicon-fullscreen"></span> View</a>
+                                <a href="#detail<?php echo $row['id']; ?>" data-toggle="modal" class="btn btn-primary btn-sm" style= 'text-align: center;color:white;'><span class="glyphicon glyphicon-fullscreen"></span> View History</a>
                                 <?php include ('pro_list_view.php'); ?>
                             </td>
                         </td>   
