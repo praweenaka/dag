@@ -13,7 +13,7 @@ $row1 = $result1->fetch();
         <div class="modal-content">
             <div class="modal-header">
                 <div class="col-sm-5">
-                 <center><h4 class="modal-title" id="myModalLabel">PRODUCTION</h4></center>
+                 <center><h4 class="modal-title" id="myModalLabel">COMPLETE</h4></center>
              </div>
 
              <div class="col-sm-3">
@@ -69,9 +69,7 @@ $row1 = $result1->fetch();
             <li class="nav-item">
                 <a class="nav-link" id="profile-tab" data-toggle="tab" href="#profile" role="tab" aria-controls="profile" aria-selected="false">JOB WORKERS</a>
             </li>
-            <li class="nav-item">
-                <a class="nav-link" id="contact-tab" data-toggle="tab" href="#contact" role="tab" aria-controls="contact" aria-selected="false">FINISH</a>
-            </li>
+            
         </ul>
     </div>
     <div class="tab-content" id="myTabContent">
@@ -87,22 +85,7 @@ $row1 = $result1->fetch();
                             <th>TOTAL</th> 
                             <th>#</th> 
                         </tr>
-                        <tr>
-                            <td> <select name="spareitem" id="spareitem"    class="text_purchase3 col-sm-9 form-control" > 
-                                <?php
-                                require_once("./connection_sql.php");
-
-                                $sql = "Select * from size order by code";
-                                foreach ($conn->query($sql) as $row) {
-                                    echo "<option value=\"" . $row["name"] . "\">" . $row["name"] . "</option>";
-                                }
-                                ?>
-                            </select></td>
-                            <td><input type="number" onblur="totqty();" placeholder="PRICE" id="price"   class="form-control"></td>
-                            <td><input type="number" onblur="totqty();" placeholder="QTY" id="qty"   class="form-control"></td>
-                            <td><input type="number" placeholder="TOTAL" id="total"    class="form-control"></td>
-                            <td><a onclick="add_spare('<?php echo  $row1['refno']; ?>','<?php echo  $row1['serialno']; ?>');" class="btn btn-default btn-sm"> <span class="fa fa-plus"></span> &nbsp; </a></td>
-                        </tr>
+                       
                     </thead>
                     <tbody>
                         <?php
@@ -110,7 +93,7 @@ $row1 = $result1->fetch();
 
 
                         $total = 0;
-                        $pd = "select * from produ_spareitem where refno='" . $row['refno'] . "' and  serialno='".$row['serialno']."'";
+                        $pd = "select * from produ_spareitem where refno='" . $row1['refno'] . "' and  serialno='".$row1['serialno']."'";
                         foreach ($conn->query($pd) as $pdrow) {
                             ?>
                             <tr> 
@@ -151,20 +134,7 @@ $row1 = $result1->fetch();
                         <th>HOURS</th> 
                         <th>#</th> 
                     </tr>
-                    <tr>
-                        <td> <select name="workers" id="workers"    class="text_purchase3 col-sm-9 form-control" > 
-                            <?php
-                            require_once("./connection_sql.php");
-
-                            $sql = "Select * from workers order by code";
-                            foreach ($conn->query($sql) as $row) {
-                                echo "<option value=\"" . $row["name"] . "\">" . $row["name"] . "</option>";
-                            }
-                            ?>
-                        </select></td> 
-                        <td><input type="number" placeholder="HOURS" id="hours"   class="form-control"></td>
-                        <td><a onclick="add_workers('g/56','test');" class="btn btn-default btn-sm"> <span class="fa fa-plus"></span> &nbsp; </a></td>
-                    </tr>
+                    
                 </thead>
                 <tbody>
                     <?php
@@ -172,7 +142,7 @@ $row1 = $result1->fetch();
 
 
                     $total = 0;
-                    $pd = "select * from produ_workers where refno='" . $row['refno'] . "' and  serialno='".$row['serialno']."'";
+                    $pd = "select * from produ_workers where refno='" . $row1['refno'] . "' and  serialno='".$row1['serialno']."'"; 
                     foreach ($conn->query($pd) as $pdrow) {
                         ?>
                         <tr>  
@@ -199,46 +169,6 @@ $row1 = $result1->fetch();
     </div> 
 </div>
 
-<!-- =================================================================================== -->
-<div class="tab-pane fade" id="contact" role="tabpanel" aria-labelledby="contact-tab">
-    <div class="row">
-        <div class="form-group">
-
-            <label class="col-sm-2 control-label" for="txt_usernm">WARRANTY</label>
-            <div class="col-sm-3">
-                <select name="warranty" id="warranty"    class="text_purchase3 col-sm-9 form-control" > 
-                    <option value="YES">YES</option>
-                    <option value="NO">NO</option>
-                </select> 
-            </div> 
-
-
-        </div> 
-        <div class="form-group">
-
-            <label class="col-sm-2 control-label" for="txt_usernm">DAG DESIGN</label>
-            <div class="col-sm-3">
-             <select name="design" id="design"    class="text_purchase3 col-sm-9 form-control" > 
-                <?php
-                require_once("./connection_sql.php");
-
-                $sql = "Select * from workers order by code";
-                foreach ($conn->query($sql) as $row) {
-                    echo "<option value=\"" . $row["name"] . "\">" . $row["name"] . "</option>";
-                }
-                ?>
-            </select>
-        </div> 
-
-        <div class="col-sm-1">
-          <a onclick="sendfinish();" class="btn btn-primary">
-            <span class="fa fa-save"></span> &nbsp; SEND TO FINISH
-        </a> 
-    </div> 
-</div> 
-
-</div>
-</div>
 </div>
 
 
@@ -249,48 +179,3 @@ $row1 = $result1->fetch();
 </div>
 </div>
 </div>
-
-<script type="text/javascript">
-    
-//     function add_spare(refno,serialno) {
-// alert("fsdyuiui");
-//     xmlHttp = GetXmlHttpObject();
-//     if (xmlHttp == null) {
-//         alert("Browser does not support HTTP Request");
-//         return;
-//     }
-//     var url = "pro_list_data.php";                                 
-//     var params ="Command="+"add_spare";    
-//     params = params + "&refno=" + refno;
-//     params = params + "&serialno=" + serialno;
-//     params = params + "&spareitem=" + document.getElementById('spareitem').value;
-//     params = params + "&price=" + document.getElementById('price').value;
-//     params = params + "&qty=" + document.getElementById('qty').value;
-//     params = params + "&total=" + document.getElementById('total').value; 
-
-
-//     xmlHttp.open("POST", url, true);
-
-//     xmlHttp.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
-//     xmlHttp.setRequestHeader("Content-length", params.length);
-//     xmlHttp.setRequestHeader("Connection", "close");
-
-//     xmlHttp.onreadystatechange=re_search;
-
-//     xmlHttp.send(params);  
-
-// }
-
-// function re_search()
-// {
-//     var XMLAddress1;
-
-//     if (xmlHttp.readyState == 4 || xmlHttp.readyState == "complete")
-//     {
-
-//        XMLAddress1 = xmlHttp.responseXML.getElementsByTagName("sales_table");
-//        opener.document.form1.itemdetails.innerHTML = XMLAddress1[0].childNodes[0].nodeValue;  
-
-//    }
-// }
-</script>

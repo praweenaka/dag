@@ -73,12 +73,19 @@ if ($_POST["Command"] == "add_spare") {
     $ResponseXML .= "<salesdetails>";
     
     
+    if ($_GET['Command1'] == "del_item") {
+        $sql = "delete from produ_spareitem where id='" . $_GET['id'] . "'  ";
+        $result = $conn->query($sql);
+    }
 
+    
 
-    $sql2 = "insert into produ_spareitem(refno,serialno,price,qty,total,spareitem) values ('" . $_POST['refno'] . "','" . $_POST['serialno'] . "','" . $_POST['price'] . "','" . $_POST['qty'] . "','" . $_POST['total'] . "','" . $_POST['spareitem'] . "')";  
-    $result2 = $conn->query($sql2);
+    if ($_GET["Command1"] == "add_tmp") {
 
+        $sql2 = "insert into produ_spareitem(refno,serialno,price,qty,total,spareitem) values ('" . $_POST['refno'] . "','" . $_POST['serialno'] . "','" . $_POST['price'] . "','" . $_POST['qty'] . "','" . $_POST['total'] . "','" . $_POST['spareitem'] . "')";  
+        $result2 = $conn->query($sql2);
 
+    }
 
 
     $ResponseXML .= "<sales_table><![CDATA[<table class=\"table\">  ";
@@ -171,4 +178,18 @@ if ($_POST["Command"] == "add_workers") {
 }
 }
 
+if ($_POST["Command"] == "totqty") {
+  $ResponseXML = "";
+  $ResponseXML .= "<salesdetails>";
+  $tot=0;
+
+  if($_POST['qty']=""){
+   if($_POST['price']=""){
+    $tot=$_POST['qty']*$_POST['price'];
+}  
+}
+$ResponseXML .= "<tot><![CDATA[" . $tot . "]]></tot>";
+$ResponseXML .= "</salesdetails>";
+echo $ResponseXML;
+}
 ?>

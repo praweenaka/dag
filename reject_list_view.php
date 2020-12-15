@@ -13,19 +13,15 @@ $row1 = $result1->fetch();
         <div class="modal-content">
             <div class="modal-header">
                 <div class="col-sm-5">
-                 <center><h4 class="modal-title" id="myModalLabel">PRODUCTION</h4></center>
+                 <center><h4 class="modal-title" id="myModalLabel">REJECT</h4></center>
              </div>
 
              <div class="col-sm-3">
-              <a onclick="sendonhand();" class="btn btn-primary">
-                <span class="fa fa-save"></span> &nbsp; SEND TO ONHAND
+              <a onclick="sendproduction();" class="btn btn-primary">
+                <span class="fa fa-save"></span> &nbsp; SEND TO PRODUCTION
             </a> 
         </div> 
-        <div class="col-sm-3">
-          <a onclick="sendreject();" class="btn btn-primary">
-            <span class="fa fa-save"></span> &nbsp; SEND TO REJECT
-        </a> 
-    </div>
+       
     <div class="col-sm-1">
 
      <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
@@ -69,9 +65,7 @@ $row1 = $result1->fetch();
             <li class="nav-item">
                 <a class="nav-link" id="profile-tab" data-toggle="tab" href="#profile" role="tab" aria-controls="profile" aria-selected="false">JOB WORKERS</a>
             </li>
-            <li class="nav-item">
-                <a class="nav-link" id="contact-tab" data-toggle="tab" href="#contact" role="tab" aria-controls="contact" aria-selected="false">FINISH</a>
-            </li>
+            
         </ul>
     </div>
     <div class="tab-content" id="myTabContent">
@@ -87,22 +81,7 @@ $row1 = $result1->fetch();
                             <th>TOTAL</th> 
                             <th>#</th> 
                         </tr>
-                        <tr>
-                            <td> <select name="spareitem" id="spareitem"    class="text_purchase3 col-sm-9 form-control" > 
-                                <?php
-                                require_once("./connection_sql.php");
-
-                                $sql = "Select * from size order by code";
-                                foreach ($conn->query($sql) as $row) {
-                                    echo "<option value=\"" . $row["name"] . "\">" . $row["name"] . "</option>";
-                                }
-                                ?>
-                            </select></td>
-                            <td><input type="number" placeholder="PRICE" id="price"   class="form-control"></td>
-                            <td><input type="number" placeholder="QTY" id="qty"   class="form-control"></td>
-                            <td><input type="number" placeholder="TOTAL" id="total"    class="form-control"></td>
-                            <td><a onclick="add_spare('g/56','test');" class="btn btn-default btn-sm"> <span class="fa fa-plus"></span> &nbsp; </a></td>
-                        </tr>
+                       
                     </thead>
                     <tbody>
                         <?php

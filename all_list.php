@@ -4,7 +4,7 @@
 
     <div class="box box-primary">
         <div class="box-header with-border">
-            <h3 class="box-title">REJECT LIST</h3>
+            <h3 class="box-title">ALL LIST</h3>
         </div>
         <form role="form" class="form-horizontal">
             <div class="box-body">
@@ -46,7 +46,7 @@
                     $i=1;
                     include './connection_sql.php';
 
-                    $sql = "select * from dag_item WHERE flag='1'  and cancel='1' ";
+                    $sql = "select * from dag_item  ";
 
 
                     foreach ($conn->query($sql) as $row) {
@@ -69,7 +69,7 @@
                             <td><?php echo $row['pro_date']; ?></td>  
                             <td colspan='1' style= 'text-align: center;'>
                                 <a href="#detail<?php echo $row['id']; ?>" data-toggle="modal" class="btn btn-primary btn-sm" style= 'text-align: center;color:white;'><span class="glyphicon glyphicon-fullscreen"></span> View</a>
-                                <?php include ('reject_list_view.php'); ?>
+                                <?php include ('all_list_view.php'); ?>
                             </td>
                         </td>   
 
@@ -90,7 +90,7 @@
 
 </section>
 
-<script src="js/reject_list.js"></script>
+<script src="js/all_list.js"></script>
 <script>
 
    function search1() {

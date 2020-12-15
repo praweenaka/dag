@@ -69,7 +69,7 @@
                             <td><?php echo $row['pro_date']; ?></td>  
                             <td colspan='1' style= 'text-align: center;'>
                                 <a href="#detail<?php echo $row['id']; ?>" data-toggle="modal" class="btn btn-primary btn-sm" style= 'text-align: center;color:white;'><span class="glyphicon glyphicon-fullscreen"></span> View</a>
-                                <?php include ('com_list_view.php'); ?>
+                                <?php include ('comp_list_view.php'); ?>
                             </td>
                         </td>   
 

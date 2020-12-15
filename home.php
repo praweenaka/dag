@@ -32,12 +32,10 @@ if (isset($_GET['url'])) {
     if ($_GET['url'] == "jobcart") {
         include_once './jobcart.php';
     }
-    if ($_GET['url'] == "treadpattern") {
-        include_once './treadpattern.php';
+    if ($_GET['url'] == "expenses") {
+        include_once './expenses.php';
     }
-    if ($_GET['url'] == "sizemaster") {
-        include_once './sizemaster.php';
-    }
+    
     if ($_GET['url'] == "invoice") {
         include_once './invoice.php';
     }
@@ -58,6 +56,21 @@ if (isset($_GET['url'])) {
     }
     if ($_GET['url'] == "reject_list") {
         include_once './reject_list.php';
+    }
+    if ($_GET['url'] == "all_list") {
+        include_once './all_list.php';
+    }
+    if ($_GET['url'] == "design") {
+        include_once './design.php';
+    }
+    if ($_GET['url'] == "spareitems") {
+        include_once './spareitems.php';
+    }
+    if ($_GET['url'] == "expenses") {
+        include_once './expenses.php';
+    }
+    if ($_GET['url'] == "packege") {
+        include_once './packege.php';
     }
 
 
@@ -133,7 +146,7 @@ $(function () {
         var d = new Date();
 //   var dd = d.toLocaleDateString();
 var tt = d.toLocaleTimeString();
-document.getElementById("time").innerHTML = tt;
+// document.getElementById("time").innerHTML = tt;
 }
 
 </script>
