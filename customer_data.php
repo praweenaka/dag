@@ -68,4 +68,28 @@ if ($_POST["Command"] == "save_inv") {
     }
     
 }
+
+if ($_POST["Command"] == "pass_quot") {
+    $_SESSION["custno"] = $_GET['custno'];
+
+    header('Content-Type: text/xml');
+    echo "<?xml version=\"1.0\" encoding=\"utf-8\"?>\n";
+
+    $ResponseXML = "";
+    $ResponseXML .= "<salesdetails>";
+
+    $cuscode = $_POST["custno"];
+
+    $sql = "Select * from vendor where   CODE ='" . $cuscode . "'";
+    $result = $conn->query($sql);
+
+    if ($rowM = $result->fetch()) {
+        $ResponseXML .= "<id><![CDATA[" . json_encode($rowM) .  "]]></id>";
+    }
+
+    $ResponseXML .= "<stname><![CDATA[".$_POST["stname"]."]]></stname>";
+
+    $ResponseXML .= "</salesdetails>";
+    echo $ResponseXML;
+}
 ?>

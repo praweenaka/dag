@@ -46,14 +46,14 @@
             <div class="form-group">
                 <label class="col-sm-1 control-label" for="txt_usernm">CUSTOMER CODE</label>
                 <div class="col-sm-2">
-                    <input type="text" placeholder="CUSTOMER CODE" id="cuscode"   class="form-control">
+                    <input type="text" placeholder="CUSTOMER CODE" id="cuscode" disabled   class="form-control">
                 </div>
                 <label class="col-sm-1 control-label" for="txt_usernm">CUSTOMER NAME</label>
                 <div class="col-sm-2">
-                    <input type="text" placeholder="NAME" id="cusname"   class="form-control">
+                    <input type="text" placeholder="NAME" id="cusname" disabled=""  class="form-control">
                 </div> 
                 <div class="col-sm-2">
-                    <a onfocus="this.blur()" onclick="NewWindow('customer_search.php', 'mywin', '800', '700', 'yes', 'center');
+                    <a onfocus="this.blur()" onclick="NewWindow('customer_search.php?stname=dag', 'mywin', '800', '700', 'yes', 'center');
                     return false" href="">
                     <input type="button" class="btn btn-default" value="..." id="searchcust" name="searchcust">
                 </a>

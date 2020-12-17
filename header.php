@@ -3,15 +3,15 @@
 <html lang="en">
 <head>
 
-   <title><?php 
-   require_once ('connection_sql.php');
+ <title><?php 
+ require_once ('connection_sql.php');
 
-   $sqlinv = "select * from  doc where name = '". $_GET['url'] ."'";
-   $resultinv = $conn->query($sqlinv);
-   if ($rowlurl = $resultinv->fetch()) {
+ $sqlinv = "select * from  doc where name = '". $_GET['url'] ."'";
+ $resultinv = $conn->query($sqlinv);
+ if ($rowlurl = $resultinv->fetch()) {
 
-     echo $rowlurl['docname'];
- }else{
+   echo $rowlurl['docname'];
+}else{
     echo "HOME";
 }
 
@@ -30,22 +30,22 @@
 <!-- Theme style -->
 <link rel="stylesheet" href="bootstrap/dist/css/AdminLTE.min.css">
         <!-- AdminLTE Skins. Choose a skin from the css/skins
-         folder instead of downloading all of them to reduce the load. -->
-         <link rel="stylesheet" href="bootstrap/dist/css/skins/_all-skins.min.css">
-         <!-- Ionicons -->
-         <!--<link rel="stylesheet" href="css/ionicons/css/ionicons.min.css">-->
-         <!-- Morris chart -->
-         <link rel="stylesheet" href="plugins/morris/morris.css">
+           folder instead of downloading all of them to reduce the load. -->
+           <link rel="stylesheet" href="bootstrap/dist/css/skins/_all-skins.min.css">
+           <!-- Ionicons -->
+           <!--<link rel="stylesheet" href="css/ionicons/css/ionicons.min.css">-->
+           <!-- Morris chart -->
+           <link rel="stylesheet" href="plugins/morris/morris.css">
 
-         <!-- Date Picker -->
-         <!--<link rel="stylesheet" href="plugins/datepicker/datepicker3.css">-->
+           <!-- Date Picker -->
+           <!--<link rel="stylesheet" href="plugins/datepicker/datepicker3.css">-->
 
-         <!-- For Jason Table -->
+           <!-- For Jason Table -->
 
-         <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+           <!-- <script src="plugins/jQuery/jQuery-2.1.4.min_1.js"></script> -->
+           <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
 
-
-         <style>
+           <style>
             .form-group {
                 margin-bottom: 8px;
             }
@@ -95,14 +95,14 @@
                                         <div class="pull-left">
                                             <?php
                                             if ((substr($_SERVER['REMOTE_ADDR'], 1, 9)) == "192.168.5") {
-                                             echo "<a target='_blank' href=\"http:\\\\192.168.5.153:8090\mspace\" class='btn btn-primary btn-file'>Myspace</a>";
-                                         } else {
-                                             echo "<a target='_blank' href=\"http:\\\\124.43.17.130:8090\mspace\" class='btn btn-primary btn-file'>Myspace</a>";
-                                         }
-                                         ?>
+                                               echo "<a target='_blank' href=\"http:\\\\192.168.5.153:8090\mspace\" class='btn btn-primary btn-file'>Myspace</a>";
+                                           } else {
+                                               echo "<a target='_blank' href=\"http:\\\\124.43.17.130:8090\mspace\" class='btn btn-primary btn-file'>Myspace</a>";
+                                           }
+                                           ?>
 
-                                     </div>
-                                     <div class="pull-right">
+                                       </div>
+                                       <div class="pull-right">
                                         <a onclick="logout();" class="btn btn-success btn-file">Sign out</a>
                                     </div>
                                 </li>

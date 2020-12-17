@@ -105,9 +105,7 @@ if (isset($_COOKIE[$cookie_name])) {
             &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;   &nbsp;&nbsp;
             <button class="button button3" style="background-color: #f44336;" id="lbtn"  name="lbtn" onclick="IsValiedData();">&nbsp;&nbsp;&nbsp;&nbsp;Loging &nbsp;&nbsp; &nbsp;&nbsp;</button>
             <div class="form-group"></div>
-            <div class="form-group"> 
-                <a style="text-align: right;" href="#"><p>Want to be a Client ? Inquire or packages</p></a>
-          </div>
+             
       </div>
       <div class="col-md-8" style="text-align: center;color: white;font-family: Helvetica, Geneva, sans-serif;font-size: 13px;letter-spacing: 0.4px;word-spacing: 6px;color: white;text-decoration: none;font-style: normal;font-variant: normal;text-transform: none;">
         <div style="margin-top: 20px;">

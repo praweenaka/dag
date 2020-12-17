@@ -2,7 +2,7 @@
 <section class="content">
     <div class="box box-primary">
         <div class="box-header with-border">
-            <h3 class="box-title">SPARE ITEM MASTER</h3>
+            <h3 class="box-title">SIZE MASTER</h3>
             <h4 style="float: right;height: 3px;"><b id="time"></b></h4>
         </div>
         <form role="form" class="form-horizontal">
@@ -17,7 +17,7 @@
                   <!--   <a onclick="deleteuser();" class="btn btn-danger">
                         <span class="fa fa-trash"></span> &nbsp; Delete
                     </a> -->
-                    <a onclick="NewWindow('spareitems_search.php', 'mywin', '800', '700', 'yes', 'center');" class="btn btn-info btn-sm">
+                    <a onclick="NewWindow('size_search.php', 'mywin', '800', '700', 'yes', 'center');" class="btn btn-info btn-sm">
                         <span class="glyphicon glyphicon-search"></span> &nbsp; FIND
                     </a>
                 </div>
@@ -35,31 +35,12 @@
                     <input type="text" placeholder="Code" id="code" disabled class="form-control">
                 </div>
             </div>
-            <div class="form-group">
-                <label class="col-sm-2 control-label" for="txt_usernm">NAME</label>
-                <div class="col-sm-3">
-                    <input type="text" placeholder="NAME" id="name"   class="form-control">
-                </div>
-            </div>
+           
 
             <div class="form-group">
                 <label class="col-sm-2 control-label" for="txt_password">DESCRIPTION</label>
                 <div class="col-sm-3">
                     <input type="text" placeholder="DESCRIPTION" id="des" class="form-control">
-
-                </div>
-            </div>
-            <div class="form-group">
-                <label class="col-sm-2 control-label" for="txt_password">COST</label>
-                <div class="col-sm-3">
-                    <input type="number" placeholder="COST" id="cost" class="form-control">
-
-                </div>
-            </div>
-            <div class="form-group">
-                <label class="col-sm-2 control-label" for="txt_password">SALE</label>
-                <div class="col-sm-3">
-                    <input type="number" placeholder="SALE" id="sale" class="form-control">
 
                 </div>
             </div>
@@ -72,5 +53,5 @@
 
 </section>
 
-<script src="js/spareitems.js"></script>
+<script src="js/sizemaster.js"></script>
 <script>new_inv();</script>

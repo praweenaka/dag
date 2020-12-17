@@ -15,11 +15,11 @@ if ($_POST["Command"] == "getdt") {
     $ResponseXML = "";
     $ResponseXML .= "<new>";
 
-    $sql = "SELECT design FROM invpara";
+    $sql = "SELECT sizemas FROM invpara";
     $result = $conn->query($sql);
 
     $row = $result->fetch();
-    $no = $row['design'];
+    $no = $row['sizemas'];
     $uniq = uniqid();
     $ResponseXML .= "<id><![CDATA[$no]]></id>";
     $ResponseXML .= "<uniq><![CDATA[$uniq]]></uniq>";
@@ -41,21 +41,21 @@ if ($_POST["Command"] == "save_inv") {
         $resultsalma_q = $conn->query($sqlisalma_q);
         if ($rowsalma_q = $resultsalma_q->fetch()) {
             
-            $sql = "update design set design='" . $_POST['design'] . "', des= '" . $_POST['des'] . "'   where code='" . $_POST['code'] . "'";
+            $sql = "update size set name= '" . $_POST['des'] . "'   where code='" . $_POST['code'] . "'";
             $result = $conn->query($sql);
 
             $conn->commit();
             echo "Updated";
         }else{
-            $sql2 = "insert into design(code,design,des) values ('" . $_POST['code'] . "', '" . $_POST['design'] . "', '" . $_POST['des'] . "')"; 
+            $sql2 = "insert into size(code,name) values ('" . $_POST['code'] . "' , '" . $_POST['des'] . "')"; 
             $result2 = $conn->query($sql2);
 
-            $sql = "SELECT design FROM invpara";
+            $sql = "SELECT sizemas FROM invpara";
             $resul = $conn->query($sql);
             $row = $resul->fetch();
-            $no = $row['design'];
+            $no = $row['sizemas'];
             $no2 = $no + 1;
-            $sql = "update invpara set design = $no2 where design = $no";
+            $sql = "update invpara set sizemas = $no2 where sizemas = $no";
             $result = $conn->query($sql);
 
 
@@ -68,27 +68,4 @@ if ($_POST["Command"] == "save_inv") {
     }
     
 }
-
-if ($_POST["Command"] == "pass_quot") {
-    $_SESSION["custno"] = $_GET['custno'];
-
-    header('Content-Type: text/xml');
-    echo "<?xml version=\"1.0\" encoding=\"utf-8\"?>\n";
-
-    $ResponseXML = "";
-    $ResponseXML .= "<salesdetails>";
-
-    $cuscode = $_POST["custno"];
-
-    $sql = "Select * from design where   code ='" . $cuscode . "'";
-    $result = $conn->query($sql);
-
-    if ($rowM = $result->fetch()) {
-        $ResponseXML .= "<id><![CDATA[" . json_encode($rowM) .  "]]></id>";
-    }
-
-    $ResponseXML .= "</salesdetails>";
-    echo $ResponseXML;
-}
-
 ?>

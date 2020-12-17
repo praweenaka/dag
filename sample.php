@@ -295,7 +295,7 @@ require_once("./connection_sql.php");
 </div>
 </section>
 
-<script src="js/pro_list.js"></script>
+<script src="js/sample.js"></script>
 <script>
 
 

@@ -15,11 +15,11 @@ if ($_POST["Command"] == "getdt") {
     $ResponseXML = "";
     $ResponseXML .= "<new>";
 
-    $sql = "SELECT spareitem FROM invpara";
+    $sql = "SELECT packegelist FROM invpara";
     $result = $conn->query($sql);
 
     $row = $result->fetch();
-    $no = $row['spareitem'];
+    $no = $row['packegelist'];
     $uniq = uniqid();
     $ResponseXML .= "<id><![CDATA[$no]]></id>";
     $ResponseXML .= "<uniq><![CDATA[$uniq]]></uniq>";
@@ -37,25 +37,25 @@ if ($_POST["Command"] == "save_inv") {
         $conn->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
         $conn->beginTransaction();
 
-        $sqlisalma_q = "select * from spareitem where code='" . $_POST['code'] . "'";
+        $sqlisalma_q = "select * from packegelist where code='" . $_POST['code'] . "'";
         $resultsalma_q = $conn->query($sqlisalma_q);
         if ($rowsalma_q = $resultsalma_q->fetch()) {
-            
-            $sql = "update spareitem set name='" . $_POST['name'] . "', des= '" . $_POST['des'] . "',cost='" . $_POST['cost'] . "', sale= '" . $_POST['sale'] . "'   where code='" . $_POST['code'] . "'";
+
+            $sql = "update packegelist set design='" . $_POST['design'] . "',size='" . $_POST['size'] . "', des= '" . $_POST['des'] . "'   where code='" . $_POST['code'] . "'";
             $result = $conn->query($sql);
 
             $conn->commit();
             echo "Updated";
         }else{
-            $sql2 = "insert into spareitem(code,name,des,cost,sale) values ('" . $_POST['code'] . "', '" . $_POST['name'] . "', '" . $_POST['des'] . "', '" . $_POST['cost'] . "', '" . $_POST['sale'] . "')"; 
+            $sql2 = "insert into packegelist(code,design,des,size) values ('" . $_POST['code'] . "', '" . $_POST['design'] . "', '" . $_POST['des'] . "','" . $_POST['size'] . "')"; 
             $result2 = $conn->query($sql2);
 
-            $sql = "SELECT spareitem FROM invpara";
+            $sql = "SELECT packegelist FROM invpara";
             $resul = $conn->query($sql);
             $row = $resul->fetch();
-            $no = $row['spareitem'];
+            $no = $row['packegelist'];
             $no2 = $no + 1;
-            $sql = "update invpara set spareitem = $no2 where spareitem = $no";
+            $sql = "update invpara set packegelist = $no2 where packegelist = $no";
             $result = $conn->query($sql);
 
 
@@ -81,7 +81,7 @@ if ($_POST["Command"] == "pass_quot") {
 
     $cuscode = $_POST["custno"];
 
-    $sql = "Select * from spareitem where   code ='" . $cuscode . "'";
+    $sql = "Select * from packegelist where   code ='" . $cuscode . "'";
     $result = $conn->query($sql);
 
     if ($rowM = $result->fetch()) {
@@ -91,5 +91,4 @@ if ($_POST["Command"] == "pass_quot") {
     $ResponseXML .= "</salesdetails>";
     echo $ResponseXML;
 }
-
 ?>

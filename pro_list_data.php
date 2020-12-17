@@ -13,7 +13,7 @@ if ($_POST["Command"] == "sendonhand") {
         $conn->beginTransaction();
         
 
-        $sql = "UPDATE dag_item set flag='0'  where id='" . $_POST['id'] . "'";
+        $sql = "UPDATE dag_item set flag='0'  where refno='" . $_POST['refno'] . "' and  serialno='".$_POST['serialno']."'"; 
         $result = $conn->query($sql); 
 
         $conn->commit();
@@ -31,7 +31,7 @@ if ($_POST["Command"] == "sendreject") {
         $conn->beginTransaction();
         
 
-        $sql = "UPDATE dag_item set cancel='1'  where id='" . $_POST['id'] . "'";
+        $sql = "UPDATE dag_item set cancel='1'  where refno='" . $_POST['refno'] . "' and  serialno='".$_POST['serialno']."'"; 
         $result = $conn->query($sql); 
 
         $conn->commit();
@@ -49,11 +49,11 @@ if ($_POST["Command"] == "sendfinish") {
         $conn->beginTransaction();
         
 
-        $sql = "UPDATE dag_item set flag='2',warrenty='" . $_POST['warrenty'] . "',pro_date='" . date("Y-m-d") . "',design='" . $_POST['design'] . "'  where id='" . $_POST['id'] . "'";
+        $sql = "UPDATE dag_item set flag='2',warrenty='" . $_POST['warranty'] . "',pro_date='" . date("Y-m-d") . "',design='" . $_POST['design'] . "'  where refno='" . $_POST['refno'] . "' and  serialno='".$_POST['serialno']."'"; 
         $result = $conn->query($sql); 
 
         $conn->commit();
-        echo "SEND TO REJECT";
+        echo "SEND TO FINISH";
 
     } catch (Exception $e) {
         $conn->rollBack();
@@ -73,14 +73,14 @@ if ($_POST["Command"] == "add_spare") {
     $ResponseXML .= "<salesdetails>";
     
     
-    if ($_GET['Command1'] == "del_item") {
-        $sql = "delete from produ_spareitem where id='" . $_GET['id'] . "'  ";
+    if ($_POST['Command1'] == "del_item") {
+        $sql = "delete from produ_spareitem where id='" . $_POST['id'] . "'  ";
         $result = $conn->query($sql);
     }
 
     
 
-    if ($_GET["Command1"] == "add_tmp") {
+    if ($_POST["Command1"] == "add_tmp") {
 
         $sql2 = "insert into produ_spareitem(refno,serialno,price,qty,total,spareitem) values ('" . $_POST['refno'] . "','" . $_POST['serialno'] . "','" . $_POST['price'] . "','" . $_POST['qty'] . "','" . $_POST['total'] . "','" . $_POST['spareitem'] . "')";  
         $result2 = $conn->query($sql2);
@@ -89,22 +89,15 @@ if ($_POST["Command"] == "add_spare") {
 
 
     $ResponseXML .= "<sales_table><![CDATA[<table class=\"table\">  ";
-    $ResponseXML .= " <tr>
-    <th>SIZE</th>.
-    <th>MARKER</th>
-    <th>SERIAL NO</th>
-    <th>WARRENTY</th>
-    <th>REMARK</th> 
-    <th></th> 
+    $ResponseXML .= " <tr>  
     </tr>";
     
 
-    $sql = "Select * from produ_spareitem";
+    $sql = "Select * from produ_spareitem where refno='" . $_POST['refno'] . "' and  serialno='".$_POST['serialno']."'"; 
     foreach ($conn->query($sql) as $row) {
 
-        $ResponseXML .= "<tr> 
-        <td style=\"width:200px;\">" . $row['refno']."</td> 
-        <td style=\"width:200px;\">" . $row['serialno'] . "</td> 
+        $ResponseXML .= "<tr>  
+        <td style=\"width:200px;\">" . $row['spareitem'] . "</td> 
         <td style=\"width:200px;\">" . $row['price'] . "</td> 
         <td style=\"width:200px;\">" . $row['qty'] . "</td> 
         <td style=\"width:200px;\">" . $row['total'] . "</td>  
@@ -138,23 +131,27 @@ if ($_POST["Command"] == "add_workers") {
     $ResponseXML .= "<salesdetails>";
     
     
+    if ($_POST['Command1'] == "del_item") {
+        $sql = "delete from produ_workers where id='" . $_POST['id'] . "'  "; 
+        $result = $conn->query($sql);
+    }
 
-
-    $sql2 = "insert into produ_workers(refno,serialno,hours,workers) values ('" . $_POST['refno'] . "','" . $_POST['serialno'] . "','" . $_POST['hours'] . "','" . $_POST['workers'] . "')";  
-    $result2 = $conn->query($sql2);
-
-
-
-
-    $ResponseXML .= "<sales_table><![CDATA[<table class=\"table\">  ";
-    $ResponseXML .= " <tr>
-    <th>NAME</th>.
-    <th>HOURS</th> 
-    <th></th> 
-    </tr>";
     
 
-    $sql = "Select * from produ_workers";
+    if ($_POST["Command1"] == "add_tmp") {
+
+
+        $sql2 = "insert into produ_workers(refno,serialno,hours,workers) values ('" . $_POST['refno'] . "','" . $_POST['serialno'] . "','" . $_POST['hours'] . "','" . $_POST['workers'] . "')";  
+        $result2 = $conn->query($sql2);
+
+
+    }
+
+    $ResponseXML .= "<sales_table><![CDATA[<table class=\"table\">  ";
+    $ResponseXML .= " <tr>  </tr>";
+    
+
+    $sql = "Select * from produ_workers where  refno='" . $_POST['refno'] . "' and  serialno='".$_POST['serialno']."'";  
     foreach ($conn->query($sql) as $row) {
 
         $ResponseXML .= "<tr> 
@@ -178,17 +175,23 @@ if ($_POST["Command"] == "add_workers") {
 }
 }
 
-if ($_POST["Command"] == "totqty") {
-  $ResponseXML = "";
-  $ResponseXML .= "<salesdetails>";
-  $tot=0;
 
-  if($_POST['qty']=""){
-   if($_POST['price']=""){
-    $tot=$_POST['qty']*$_POST['price'];
-}  
+if ($_POST["Command"] == "totqty") {
+ header('Content-Type: text/xml');
+ 
+ $ResponseXML = "";
+ $ResponseXML .= "<salesdetails>";
+ $total = 0;
+ if ($_POST["qty"] != '') { 
+    if ($_POST["price"] != '') { 
+        $total =  $_POST["qty"] * $_POST["price"] ; 
+    }  
 }
-$ResponseXML .= "<tot><![CDATA[" . $tot . "]]></tot>";
+
+
+$tot = number_format($total);
+
+$ResponseXML .= "<toot><![CDATA[$tot]]></toot>";
 $ResponseXML .= "</salesdetails>";
 echo $ResponseXML;
 }

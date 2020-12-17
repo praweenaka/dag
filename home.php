@@ -72,6 +72,13 @@ if (isset($_GET['url'])) {
     if ($_GET['url'] == "packege") {
         include_once './packege.php';
     }
+    if ($_GET['url'] == "packege_list") {
+        include_once './packege_list.php';
+    }
+
+    if ($_GET['url'] == "sample") {
+        include_once './sample.php';
+    }
 
 
 //////////////////////////////////
@@ -106,7 +113,7 @@ include './autocomple_gl.php';
 
 
 <script src="plugins/bootstrap-datepicker/js/bootstrap-datepicker.min.js"></script>
-<!-- <script src="js/comman.js"></script> -->
+<script src="js/comman.js"></script>
 
 
 <!-- FastClick -->

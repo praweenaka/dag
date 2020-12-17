@@ -17,7 +17,7 @@
                   <!--   <a onclick="deleteuser();" class="btn btn-danger">
                         <span class="fa fa-trash"></span> &nbsp; Delete
                     </a> -->
-                    <a onclick="NewWindow('design_search.php', 'mywin', '800', '700', 'yes', 'center');" class="btn btn-info btn-sm">
+                    <a onclick="NewWindow('expenses_search.php', 'mywin', '800', '700', 'yes', 'center');" class="btn btn-info btn-sm">
                         <span class="glyphicon glyphicon-search"></span> &nbsp; FIND
                     </a>
                 </div>
@@ -29,33 +29,50 @@
             </div>
             
 
-            <div class="form-group">
-                <label class="col-sm-2 control-label" for="txt_usernm">CODE</label>
-                <div class="col-sm-2">
-                    <input type="text" placeholder="Code" id="code" disabled class="form-control">
+            <div class="row">
+                <div class="col-md-6">
+                    <div class="form-group">
+                        <label class="col-sm-2 control-label" for="txt_usernm">CODE</label>
+                        <div class="col-sm-3">
+                            <input type="text" placeholder="Code" id="code" disabled class="form-control">
+                        </div>
+
+                    </div>
+                    <div class="form-group">
+                        <label class="col-sm-2 control-label" for="txt_usernm">NAME</label>
+                        <div class="col-sm-3">
+                            <input type="text" placeholder="NAME" id="name"   class="form-control">
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="col-sm-2 control-label" for="txt_password">DESCRIPTION</label>
+                        <div class="col-sm-3">
+                            <input type="text" placeholder="DESCRIPTION" id="des" class="form-control">
+
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="col-sm-2 control-label" for="txt_password">COST</label>
+                        <div class="col-sm-3">
+                            <input type="number" placeholder="COST" id="cost" class="form-control">
+
+                        </div>
+                    </div> 
+                </div>
+
+                <div class="col-md-6">
+                    <table class="table">
+                        <tr>
+                            <td>gfdg</td>
+                            <td>gfdg</td>
+                            <td>gfdg</td>
+                            <td>gfdg</td>
+                            <td>gfdg</td>
+                        </tr>
+                    </table>
                 </div>
             </div>
-            <div class="form-group">
-                <label class="col-sm-2 control-label" for="txt_usernm">NAME</label>
-                <div class="col-sm-3">
-                    <input type="text" placeholder="NAME" id="name"   class="form-control">
-                </div>
-            </div>
-
-            <div class="form-group">
-                <label class="col-sm-2 control-label" for="txt_password">DESCRIPTION</label>
-                <div class="col-sm-3">
-                    <input type="text" placeholder="DESCRIPTION" id="des" class="form-control">
-
-                </div>
-            </div>
-            <div class="form-group">
-                <label class="col-sm-2 control-label" for="txt_password">COST</label>
-                <div class="col-sm-3">
-                    <input type="number" placeholder="COST" id="cost" class="form-control">
-
-                </div>
-            </div> 
 
             <div id="itemdetails"></div>
         </div>

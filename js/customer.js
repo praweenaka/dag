@@ -130,3 +130,65 @@ function save()
 
 }
 }
+
+function custno(code,stname)
+{
+    //alert(code);
+    xmlHttp = GetXmlHttpObject();
+    if (xmlHttp == null)
+    {
+        alert("Browser does not support HTTP Request");
+        return;
+    }
+    var url = 'customer_data.php';
+    var params = 'Command=' + 'pass_quot';
+    params = params + '&custno=' + code;
+    params = params + '&stname=' + stname;
+    
+
+    xmlHttp.open("POST", url, true);
+    xmlHttp.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
+    xmlHttp.setRequestHeader("Content-length", params.length);
+    xmlHttp.setRequestHeader("Connection", "close");
+
+    xmlHttp.onreadystatechange = passcusresult_quot;
+
+    xmlHttp.send(params);
+
+}
+
+
+function passcusresult_quot()
+{
+    var XMLAddress1;
+
+    if (xmlHttp.readyState == 4 || xmlHttp.readyState == "complete")
+    {
+
+     XMLAddress1 = xmlHttp.responseXML.getElementsByTagName("id");
+     var obj = JSON.parse(XMLAddress1[0].childNodes[0].nodeValue);
+
+     XMLAddress1 = xmlHttp.responseXML.getElementsByTagName("stname");
+     if (XMLAddress1[0].childNodes[0].nodeValue=="dag") {
+       opener.document.getElementById('cuscode').value = obj.CODE;  
+       opener.document.getElementById('cusname').value = obj.NAME; 
+   }else{
+      
+       opener.document.getElementById('code').value = obj.CODE;  
+       opener.document.getElementById('name').value = obj.NAME;   
+       opener.document.getElementById('title').value = obj.title;   
+       opener.document.getElementById('shopname').value = obj.shopname;              
+       opener.document.getElementById('nic').value = obj.nic;   
+       opener.document.getElementById('land').value = obj.TELE1;   
+       opener.document.getElementById('mobile').value = obj.TELE2;   
+       opener.document.getElementById('address').value = obj.ADD1;  
+   }
+
+
+
+
+
+   self.close();
+}
+
+} 
