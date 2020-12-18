@@ -28,7 +28,10 @@ function getcode(cdata,cdata1,cdata2) {
     document.getElementById('packegename').value = cdata1; 
     document.getElementById('packegecode').value = cdata;
     window.scrollTo(0, 0);
+
     
+    add_summeryview();
+
 }
 
 function add_spare() {
@@ -67,14 +70,45 @@ function re_spare()
     if (xmlHttp.readyState == 4 || xmlHttp.readyState == "complete")
     {
 
-     XMLAddress1 = xmlHttp.responseXML.getElementsByTagName("sales_table"); 
-     document.getElementById('itemdetails').innerHTML = XMLAddress1[0].childNodes[0].nodeValue;  
+       XMLAddress1 = xmlHttp.responseXML.getElementsByTagName("sales_table"); 
 
-     document.getElementById('cost').value="";
-     document.getElementById('qty').value="";
-     document.getElementById('total').value="";
+       document.getElementById('itemdetails').innerHTML = XMLAddress1[0].childNodes[0].nodeValue;  
 
- }
+       document.getElementById('cost').value="";
+       document.getElementById('qty').value="";
+       document.getElementById('total').value="";
+
+
+       add_expenseview();
+   }
+}
+
+
+function add_spareview() {
+
+    xmlHttp = GetXmlHttpObject();
+    if (xmlHttp == null) {
+        alert("Browser does not support HTTP Request");
+        return;
+    }
+
+
+
+    var url = "packege_data.php";                                 
+    var params ="Command="+"add_spare";    
+    params = params + "&packegecode=" +document.getElementById('packegecode').value;
+
+
+    xmlHttp.open("POST", url, true);
+
+    xmlHttp.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
+    xmlHttp.setRequestHeader("Content-length", params.length);
+    xmlHttp.setRequestHeader("Connection", "close");
+
+    xmlHttp.onreadystatechange=re_spare;
+
+    xmlHttp.send(params);  
+
 }
 
 function del_spare(cdate) {
@@ -118,7 +152,7 @@ function add_expense() {
     params = params + "&packegecode=" +document.getElementById('packegecode').value;
     params = params + "&name=" + document.getElementById('name').value;
     params = params + "&cost=" + document.getElementById('cost1').value; 
- 
+
 
     xmlHttp.open("POST", url, true);
 
@@ -139,12 +173,39 @@ function re_expense()
     if (xmlHttp.readyState == 4 || xmlHttp.readyState == "complete")
     {
 
-     XMLAddress1 = xmlHttp.responseXML.getElementsByTagName("sales_table"); 
-     document.getElementById('itemdetails1').innerHTML = XMLAddress1[0].childNodes[0].nodeValue;  
+       XMLAddress1 = xmlHttp.responseXML.getElementsByTagName("sales_table"); 
+       document.getElementById('itemdetails1').innerHTML = XMLAddress1[0].childNodes[0].nodeValue;  
 
-     document.getElementById('cost').value=""; 
-     
- }
+       document.getElementById('cost1').value=""; 
+
+   }
+}
+
+function add_expenseview() {
+
+    xmlHttp = GetXmlHttpObject();
+    if (xmlHttp == null) {
+        alert("Browser does not support HTTP Request");
+        return;
+    }
+
+
+
+    var url = "packege_data.php";                                 
+    var params ="Command="+"add_expense";    
+    params = params + "&packegecode=" +document.getElementById('packegecode').value;
+
+
+    xmlHttp.open("POST", url, true);
+
+    xmlHttp.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
+    xmlHttp.setRequestHeader("Content-length", params.length);
+    xmlHttp.setRequestHeader("Connection", "close");
+
+    xmlHttp.onreadystatechange=re_expense;
+
+    xmlHttp.send(params);  
+
 }
 
 function del_expense(cdate) {
@@ -171,4 +232,232 @@ function del_expense(cdate) {
 
     xmlHttp.send(params);  
 
+}
+
+
+function add_summeryview() {
+
+    xmlHttp = GetXmlHttpObject();
+    if (xmlHttp == null) {
+        alert("Browser does not support HTTP Request");
+        return;
+    }
+
+
+
+    var url = "packege_data.php";                                 
+    var params ="Command="+"add_summeryview";    
+    params = params + "&packegecode=" +document.getElementById('packegecode').value;
+
+
+    xmlHttp.open("POST", url, true);
+
+    xmlHttp.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
+    xmlHttp.setRequestHeader("Content-length", params.length);
+    xmlHttp.setRequestHeader("Connection", "close");
+
+    xmlHttp.onreadystatechange=re_summery;
+
+    xmlHttp.send(params);  
+
+}
+
+function re_summery()
+{
+    var XMLAddress1;
+
+    if (xmlHttp.readyState == 4 || xmlHttp.readyState == "complete")
+    {
+        XMLAddress1 = xmlHttp.responseXML.getElementsByTagName("spare"); 
+        document.getElementById('spcost').value = XMLAddress1[0].childNodes[0].nodeValue;
+
+        XMLAddress1 = xmlHttp.responseXML.getElementsByTagName("expense"); 
+        document.getElementById('fix_expen').value = XMLAddress1[0].childNodes[0].nodeValue;
+
+        XMLAddress1 = xmlHttp.responseXML.getElementsByTagName("wmargin"); 
+        document.getElementById('w_margin').value = XMLAddress1[0].childNodes[0].nodeValue;
+
+        XMLAddress1 = xmlHttp.responseXML.getElementsByTagName("wprice"); 
+        document.getElementById('wprice').value = XMLAddress1[0].childNodes[0].nodeValue;
+
+        XMLAddress1 = xmlHttp.responseXML.getElementsByTagName("rmargin"); 
+        document.getElementById('r_margin').value = XMLAddress1[0].childNodes[0].nodeValue;
+
+        XMLAddress1 = xmlHttp.responseXML.getElementsByTagName("rprice"); 
+        document.getElementById('rprice').value = XMLAddress1[0].childNodes[0].nodeValue;
+
+        add_spareview();
+
+    }
+}
+
+
+function wpricecal()
+{
+
+    xmlHttp = GetXmlHttpObject();
+    if (xmlHttp == null)
+    {
+        alert("Browser does not support HTTP Request");
+        return;
+    }
+
+    var url = 'packege_data.php';
+    var params = 'Command=' + 'wpricecal'; 
+    params = params + '&w_margin=' + document.getElementById('w_margin').value; 
+    params = params + '&spcost=' + document.getElementById('spcost').value; 
+    params = params + '&fix_expen=' + document.getElementById('fix_expen').value;   
+
+    xmlHttp.open("POST", url, true);
+    xmlHttp.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
+    xmlHttp.setRequestHeader("Content-length", params.length);
+    xmlHttp.setRequestHeader("Connection", "close");
+
+    xmlHttp.onreadystatechange =re_wpricecal;
+
+    xmlHttp.send(params);
+
+
+
+}
+
+function re_wpricecal()
+{
+    var XMLAddress1;
+
+    if (xmlHttp.readyState == 4 || xmlHttp.readyState == "complete")
+    {
+        XMLAddress1 = xmlHttp.responseXML.getElementsByTagName("toot"); 
+        document.getElementById('wprice').value = XMLAddress1[0].childNodes[0].nodeValue;
+
+
+    }
+}
+
+function rpricecal()
+{
+
+    xmlHttp = GetXmlHttpObject();
+    if (xmlHttp == null)
+    {
+        alert("Browser does not support HTTP Request");
+        return;
+    }
+
+    var url = 'packege_data.php';
+    var params = 'Command=' + 'rpricecal'; 
+    params = params + '&r_margin=' + document.getElementById('r_margin').value; 
+    params = params + '&spcost=' + document.getElementById('spcost').value; 
+    params = params + '&fix_expen=' + document.getElementById('fix_expen').value;   
+    
+    xmlHttp.open("POST", url, true);
+    xmlHttp.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
+    xmlHttp.setRequestHeader("Content-length", params.length);
+    xmlHttp.setRequestHeader("Connection", "close");
+
+    xmlHttp.onreadystatechange =re_rpricecal;
+
+    xmlHttp.send(params);
+
+
+
+}
+
+function re_rpricecal()
+{
+    var XMLAddress1;
+
+    if (xmlHttp.readyState == 4 || xmlHttp.readyState == "complete")
+    {
+        XMLAddress1 = xmlHttp.responseXML.getElementsByTagName("toot"); 
+        document.getElementById('rprice').value = XMLAddress1[0].childNodes[0].nodeValue;
+
+
+    }
+}
+
+function updatepackege()
+{
+
+    xmlHttp = GetXmlHttpObject();
+    if (xmlHttp == null)
+    {
+        alert("Browser does not support HTTP Request");
+        return;
+    }
+
+    var url = 'packege_data.php';
+    var params = 'Command=' + 'updatepackege';  
+    params = params + '&packegecode=' + document.getElementById('packegecode').value; 
+    params = params + '&spcost=' + document.getElementById('spcost').value; 
+    params = params + '&fix_expen=' + document.getElementById('fix_expen').value;   
+    params = params + '&w_margin=' + document.getElementById('w_margin').value;   
+    params = params + '&wprice=' + document.getElementById('wprice').value;   
+    params = params + '&r_margin=' + document.getElementById('r_margin').value;   
+    params = params + '&rprice=' + document.getElementById('rprice').value;   
+    
+    xmlHttp.open("POST", url, true);
+    xmlHttp.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
+    xmlHttp.setRequestHeader("Content-length", params.length);
+    xmlHttp.setRequestHeader("Connection", "close");
+
+    xmlHttp.onreadystatechange =re_updatepackege;
+
+    xmlHttp.send(params);
+
+
+
+}
+
+function re_updatepackege()
+{
+    var XMLAddress1;
+
+    if (xmlHttp.readyState == 4 || xmlHttp.readyState == "complete")
+    {
+        alert(xmlHttp.responseText);  
+        location.reload();
+    }
+}
+
+
+function sparecal()
+{
+
+    xmlHttp = GetXmlHttpObject();
+    if (xmlHttp == null)
+    {
+        alert("Browser does not support HTTP Request");
+        return;
+    }
+
+    var url = 'packege_data.php';
+    var params = 'Command=' + 'sparecal'; 
+    params = params + '&qty=' + document.getElementById('qty').value; 
+    params = params + '&cost=' + document.getElementById('cost').value;   
+    
+    xmlHttp.open("POST", url, true);
+    xmlHttp.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
+    xmlHttp.setRequestHeader("Content-length", params.length);
+    xmlHttp.setRequestHeader("Connection", "close");
+
+    xmlHttp.onreadystatechange =re_sparecal;
+
+    xmlHttp.send(params);
+
+
+
+}
+
+function re_sparecal()
+{
+    var XMLAddress1;
+
+    if (xmlHttp.readyState == 4 || xmlHttp.readyState == "complete")
+    {
+        XMLAddress1 = xmlHttp.responseXML.getElementsByTagName("toot"); 
+        document.getElementById('total').value = XMLAddress1[0].childNodes[0].nodeValue;
+
+
+    }
 }
