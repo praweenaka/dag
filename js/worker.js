@@ -30,7 +30,7 @@ function new_inv() {
     document.getElementById('des').value="";
     document.getElementById('msg_box').innerHTML = "";
     
-    var url = "sizemaster_data.php";
+    var url = "worker_data.php";
     var params = "Command=" + "getdt";
     params = params + "&ls=" + "new";
     // params = params + "&uniq=" + document.getElementById('uniq').value; 
@@ -53,15 +53,15 @@ function assign_dt() {
         XMLAddress1 = xmlHttp.responseXML.getElementsByTagName("id");
         var idno = XMLAddress1[0].childNodes[0].nodeValue;
         if (idno.length === 1) {
-            idno = "S/0000" + idno;
+            idno = "W/0000" + idno;
         } else if (idno.length === 2) {
-            idno = "S/000" + idno;
+            idno = "W/000" + idno;
         } else if (idno.length === 3) {
-            idno = "S/00" + idno;
+            idno = "W/00" + idno;
         } else if (idno.length === 4) {
-            idno = "S/0" + idno;
+            idno = "W/0" + idno;
         } else if (idno.length === 5) {
-            idno = "S/" + idno;
+            idno = "W/" + idno;
         }
 
         document.getElementById("code").value = idno;
@@ -85,7 +85,7 @@ function save_inv()
         return;
     }
 
-    var url = 'sizemaster_data.php';
+    var url = 'worker_data.php';
     var params = 'Command=' + 'save_inv';
     params = params + '&code=' + document.getElementById('code').value; 
     params = params + '&des=' + document.getElementById('des').value;
@@ -110,14 +110,14 @@ function save()
     if (xmlHttp.readyState == 4 || xmlHttp.readyState == "complete")
     {
         if (xmlHttp.responseText == "Saved") {
-         document.getElementById('msg_box').innerHTML = "<div class='alert alert-success' role='alert'><span class='center-block'>Saved</span></div>";
-         setTimeout("location.reload(true);", 500);
-     } else {
-       document.getElementById('msg_box').innerHTML = "<div class='alert alert-warning' role='alert'><span class='center-block'>" + xmlHttp.responseText + "</span></div>";
+           document.getElementById('msg_box').innerHTML = "<div class='alert alert-success' role='alert'><span class='center-block'>Saved</span></div>";
+           setTimeout("location.reload(true);", 500);
+       } else {
+         document.getElementById('msg_box').innerHTML = "<div class='alert alert-warning' role='alert'><span class='center-block'>" + xmlHttp.responseText + "</span></div>";
 
-   }
+     }
 
-}
+ }
 }
 
 function custno(code)
@@ -129,7 +129,7 @@ function custno(code)
         alert("Browser does not support HTTP Request");
         return;
     }
-    var url = 'sizemaster_data.php';
+    var url = 'worker_data.php';
     var params = 'Command=' + 'pass_quot';
     params = params + '&custno=' + code;
     

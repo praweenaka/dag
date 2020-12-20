@@ -189,9 +189,9 @@ if ($_POST["Command"] == "totqty") {
 }
 
 
-$tot = number_format($total);
+ 
 
-$ResponseXML .= "<toot><![CDATA[$tot]]></toot>";
+$ResponseXML .= "<toot><![CDATA[$total]]></toot>";
 $ResponseXML .= "</salesdetails>";
 echo $ResponseXML;
 }

@@ -201,7 +201,7 @@ if ($_POST["Command"] == "wpricecal") {
    $total = 0;
    if ($_POST["spcost"] != '') { 
     if ($_POST["fix_expen"] != '') { 
-        $total =  $_POST["fix_expen"] + $_POST["spcost"]-$_POST["w_margin"] ; 
+        $total =  $_POST["fix_expen"] + $_POST["spcost"]+$_POST["w_margin"] ; 
     }  
 }
 
@@ -221,7 +221,7 @@ if ($_POST["Command"] == "rpricecal") {
    $total = 0;
    if ($_POST["spcost"] != '') { 
     if ($_POST["fix_expen"] != '') { 
-        $total =  $_POST["fix_expen"] + $_POST["spcost"]-$_POST["r_margin"] ; 
+        $total =  $_POST["fix_expen"] + $_POST["spcost"]+$_POST["r_margin"] ; 
     }  
 }
 

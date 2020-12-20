@@ -17,7 +17,7 @@ if ($_POST["Command"] == "sendproduction") {
         $result = $conn->query($sql); 
 
         $conn->commit();
-        echo "Updated";
+        echo "SEND PRODUCTION";
 
     } catch (Exception $e) {
         $conn->rollBack();

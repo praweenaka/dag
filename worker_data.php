@@ -15,11 +15,11 @@ if ($_POST["Command"] == "getdt") {
     $ResponseXML = "";
     $ResponseXML .= "<new>";
 
-    $sql = "SELECT sizemas FROM invpara";
+    $sql = "SELECT worker FROM invpara";
     $result = $conn->query($sql);
 
     $row = $result->fetch();
-    $no = $row['sizemas'];
+    $no = $row['worker'];
     $uniq = uniqid();
     $ResponseXML .= "<id><![CDATA[$no]]></id>";
     $ResponseXML .= "<uniq><![CDATA[$uniq]]></uniq>";
@@ -37,25 +37,25 @@ if ($_POST["Command"] == "save_inv") {
         $conn->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
         $conn->beginTransaction();
 
-        $sqlisalma_q = "select * from design where code='" . $_POST['code'] . "'";
+        $sqlisalma_q = "select * from workers where code='" . $_POST['code'] . "'";
         $resultsalma_q = $conn->query($sqlisalma_q);
         if ($rowsalma_q = $resultsalma_q->fetch()) {
             
-            $sql = "update size set name= '" . $_POST['des'] . "'   where code='" . $_POST['code'] . "'";
+            $sql = "update workers set name= '" . $_POST['des'] . "'   where code='" . $_POST['code'] . "'";
             $result = $conn->query($sql);
 
             $conn->commit();
             echo "Updated";
         }else{
-            $sql2 = "insert into size(code,name) values ('" . $_POST['code'] . "' , '" . $_POST['des'] . "')"; 
+            $sql2 = "insert into workers(code,name) values ('" . $_POST['code'] . "' , '" . $_POST['des'] . "')"; 
             $result2 = $conn->query($sql2);
 
-            $sql = "SELECT sizemas FROM invpara";
+            $sql = "SELECT worker FROM invpara";
             $resul = $conn->query($sql);
             $row = $resul->fetch();
-            $no = $row['sizemas'];
+            $no = $row['worker'];
             $no2 = $no + 1;
-            $sql = "update invpara set sizemas = $no2 where sizemas = $no";
+            $sql = "update invpara set worker = $no2 where worker = $no";
             $result = $conn->query($sql);
 
 
@@ -80,7 +80,7 @@ if ($_POST["Command"] == "pass_quot") {
 
     $cuscode = $_POST["custno"];
 
-    $sql = "Select * from size where   code ='" . $cuscode . "'";
+    $sql = "Select * from workers where   code ='" . $cuscode . "'";
     $result = $conn->query($sql);
 
     if ($rowM = $result->fetch()) {

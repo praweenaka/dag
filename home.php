@@ -29,8 +29,8 @@ if (isset($_GET['url'])) {
     if ($_GET['url'] == "change_pass") {
         include_once './change_pass.php';
     }
-    if ($_GET['url'] == "jobcart") {
-        include_once './jobcart.php';
+    if ($_GET['url'] == "sizemaster") {
+        include_once './sizemaster.php';
     }
     if ($_GET['url'] == "expenses") {
         include_once './expenses.php';
@@ -76,8 +76,8 @@ if (isset($_GET['url'])) {
         include_once './packege_list.php';
     }
 
-    if ($_GET['url'] == "sample") {
-        include_once './sample.php';
+    if ($_GET['url'] == "worker") {
+        include_once './worker.php';
     }
 
 

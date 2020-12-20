@@ -36,8 +36,9 @@ function new_inv() {
     document.getElementById('warranty').value="";
     document.getElementById('remark').value="";
     document.getElementById('uniq').value="";
-    document.getElementById('msg_box').value="";
+    document.getElementById('msg_box').innerHTML="";
     
+    document.getElementById('itemdetails').innerHTML="";
     var url = "dag_data.php";
     var params = "Command=" + "getdt";
     params = params + "&ls=" + "new";
@@ -92,6 +93,15 @@ function add_tmp()
         return;
     }
 
+    if (document.getElementById('cuscode').value == "") {
+        document.getElementById('msg_box').innerHTML = "<div class='alert alert-warning' role='alert'><span class='center-block'>Select Customer</span></div>";
+        return false;
+    }
+
+    if (document.getElementById('warranty').value == "") {
+        document.getElementById('msg_box').innerHTML = "<div class='alert alert-warning' role='alert'><span class='center-block'>Select Warrenty</span></div>";
+        return false;
+    }
     var url = 'dag_data.php';
     var params = 'Command=' + 'add_tmp';
     params = params + "&Command1=add";  
@@ -126,16 +136,16 @@ function add()
 
     if (xmlHttp.readyState == 4 || xmlHttp.readyState == "complete")
     {
-       XMLAddress1 = xmlHttp.responseXML.getElementsByTagName("sales_table");
-       document.getElementById('itemdetails').innerHTML = XMLAddress1[0].childNodes[0].nodeValue;
+     XMLAddress1 = xmlHttp.responseXML.getElementsByTagName("sales_table");
+     document.getElementById('itemdetails').innerHTML = XMLAddress1[0].childNodes[0].nodeValue;
 
-       document.getElementById('warranty').value = "";
-       document.getElementById('remark').value = ""; 
-       document.getElementById('serialno').value = ""; 
-       document.getElementById('marker').value = ""; 
-       document.getElementById('size').value = ""; 
+     document.getElementById('warranty').value = "";
+     document.getElementById('remark').value = ""; 
+     document.getElementById('serialno').value = ""; 
+     document.getElementById('marker').value = ""; 
+     document.getElementById('size').value = ""; 
 
-   }
+ }
 }
 
 
@@ -147,6 +157,12 @@ function save_inv()
     {
         alert("Browser does not support HTTP Request");
         return;
+    }
+
+    document.getElementById('msg_box').innerHTML = "";
+    if (document.getElementById('cuscode').value == "") {
+        document.getElementById('msg_box').innerHTML = "<div class='alert alert-warning' role='alert'><span class='center-block'>Select Customer</span></div>";
+        return false;
     }
 
     var url = 'dag_data.php';
@@ -179,14 +195,14 @@ function save()
 
 
         if (xmlHttp.responseText == "Saved") {
-           document.getElementById('msg_box').innerHTML = "<div class='alert alert-success' role='alert'><span class='center-block'>Saved</span></div>";
-           setTimeout("location.reload(true);", 500); 
-       } else {
-         document.getElementById('msg_box').innerHTML = "<div class='alert alert-warning' role='alert'><span class='center-block'>" + xmlHttp.responseText + "</span></div>";
+         document.getElementById('msg_box').innerHTML = "<div class='alert alert-success' role='alert'><span class='center-block'>Saved</span></div>";
+         setTimeout("location.reload(true);", 500); 
+     } else {
+       document.getElementById('msg_box').innerHTML = "<div class='alert alert-warning' role='alert'><span class='center-block'>" + xmlHttp.responseText + "</span></div>";
 
-     }
+   }
 
- }
+}
 }
 
 function del_item(id)
@@ -266,13 +282,7 @@ function passcusresult_quot()
         opener.document.getElementById('refno').value = obj.refno;  
         opener.document.getElementById('sdate').value = obj.sdate;   
         opener.document.getElementById('cuscode').value = obj.cuscode;   
-        opener.document.getElementById('cusname').value = obj.cusname;   
-        opener.document.getElementById('size').value = obj.size;   
-        opener.document.getElementById('marker').value = obj.marker;   
-        opener.document.getElementById('adpayment').value = obj.adpayment;   
-        opener.document.getElementById('serialno').value = obj.serialno;   
-        opener.document.getElementById('warrenty').value = obj.warrenty;    
-        opener.document.getElementById('remark').value = obj.remark;            
+        opener.document.getElementById('cusname').value = obj.cusname;             
         
         XMLAddress1 = xmlHttp.responseXML.getElementsByTagName("sales_table");
         opener.document.getElementById('itemdetails').innerHTML = XMLAddress1[0].childNodes[0].nodeValue;
@@ -281,4 +291,61 @@ function passcusresult_quot()
         self.close();
     }
 
+}
+
+
+
+
+function cancel_inv()
+{
+
+    xmlHttp = GetXmlHttpObject();
+    if (xmlHttp == null)
+    {
+        alert("Browser does not support HTTP Request");
+        return;
+    }
+
+    document.getElementById('msg_box').innerHTML = "";
+    if (document.getElementById('refno').value == "") {
+        document.getElementById('msg_box').innerHTML = "<div class='alert alert-warning' role='alert'><span class='center-block'>Select Entry</span></div>";
+        return false;
+    }
+
+
+
+    var url = 'dag_data.php';
+    var params = 'Command=' + 'cancel_inv'; 
+    params = params + '&refno=' + document.getElementById('refno').value; 
+    params = params + '&uniq=' + document.getElementById('uniq').value;   
+    xmlHttp.open("POST", url, true);
+    xmlHttp.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
+    xmlHttp.setRequestHeader("Content-length", params.length);
+    xmlHttp.setRequestHeader("Connection", "close");
+
+    xmlHttp.onreadystatechange = re_cancel;
+
+    xmlHttp.send(params);
+
+
+
+}
+
+function re_cancel()
+{
+    var XMLAddress1;
+
+    if (xmlHttp.readyState == 4 || xmlHttp.readyState == "complete")
+    {
+
+
+        if (xmlHttp.responseText == "Cancel") {
+         document.getElementById('msg_box').innerHTML = "<div class='alert alert-success' role='alert'><span class='center-block'>Canceled</span></div>";
+         setTimeout("location.reload(true);", 500); 
+     } else {
+       document.getElementById('msg_box').innerHTML = "<div class='alert alert-warning' role='alert'><span class='center-block'>" + xmlHttp.responseText + "</span></div>";
+
+   }
+
+}
 }

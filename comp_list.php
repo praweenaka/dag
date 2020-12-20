@@ -46,7 +46,7 @@
                     $i=1;
                     include './connection_sql.php';
 
-                    $sql = "select * from dag_item WHERE flag='1' and cancel='0' ";
+                    $sql = "select * from dag_item WHERE flag='2' and cancel='0' ";
 
 
                     foreach ($conn->query($sql) as $row) {

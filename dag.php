@@ -14,12 +14,13 @@
                     <a onclick="save_inv();" class="btn btn-success">
                         <span class="fa fa-save"></span> &nbsp; Save
                     </a> 
+                    <a onclick="cancel_inv();" class="btn btn-danger">
+                        <span class="fa fa-trash"></span> &nbsp; Cancel
+                    </a>
                     <a onclick="NewWindow('dag_search.php', 'mywin', '800', '700', 'yes', 'center');" class="btn btn-info btn-sm">
                         <span class="glyphicon glyphicon-search"></span> &nbsp; FIND
                     </a> 
-                  <!--   <a onclick="deleteuser();" class="btn btn-danger">
-                        <span class="fa fa-trash"></span> &nbsp; Delete
-                    </a> -->
+                    
                 </div>
 
                 <input type="hidden" id="uniq" class="form-control">
