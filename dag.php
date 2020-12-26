@@ -30,7 +30,7 @@
             </div>
 
             <div class="form-group">
-                <label class="col-sm-1 control-label" for="txt_usernm">DAG NO</label>
+                <label class="col-sm-1 control-label" for="txt_usernm">INVOICE NO</label>
                 <div class="col-sm-2">
                     <input type="text" placeholder="DAG NO" id="refno" disabled class="form-control">
                 </div>
@@ -92,6 +92,10 @@
             }
             ?>
         </select>
+    </div>     
+    <label class="col-sm-1 control-label" for="txt_usernm">JOB NO</label>
+        <div class="col-sm-2">
+          <input type="number" placeholder="JOB NO" id="jobno" disabled  class="form-control">
     </div>     
 
 </div>

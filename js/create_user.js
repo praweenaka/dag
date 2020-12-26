@@ -116,6 +116,19 @@ function save_inv()
 
 }
 
+function passsuppresult_save_inv() {
+    var XMLAddress1;
+
+    if (xmlHttp.readyState == 4 || xmlHttp.readyState == "complete") {
+
+        if (xmlHttp.responseText == "Saved") {
+            document.getElementById('msg_box').innerHTML = "<div class='alert alert-danger' role='alert'><span class='center-block'>Saved</span></div>";
+            setTimeout("location.reload(true);", 1200);
+        } else {
+            document.getElementById('msg_box').innerHTML = "<div class='alert alert-warning' role='alert'><span class='center-block'>" + xmlHttp.responseText + "</span></div>";
+        }
+    }
+}
 
 function deleteuser() {
 
