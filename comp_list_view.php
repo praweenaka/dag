@@ -23,7 +23,7 @@ $row1 = $result1->fetch();
         </div> 
         <div class="col-sm-3">
           <a onclick="sendreject();" class="btn btn-primary">
-            <span class="fa fa-save"></span> &nbsp; SEND TO REJECT
+            <span class="fa fa-save"></span> &nbsp; SEND TO  REJECT
         </a> 
     </div>
     <div class="col-sm-1">
