@@ -33,8 +33,7 @@ function chk_cookie($UserName) {
         clearstatcache();
         
         return $action;
-    } else {
-
+    } else { 
         return "not";
         echo 'not';
     }
