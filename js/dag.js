@@ -36,13 +36,17 @@ function new_inv() {
     document.getElementById('warranty').value="";
     document.getElementById('remark').value="";
     document.getElementById('uniq').value="";
+    document.getElementById('jobno').value="";
+    document.getElementById('belt').value="";
+    document.getElementById('department').value="01";
     document.getElementById('msg_box').innerHTML="";
+    document.getElementById('department').disabled=false;
     
     document.getElementById('itemdetails').innerHTML="";
     var url = "dag_data.php";
     var params = "Command=" + "getdt";
     params = params + "&ls=" + "new";
-    // params = params + "&uniq=" + document.getElementById('uniq').value; 
+    params = params + "&department=" + document.getElementById('department').value; 
     xmlHttp.open("POST", url, true);
 
     xmlHttp.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
@@ -74,14 +78,62 @@ function assign_dt() {
         }
 
         document.getElementById("refno").value = idno;
+        
+       
 
         XMLAddress1 = xmlHttp.responseXML.getElementsByTagName("uniq");
         document.getElementById("uniq").value = XMLAddress1[0].childNodes[0].nodeValue;
+        
+         XMLAddress1 = xmlHttp.responseXML.getElementsByTagName("scode"); 
+        if (XMLAddress1[0].childNodes[0].nodeValue=="K") {
+            document.getElementById("jobno").disabled=false;
+        }else{
+            document.getElementById("jobno").disabled=true;
+        }
+        
+        XMLAddress1 = xmlHttp.responseXML.getElementsByTagName("jobno");
+        document.getElementById("jobno").value = XMLAddress1[0].childNodes[0].nodeValue;
     }
 }
 
+function setjobno() {
+
+    xmlHttp = GetXmlHttpObject();
+    if (xmlHttp == null) {
+        alert("Browser does not support HTTP Request");
+        return;
+    }
+   
+     
+    var url = "dag_data.php";
+    var params = "Command=" + "setjobno"; 
+    params = params + "&department=" + document.getElementById('department').value; 
+    xmlHttp.open("POST", url, true);
+
+    xmlHttp.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
+    xmlHttp.setRequestHeader("Content-length", params.length);
+    xmlHttp.setRequestHeader("Connection", "close");
+
+    xmlHttp.onreadystatechange = re_setjobno;
+    xmlHttp.send(params);
+}
 
 
+function re_setjobno() {
+    var XMLAddress1;
+    if (xmlHttp.readyState == 4 || xmlHttp.readyState == "complete") {
+
+         XMLAddress1 = xmlHttp.responseXML.getElementsByTagName("scode"); 
+        if (XMLAddress1[0].childNodes[0].nodeValue=="K") {
+            document.getElementById("jobno").disabled=false;
+        }else{
+            document.getElementById("jobno").disabled=true;
+        }
+        
+        XMLAddress1 = xmlHttp.responseXML.getElementsByTagName("jobno");
+        document.getElementById("jobno").value = XMLAddress1[0].childNodes[0].nodeValue;
+    }
+}
 
 function add_tmp()
 {
@@ -98,7 +150,24 @@ function add_tmp()
         return false;
     }
 
-    if (document.getElementById('warranty').value == "") {
+    if (document.getElementById('belt').value == "") {
+        document.getElementById('msg_box').innerHTML = "<div class='alert alert-warning' role='alert'><span class='center-block'>Select Belt</span></div>";
+        return false;
+    }
+  
+    if (document.getElementById('size').value == "") {
+        document.getElementById('msg_box').innerHTML = "<div class='alert alert-warning' role='alert'><span class='center-block'>Select Size</span></div>";
+        return false;
+    }
+     if (document.getElementById('marker').value == "") {
+        document.getElementById('msg_box').innerHTML = "<div class='alert alert-warning' role='alert'><span class='center-block'>Select Marker</span></div>";
+        return false;
+    }
+      if (document.getElementById('serialno').value == "") {
+        document.getElementById('msg_box').innerHTML = "<div class='alert alert-warning' role='alert'><span class='center-block'>Select Serial No</span></div>";
+        return false;
+    }
+     if (document.getElementById('warranty').value == "") {
         document.getElementById('msg_box').innerHTML = "<div class='alert alert-warning' role='alert'><span class='center-block'>Select Warrenty</span></div>";
         return false;
     }
@@ -115,8 +184,13 @@ function add_tmp()
     params = params + "&serialno="+document.getElementById('serialno').value;
     params = params + "&warranty="+document.getElementById('warranty').value;
     params = params + "&remark="+document.getElementById('remark').value;
+    params = params + "&jobno="+document.getElementById('jobno').value;
     params = params + "&sdate="+document.getElementById('sdate').value;
-
+    params = params + "&belt="+document.getElementById('belt').value;
+    params = params + "&department="+document.getElementById('department').value;
+    
+    document.getElementById('msg_box').innerHTML = "";
+    
     xmlHttp.open("POST", url, true);
     xmlHttp.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
     xmlHttp.setRequestHeader("Content-length", params.length);
@@ -144,6 +218,12 @@ function add()
      document.getElementById('serialno').value = ""; 
      document.getElementById('marker').value = ""; 
      document.getElementById('size').value = ""; 
+      document.getElementById('belt').value = ""; 
+     
+      
+     document.getElementById('department').disabled=true;
+     XMLAddress1 = xmlHttp.responseXML.getElementsByTagName("jobno");
+    document.getElementById("jobno").value = XMLAddress1[0].childNodes[0].nodeValue;
 
  }
 }
@@ -172,7 +252,7 @@ function save_inv()
     params = params + '&sdate=' + document.getElementById('sdate').value;  
     params = params + "&cuscode="+document.getElementById('cuscode').value;
     params = params + "&cusname="+document.getElementById('cusname').value;
-    params = params + '&adpayment=' + document.getElementById('adpayment').value;  
+    params = params + '&adpayment=' + document.getElementById('adpayment').value;   
     xmlHttp.open("POST", url, true);
     xmlHttp.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
     xmlHttp.setRequestHeader("Content-length", params.length);
@@ -282,7 +362,7 @@ function passcusresult_quot()
         opener.document.getElementById('refno').value = obj.refno;  
         opener.document.getElementById('sdate').value = obj.sdate;   
         opener.document.getElementById('cuscode').value = obj.cuscode;   
-        opener.document.getElementById('cusname').value = obj.cusname;             
+        opener.document.getElementById('cusname').value = obj.cusname;    
         
         XMLAddress1 = xmlHttp.responseXML.getElementsByTagName("sales_table");
         opener.document.getElementById('itemdetails').innerHTML = XMLAddress1[0].childNodes[0].nodeValue;

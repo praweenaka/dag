@@ -35,8 +35,19 @@
                     <input type="text" placeholder="DAG NO" id="refno" disabled class="form-control">
                 </div>
 
-                <div class="col-sm-1"> </div>
-                <div class="col-sm-2"></div>
+                <label class="col-sm-1 control-label" for="txt_usernm">DEPARTMENT</label>
+                <div class="col-sm-2">
+              <select name="department" id="department" onchange="setjobno();"   class="text_purchase3 col-sm-9 form-control" > 
+                <?php
+                require_once("./connection_sql.php");
+
+                $sql = "Select * from s_stomas order by code";
+                foreach ($conn->query($sql) as $row) {
+                    echo "<option value=\"" . $row["CODE"] . "\">" . $row["DESCRIPTION"] . "</option>";
+                }
+                ?>
+            </select>
+            </div>
                 <div class="col-sm-2"></div>
                 <label class="col-sm-1 control-label" for="txt_usernm">DATE</label>
                 <div class="col-sm-2">
@@ -53,20 +64,34 @@
                 <div class="col-sm-2">
                     <input type="text" placeholder="NAME" id="cusname" disabled=""  class="form-control">
                 </div> 
-                <div class="col-sm-2">
+                <div class="col-sm-1">
                     <a onfocus="this.blur()" onclick="NewWindow('customer_search.php?stname=dag', 'mywin', '800', '700', 'yes', 'center');
                     return false" href="">
                     <input type="button" class="btn btn-default" value="..." id="searchcust" name="searchcust">
                 </a>
+            </div>  
+         
+               <label class="col-sm-2 control-label" for="txt_usernm">ADVANCE PAYMENT</label>
+            <div class="col-sm-2">
+                <input type="number" placeholder="ADVANCE PAYMENT" id="adpayment"   class="form-control">
             </div>
-
         </div>
 
         <div class="form-group"> 
-            <label class="col-sm-1 control-label" for="txt_usernm">ADVANCE PAYMENT</label>
-            <div class="col-sm-2">
-                <input type="number" placeholder="ADVANCE PAYMENT" id="adpayment"   class="form-control">
-            </div>   
+         <label class="col-sm-1 control-label" for="txt_usernm">BELT DESIGN</label>
+                <div class="col-sm-2">
+              <select name="belt" id="belt"    class="text_purchase3 col-sm-9 form-control" > 
+                <?php
+                require_once("./connection_sql.php");
+
+                $sql = "Select * from belt order by code";
+                foreach ($conn->query($sql) as $row) {
+                    echo "<option value=\"" . $row["name"] . "\">" . $row["name"] . "</option>";
+                }
+                ?>
+            </select>
+        </div>        
+               
             <label class="col-sm-1 control-label" for="txt_usernm">SIZE</label>
             <div class="col-sm-2">
               <select name="size" id="size"    class="text_purchase3 col-sm-9 form-control" > 
@@ -95,7 +120,7 @@
     </div>     
     <label class="col-sm-1 control-label" for="txt_usernm">JOB NO</label>
         <div class="col-sm-2">
-          <input type="number" placeholder="JOB NO" id="jobno" disabled  class="form-control">
+          <input type="text" placeholder="JOB NO" id="jobno" disabled  class="form-control">
     </div>     
 
 </div>

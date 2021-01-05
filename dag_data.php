@@ -15,14 +15,53 @@ if ($_POST["Command"] == "getdt") {
     $ResponseXML = "";
     $ResponseXML .= "<new>";
 
-    $sql = "SELECT dag FROM invpara";
-    $result = $conn->query($sql);
-
+    $sql = "SELECT dag,jobno FROM invpara";
+    $result = $conn->query($sql); 
     $row = $result->fetch();
+    
+    $sql1 = "SELECT shortcode,short FROM s_stomas where CODE='".$_POST['department']."'";
+    $result1 = $conn->query($sql1); 
+    $row1 = $result1->fetch();
+    
+    if($row1['short']=="K"){
+        $shcode=trim($row1['short']."/") ;
+    }else{
+        $shcode=trim($row1['short']."/") .$row1['shortcode'];
+    }
+   
+    $ResponseXML .= "<scode><![CDATA[".$row1['short']."]]></scode>";
+    
     $no = $row['dag'];
     $uniq = uniqid();
     $ResponseXML .= "<id><![CDATA[$no]]></id>";
+    $ResponseXML .= "<jobno><![CDATA[".$shcode."]]></jobno>";
     $ResponseXML .= "<uniq><![CDATA[$uniq]]></uniq>";
+
+    $ResponseXML .= "</new>";
+
+    echo $ResponseXML;
+}
+
+if ($_POST["Command"] == "setjobno") {
+    echo "<?xml version=\"1.0\" encoding=\"utf-8\"?>\n";
+
+    $ResponseXML = "";
+    $ResponseXML .= "<new>";
+
+    
+    
+    $sql1 = "SELECT shortcode,short FROM s_stomas where CODE='".$_POST['department']."'";
+    $result1 = $conn->query($sql1); 
+    $row1 = $result1->fetch();
+    
+    if($row1['short']=="K"){
+        $shcode=trim($row1['short']."/");
+    }else{
+        $shcode=trim($row1['short']."/") .$row1['shortcode'];
+    }
+     
+     $ResponseXML .= "<scode><![CDATA[".$row1['short']."]]></scode>";
+    $ResponseXML .= "<jobno><![CDATA[".$shcode."]]></jobno>"; 
 
     $ResponseXML .= "</new>";
 
@@ -42,14 +81,16 @@ if ($_POST["Command"] == "add_tmp") {
     
     if ($_POST['Command1'] == "add") {
 
-        // $sql3 = "delete from t_jobcard_tmp   where jobno='".$_POST['code']."' and tmp_no='".$_POST['uniq']."'  ";
-        // $result3 = $conn->query($sql3);
+        $sql3 = "delete from dag_item_tmp   where refno='".$_POST['refno']."' and serialno='".$_POST['serialno']."'  "; 
+        $result3 = $conn->query($sql3);
 
 
 
-        $sql2 = "insert into dag_item_tmp(refno,cuscode,cusname,size,marker,adpayment,serialno,warrenty,remark,tmp_no) values ('" . $_POST['refno'] . "', '" . $_POST['cuscode']  . "', '" . $_POST['cusname'] . "', '" . $_POST['size'] . "', '" . $_POST['marker'] . "', '" . $_POST['adpayment'] . "', '" . $_POST['serialno'] . "', '" . $_POST['warranty'] . "', '" . $_POST['remark'] . "', '" . $_POST['uniq'] . "' )"; 
+        $sql2 = "insert into dag_item_tmp(refno,cuscode,cusname,size,marker,adpayment,serialno,warrenty,remark,tmp_no,jobno,belt) values ('" . $_POST['refno'] . "', '" . $_POST['cuscode']  . "', '" . $_POST['cusname'] . "', '" . $_POST['size'] . "', '" . $_POST['marker'] . "', '" . $_POST['adpayment'] . "', '" . $_POST['serialno'] . "', '" . $_POST['warranty'] . "', '" . $_POST['remark'] . "', '" . $_POST['uniq'] . "', '" . $_POST['jobno'] . "', '" . $_POST['belt'] . "')"; 
         $result2 = $conn->query($sql2);
 
+         $sql = "update s_stomas set shortcode = shortcode+ 1 where CODE = '".$_POST['jobno']."'";
+         $result = $conn->query($sql);
 
     }
     if ($_POST['Command1'] == "del") {
@@ -60,7 +101,9 @@ if ($_POST["Command"] == "add_tmp") {
 
     $ResponseXML .= "<sales_table><![CDATA[<table class=\"table\">  ";
     $ResponseXML .= " <tr>
-    <th>SIZE</th>.
+    <th>JOBNO</th>
+    <th>SIZE</th>
+    <th>BELT</th>
     <th>MARKER</th>
     <th>SERIAL NO</th>
     <th>WARRENTY</th>
@@ -72,8 +115,11 @@ if ($_POST["Command"] == "add_tmp") {
     $sql = "Select * from dag_item_tmp where refno='".$_POST['refno']."' and tmp_no='".$_POST['uniq']."'";
     foreach ($conn->query($sql) as $row) {
 
+         
         $ResponseXML .= "<tr> 
+        <td style=\"width:200px;\">" . $row['jobno']."</td> 
         <td style=\"width:200px;\">" . $row['size']."</td> 
+        <td style=\"width:200px;\">" . $row['belt']."</td> 
         <td style=\"width:200px;\">" . $row['marker'] . "</td> 
         <td style=\"width:200px;\">" . $row['serialno'] . "</td> 
         <td style=\"width:200px;\">" . $row['warrenty'] . "</td> 
@@ -84,8 +130,19 @@ if ($_POST["Command"] == "add_tmp") {
 
 
     }
-
+    
+    
+    
+    
+   
     $ResponseXML .= "</table>]]></sales_table>";   
+    
+    $sql1 = "SELECT jobno FROM invpara"; 
+    $result1 = $conn->query($sql1); 
+    $row1 = $result1->fetch();
+    
+    $ResponseXML .= "<jobno><![CDATA[".$row1['jobno']."]]></jobno>";
+      
     $ResponseXML .= "</salesdetails>";
 
     echo $ResponseXML;
@@ -116,7 +173,7 @@ if ($_POST["Command"] == "save_item") {
         $i=1;
         $sqltmp= "select * from dag_item_tmp where refno='".$_POST['refno']."' and tmp_no='".$_POST['uniq']."'";
         foreach ($conn->query($sqltmp) as $rowtmp) {
-           $sql2 = "insert into dag_item(refno,cuscode,cusname,size,marker,adpayment,serialno,warrenty,remark,tmp_no,flag,sdate) values ('" . $_POST['refno'] . "', '" . $rowtmp['cuscode']  . "', '" . $rowtmp['cusname'] . "', '" . $rowtmp['size'] . "', '" . $rowtmp['marker'] . "', '" . $rowtmp['adpayment'] . "', '" . $rowtmp['serialno'] . "', '" . $rowtmp['warrenty'] . "', '" . $rowtmp['remark'] . "', '" . $_POST['uniq'] . "' ,'0', '" . $_POST['sdate'] . "')"; 
+           $sql2 = "insert into dag_item(refno,cuscode,cusname,size,marker,adpayment,serialno,warrenty,remark,tmp_no,flag,sdate,jobno,belt) values ('" . $_POST['refno'] . "', '" . $rowtmp['cuscode']  . "', '" . $rowtmp['cusname'] . "', '" . $rowtmp['size'] . "', '" . $rowtmp['marker'] . "', '" . $rowtmp['adpayment'] . "', '" . $rowtmp['serialno'] . "', '" . $rowtmp['warrenty'] . "', '" . $rowtmp['remark'] . "', '" . $_POST['uniq'] . "' ,'0', '" . $_POST['sdate'] . "', '" . $rowtmp['jobno'] . "', '" . $rowtmp['belt'] . "')"; 
            $result2 = $conn->query($sql2); 
            $i= $i+1;
        }
@@ -166,7 +223,9 @@ if ($_GET["Command"] == "pass_quot") {
     $ResponseXML .= "<sales_table><![CDATA[ <table class=\"table\">    ";
 
     $ResponseXML .= " <tr>
+    <th>JOBNO</th>
     <th>SIZE</th>
+    <th>BELT</th>
     <th>MARKER</th>
     <th>SERIAL NO</th>
     <th>WARRENTY</th>
@@ -178,7 +237,9 @@ if ($_GET["Command"] == "pass_quot") {
     foreach ($conn->query($sql1) as $row) {
 
        $ResponseXML .= "<tr>
-       <td style=\"width:200px;\">" . $row['size'] . "</td>
+       <td style=\"width:200px;\">" . $row['jobno'] . "</td>
+        <td style=\"width:200px;\">" . $row['size'] . "</td>
+        <td style=\"width:200px;\">" . $row['belt'] . "</td>
        <td style=\"width:200px;\">" . $row['marker'] . "</td> 
        <td style=\"width:200px;\">" . $row['serialno'] . "</td> 
        <td style=\"width:200px;\">" . $row['warrenty'] . "</td> 
