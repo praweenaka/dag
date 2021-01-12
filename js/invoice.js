@@ -60,17 +60,19 @@ function add_tmp() {
         var url = "invoice_data.php";
         url = url + "?Command=" + "setitem";
         url = url + "&Command1=" + "add_tmp";
-        url = url + "&invno=" + document.getElementById('txt_entno').value;
-        url = url + "&jobref=" + document.getElementById('jobref').value;
+        url = url + "&invno=" + document.getElementById('txt_entno').value; 
         url = url + "&jobno=" + document.getElementById('jobno').value;
-        url = url + "&size=" + document.getElementById('size').value;
-        url = url + "&amount=" + document.getElementById('amount').value;
         url = url + "&make=" + document.getElementById('make').value;
-        url = url + "&repair=" + document.getElementById('repair').value;
-        url = url + "&tmpno=" + document.getElementById('tmpno').value; 
+        url = url + "&size=" + document.getElementById('size').value;
+        url = url + "&serialno=" + document.getElementById('serialno').value;
+        url = url + "&adpay=" + document.getElementById('adpay').value;
+        url = url + "&cost=" + document.getElementById('cost').value;
+        url = url + "&selling=" + document.getElementById('selling').value; 
         url = url + "&dis=" + document.getElementById('dis').value;
-        url = url + "&subtotal=" + document.getElementById('subtotal').value;
-        url = url + "&discount=" + document.getElementById('discount').value;
+        url = url + "&repair=" + document.getElementById('repair').value;
+        url = url + "&dis=" + document.getElementById('dis').value;
+        url = url + "&subtotal=" + document.getElementById('subtotal').value; 
+        url = url + "&tmpno=" + document.getElementById('tmpno').value; 
         var vattype;
         if (document.getElementById('nonvat').checked == true) {
             vattype = "nonvat";
@@ -113,16 +115,18 @@ function showarmyresultdel() {
         XMLAddress1 = xmlHttp.responseXML.getElementsByTagName("err");
         if (XMLAddress1[0].childNodes[0].nodeValue=="") {
 
-            document.getElementById('jobref').value = "";
-            document.getElementById('jobno').value = "";
-            document.getElementById('size').value = "";
-            document.getElementById('amount').value = "";
+            document.getElementById('jobno').value = ""; 
             document.getElementById('make').value = "";
-            document.getElementById('repair').value = ""; 
+            document.getElementById('size').value = "";
+            document.getElementById('serialno').value = "";
+            document.getElementById('adpay').value = ""; 
+            document.getElementById('cost').value = "";
+            document.getElementById('selling').value = "";
+            document.getElementById('repair').value = "";
             document.getElementById('dis').value = "";
             document.getElementById('subtotal').value = "";
 
-            document.getElementById('amount').focus();
+            // document.getElementById('amount').focus();
         } else {
             document.getElementById('msg_box').innerHTML = "<div class='alert alert-warning' role='alert'><span class='center-block'>" + XMLAddress1[0].childNodes[0].nodeValue + "</span></div>";
         }
@@ -242,12 +246,13 @@ function new_inv() {
     document.getElementById('nonvat').checked = true;
     document.getElementById('itemdetails').innerHTML = "";
     document.getElementById('subtot').value = "";
-    document.getElementById('msg_box').innerHTML = "";
-    document.getElementById('jobref').value = "";
+    document.getElementById('msg_box').innerHTML = ""; 
     document.getElementById('jobno').value = "";
     document.getElementById('size').value = "";
     document.getElementById('make').value = "";
-    document.getElementById('amount').value = "";
+    document.getElementById('adpay').value = "";
+    document.getElementById('cost').value = "";
+    document.getElementById('selling').value = "";
     document.getElementById('repair').value = "";
     document.getElementById('gtot').value = "";
     document.getElementById('txt_remarks').value = ""; 
@@ -507,7 +512,7 @@ function calc() {
 
     document.getElementById('dis').value = disper;
 
-    subtot = parseFloat(document.getElementById('repair').value)+parseFloat(document.getElementById('amount').value) - (parseFloat(document.getElementById('amount').value) * parseFloat(document.getElementById('dis').value) / 100);
+    subtot = parseFloat(document.getElementById('repair').value)+parseFloat(document.getElementById('selling').value) - (parseFloat(document.getElementById('selling').value) * parseFloat(document.getElementById('dis').value) / 100);
 
 
 
@@ -561,9 +566,12 @@ function passcusresult_quot1()
         var obj = JSON.parse(XMLAddress1[0].childNodes[0].nodeValue);
 
         opener.document.getElementById('jobno').value = obj.jobno;  
-        opener.document.getElementById('jobref').value = obj.cardno;  
-        opener.document.getElementById('make').value = obj.make;  
-        opener.document.getElementById('size').value = obj.tsize;   
+        opener.document.getElementById('make').value = obj.marker;  
+        opener.document.getElementById('size').value = obj.size;  
+        opener.document.getElementById('serialno').value = obj.serialno;   
+        opener.document.getElementById('adpay').value = obj.adpayment;   
+        opener.document.getElementById('cost').value = obj.cost;   
+        opener.document.getElementById('selling').value = obj.total;   
 
 
         self.close();
