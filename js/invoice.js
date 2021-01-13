@@ -53,26 +53,49 @@ function add_tmp() {
         alert("Browser does not support HTTP Request");
         return;
     }
+    
 
-    document.getElementById('msg_box').innerHTML ="";
-    if ((document.getElementById('tmpno').value != "")) {
+    document.getElementById('msg_box').innerHTML =""; 
 
+    
+     if (document.getElementById('tmpno').value == "") {
+        document.getElementById('msg_box').innerHTML = "<div class='alert alert-warning' role='alert'><span class='center-block'>New Not Selected</span></div>";
+        return false;
+    }
+    if (document.getElementById('c_code').value == "") {
+        document.getElementById('msg_box').innerHTML = "<div class='alert alert-warning' role='alert'><span class='center-block'>Customer Not Selected</span></div>";
+        return false;
+    }
+    if (document.getElementById('jobno').value == "") {
+        document.getElementById('msg_box').innerHTML = "<div class='alert alert-warning' role='alert'><span class='center-block'>Job Not Selected</span></div>";
+        return false;
+    }
+    if (document.getElementById('cost').value == "") {
+        document.getElementById('msg_box').innerHTML = "<div class='alert alert-warning' role='alert'><span class='center-block'>Cost Not Entered</span></div>";
+        return false;
+    }
+    if (document.getElementById('selling').value == "") {
+        document.getElementById('msg_box').innerHTML = "<div class='alert alert-warning' role='alert'><span class='center-block'>Selling Not Entered</span></div>";
+        return false;
+    }
+    
         var url = "invoice_data.php";
         url = url + "?Command=" + "setitem";
         url = url + "&Command1=" + "add_tmp";
-        url = url + "&invno=" + document.getElementById('txt_entno').value; 
+        url = url + "&txt_entno=" + document.getElementById('txt_entno').value; 
         url = url + "&jobno=" + document.getElementById('jobno').value;
         url = url + "&make=" + document.getElementById('make').value;
+        url = url + "&design=" + document.getElementById('design').value; 
         url = url + "&size=" + document.getElementById('size').value;
         url = url + "&serialno=" + document.getElementById('serialno').value;
         url = url + "&adpay=" + document.getElementById('adpay').value;
         url = url + "&cost=" + document.getElementById('cost').value;
         url = url + "&selling=" + document.getElementById('selling').value; 
         url = url + "&dis=" + document.getElementById('dis').value;
-        url = url + "&repair=" + document.getElementById('repair').value;
-        url = url + "&dis=" + document.getElementById('dis').value;
+        url = url + "&repair=" + document.getElementById('repair').value; 
         url = url + "&subtotal=" + document.getElementById('subtotal').value; 
         url = url + "&tmpno=" + document.getElementById('tmpno').value; 
+         url = url + "&invdate=" + document.getElementById('invdate').value; 
         var vattype;
         if (document.getElementById('nonvat').checked == true) {
             vattype = "nonvat";
@@ -86,7 +109,7 @@ function add_tmp() {
         xmlHttp.open("GET", url, true);
         xmlHttp.send(null);
 
-    }
+   
 }
 
 function showarmyresultdel() {
@@ -118,6 +141,7 @@ function showarmyresultdel() {
             document.getElementById('jobno').value = ""; 
             document.getElementById('make').value = "";
             document.getElementById('size').value = "";
+            document.getElementById('design').value = "";
             document.getElementById('serialno').value = "";
             document.getElementById('adpay').value = ""; 
             document.getElementById('cost').value = "";
@@ -176,13 +200,11 @@ function save_inv() {
 
     url = url + "&subtot=" + document.getElementById('subtot').value;
     url = url + "&invdate=" + document.getElementById('invdate').value;
-
-    url = url + "&currency=" + document.getElementById('currency').value;
-    url = url + "&txt_rate=" + document.getElementById('txt_rate').value;
+  
 
     url = url + "&salesrep=" + document.getElementById('salesrep').value; 
-    url = url + "&DANO=" + document.getElementById('DANO').value;
-    url = url + "&discount=" + document.getElementById('discount').value; 
+    url = url + "&DANO=" + document.getElementById('DANO').value;   
+    url = url + "&gtot=" + document.getElementById('gtot').value;   
 
     var vattype;
     if (document.getElementById('nonvat').checked == true) {
@@ -201,12 +223,7 @@ function save_inv() {
     }
     url = url + "&paymethod=" + paymethod;
     
-    if (document.getElementById('paymethod1_0').checked == true) {
-        paymethod1 = "NORMAL"; 
-    } else if (document.getElementById('paymethod1_1').checked == true) {
-        paymethod1 = "FOC";
-    }
-    url = url + "&paymethod1=" + paymethod1;
+  
     
 
     xmlHttp.onreadystatechange = salessaveresult;
@@ -260,9 +277,9 @@ function new_inv() {
     document.getElementById('subtotal').value = "";
     document.getElementById('discount').value = "";
     document.getElementById('dis').value = ""; 
+    document.getElementById('serialno').value = ""; 
 
-    document.getElementById('paymethod_1').checked =true;
-    document.getElementById('paymethod1_1').checked =true;
+    document.getElementById('paymethod_1').checked =true; 
 
     document.getElementById('vattot').value = "";
     var url = "invoice_data.php";
@@ -373,45 +390,23 @@ function pass_rec_result()
 
     if (xmlHttp.readyState == 4 || xmlHttp.readyState == "complete")
     {
-
-        XMLAddress1 = xmlHttp.responseXML.getElementsByTagName("tmp_no");
-        opener.document.form1.tmpno.value = XMLAddress1[0].childNodes[0].nodeValue;
-
-        XMLAddress1 = xmlHttp.responseXML.getElementsByTagName("C_REFNO");
-
-        opener.document.form1.txt_entno.value = XMLAddress1[0].childNodes[0].nodeValue;
-        XMLAddress1 = xmlHttp.responseXML.getElementsByTagName("C_CODE");
-
-        opener.document.form1.c_code.value = XMLAddress1[0].childNodes[0].nodeValue;
-
-        XMLAddress1 = xmlHttp.responseXML.getElementsByTagName("name");
-        opener.document.form1.c_name.value = XMLAddress1[0].childNodes[0].nodeValue;
-
-        XMLAddress1 = xmlHttp.responseXML.getElementsByTagName("C_DATE");
-        opener.document.form1.invdate.value = XMLAddress1[0].childNodes[0].nodeValue;
-
-        XMLAddress1 = xmlHttp.responseXML.getElementsByTagName("txt_remarks");
-        opener.document.form1.txt_remarks.value = XMLAddress1[0].childNodes[0].nodeValue;
-
-        XMLAddress1 = xmlHttp.responseXML.getElementsByTagName("Attn");
-        opener.document.form1.cus_address.value = XMLAddress1[0].childNodes[0].nodeValue;
-
         
+         XMLAddress1 = xmlHttp.responseXML.getElementsByTagName("id");
+        var obj = JSON.parse(XMLAddress1[0].childNodes[0].nodeValue);
 
-        XMLAddress1 = xmlHttp.responseXML.getElementsByTagName("currency");
-        opener.document.form1.currency.value = XMLAddress1[0].childNodes[0].nodeValue;
+        opener.document.getElementById('tmpno').value = obj.tmp_no;  
+        opener.document.getElementById('txt_entno').value = obj.REF_NO;  
+        opener.document.getElementById('c_code').value = obj.C_CODE;  
+        opener.document.getElementById('c_name').value = obj.CUS_NAME;  
+        opener.document.getElementById('invdate').value = obj.SDATE;  
+        opener.document.getElementById('txt_remarks').value = obj.REMARK;  
+        opener.document.getElementById('cus_address').value = obj.C_ADD1;  
+        opener.document.getElementById('salesrep').value = obj.SAL_EX;  
+        opener.document.getElementById('DANO').value = obj.dele_no;   
 
-        XMLAddress1 = xmlHttp.responseXML.getElementsByTagName("salesrep");
-        opener.document.form1.salesrep.value = XMLAddress1[0].childNodes[0].nodeValue;
+          
 
-
-        XMLAddress1 = xmlHttp.responseXML.getElementsByTagName("DANO");
-        opener.document.form1.DANO.value = XMLAddress1[0].childNodes[0].nodeValue;
-
-
-
-        XMLAddress1 = xmlHttp.responseXML.getElementsByTagName("txt_rate");
-        opener.document.form1.txt_rate.value = XMLAddress1[0].childNodes[0].nodeValue;
+ 
 
         XMLAddress1 = xmlHttp.responseXML.getElementsByTagName("sales_table");
         window.opener.document.getElementById('itemdetails').innerHTML = XMLAddress1[0].childNodes[0].nodeValue;
@@ -428,16 +423,14 @@ function pass_rec_result()
 
         XMLAddress1 = xmlHttp.responseXML.getElementsByTagName("gtot");
         opener.document.form1.gtot.value = XMLAddress1[0].childNodes[0].nodeValue;
-
-        XMLAddress1 = xmlHttp.responseXML.getElementsByTagName("discount");
-        opener.document.form1.discount.value = XMLAddress1[0].childNodes[0].nodeValue;
+ 
         
 
-        if (XMLAddress1[0].childNodes[0].nodeValue > 0) {
-            window.opener.document.getElementById('vat').checked = true;
-        } else {
-            window.opener.document.getElementById('nonvat').checked = true;
-        }
+        // if (XMLAddress1[0].childNodes[0].nodeValue > 0) {
+        //     window.opener.document.getElementById('vat').checked = true;
+        // } else {
+        //     window.opener.document.getElementById('nonvat').checked = true;
+        // }
 
 
 
@@ -502,6 +495,7 @@ function calc() {
     var disper = 0;
     var disper1 = 0; 
     var subtot = 0;
+    var subtot1 = 0;
 
     if ((document.getElementById('dis').value != '') && (document.getElementById('dis').value != "0") && (document.getElementById('dis').value != "0.00")) {
 
@@ -511,8 +505,8 @@ function calc() {
     }
 
     document.getElementById('dis').value = disper;
-
-    subtot = parseFloat(document.getElementById('repair').value)+parseFloat(document.getElementById('selling').value) - (parseFloat(document.getElementById('selling').value) * parseFloat(document.getElementById('dis').value) / 100);
+    subtot1=parseFloat(document.getElementById('repair').value+document.getElementById('selling').value);
+    subtot = subtot1 - (subtot1  * parseFloat(document.getElementById('dis').value) / 100);
 
 
 
@@ -520,6 +514,7 @@ function calc() {
 
     // add_tmp('up');
 }
+
 
 
 function tickamouchange(cdate){
@@ -566,7 +561,8 @@ function passcusresult_quot1()
         var obj = JSON.parse(XMLAddress1[0].childNodes[0].nodeValue);
 
         opener.document.getElementById('jobno').value = obj.jobno;  
-        opener.document.getElementById('make').value = obj.marker;  
+        opener.document.getElementById('make').value = obj.marker;
+        opener.document.getElementById('design').value = obj.design;  
         opener.document.getElementById('size').value = obj.size;  
         opener.document.getElementById('serialno').value = obj.serialno;   
         opener.document.getElementById('adpay').value = obj.adpayment;   
