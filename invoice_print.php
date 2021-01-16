@@ -17,7 +17,7 @@
         }
 
         .tb  {
-           width: 800px;
+           width: 750px;
            border: 0px solid black;
 
 
@@ -51,7 +51,7 @@
 <?php
 require_once ("connection_sql.php");
 
-$sql = "Select * from s_salma where tmp_no='" . $_GET["tmp_no"] . "'";
+$sql = "Select * from s_salma where tmp_no='" . $_GET["tmp_no"] . "' and CANCELL='0'";
 $result = $conn->query($sql);
 $row = $result->fetch();
 
@@ -68,49 +68,54 @@ $row_invpara = $result_invpara->fetch();
 
 ?>
 <body>
-    <table width="800px;"  style="margin-top: 150px;" cellspacing="0" align="center" border="0">
+    <table width="750px;"  style="margin-top: 150px;" cellspacing="0" align="center" border="0">
 
+ 
+      
+ <tr>
 
-
+            <td>&nbsp;</td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+        </tr> 
         <tr>
 
+            <td>&nbsp;</td>
             <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+        </tr> 
+        <tr>
+
+
+            <td>&nbsp;</td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+        </tr> 
+        <tr>
+
+            <td>&nbsp;</td>
             <td></td>
             <td></td>
             <td></td>
             <td></td>
         </tr>
+        
         <tr>
 
             <td> <?php echo $row['CUS_NAME'] ?></td>
             <td></td>
+            <td class="right"><?php echo $row['REF_NO']; ?> </td>
             <td></td>
-            <td></td>
-            <td class="right"><?php echo $row['REF_NO']; ?> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp; <?php echo $row['SDATE'] ?></td>
+            <td class="right"> <?php echo $row['SDATE'] ?></td>
+             
         </tr>
-        <tr>
-
-            <td>City :<?php echo $row1['ADD1'] ?></td>
-            <td></td>
-            <td></td>
-            <td></td> 
-        </tr>
-        <tr>
-
-            <td></td>
-            <td></td>
-            <td></td>
-            <td></td>
-            <td></td>
-        </tr>
-        <tr>
-
-            <td></td>
-            <td></td>
-            <td></td>
-            <td></td>
-            <td></td>
-        </tr>
+        
         <tr>
 
             <td></td>
@@ -122,7 +127,16 @@ $row_invpara = $result_invpara->fetch();
         
         <tr>
 
+            <td>&nbsp;</td>
             <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+        </tr>
+        
+        <tr>
+
+            <td>&nbsp;</td>
             <td></td>
             <td></td>
             <td></td>
@@ -130,29 +144,22 @@ $row_invpara = $result_invpara->fetch();
         </tr>
         <tr>
 
-            <td></td>
-            <td></td>
-            <td></td>
-            <td></td>
-            <td></td>
-        </tr>
-        <tr>
-
-            <td></td>
+            <td>&nbsp;</td>
             <td></td>
             <td></td>
             <td></td>
             <td></td>
         </tr>
+         
         
     </table>
 
-    <table class="tb" align="center">
+    <table class="tb" align="center"   >
 
         <?php
         $i=1;
         $part="";
-        $sql1 = "Select * from t_invo where REF_NO='" . $row['REF_NO'] . "' order by CardNO desc";
+        $sql1 = "Select * from t_invo where refno='" . $row['REF_NO'] . "' order by refno desc";
         foreach ($conn->query($sql1) as $row1) {
 
             ?>
@@ -160,23 +167,22 @@ $row_invpara = $result_invpara->fetch();
 
 
                 <td class="left" ><?php echo $row1['jobno']; ?> </td>
-                <td class="left" ><?php echo $row1['t_size']; ?> </td>
-                <td class="left" > </td>
-                <td class="left" > </td>
+                <td class="left" ><?php echo $row1['size']; ?> </td>  
+                <td class="left" ><?php echo $row1['serialno']; ?> </td>
+                <td class="left" ><?php echo $row1['design']; ?> </td>
                 <td class="left" ><?php echo $row1['make']; ?> </td>
-                <td class="right"><?php echo number_format($row1['prec_amo'], 0, ".", ","); ?></td>
-                <td class="right"><?php echo number_format($row1['repair'], 2, ".", ","); ?></td> 
+                <td class="right"><?php echo number_format($row1['selling'], 0, ".", ","); ?></td>
+                <td class="right"><?php echo number_format($row1['repair1'], 2, ".", ","); ?></td> 
                 <td class="right"><?php echo number_format($row1['subtot'], 2, ".", ","); ?></td> 
             </tr>
             <?php
-            $i=$i+1;
-            $part=$row1['PART_NO'];
+            $i=$i+1; 
         }
         ?>
 
         <?php
 
-        $t=20;
+        $t=35;
         while ($i <$t) {
 
          echo "<tr>
@@ -189,7 +195,7 @@ $row_invpara = $result_invpara->fetch();
          <td></td> 
          <td></td> 
          <td></td> 
-
+        <td></td> 
          </tr>";
          $i=$i+1;
      }
@@ -203,19 +209,18 @@ $row_invpara = $result_invpara->fetch();
         <td></td>
         <td></td>
         <td></td>
-        <td></td>
-        <td></td> 
-        <td></td> 
+        <td></td>   <td></td>   <td></td> 
         <td class="right"><?php 
         echo number_format($row['GRAND_TOT'], 2, ".", ",");
 
         ?></td>
+         <td></td>   <td></td>    <td></td>  
     </tr>
 </table>
 
 
 </table>
-<div style='height:150px;'></div>
+ 
 <table width="800px;" align="center">
     <tr>
         <td> </td>
