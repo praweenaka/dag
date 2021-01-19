@@ -6,7 +6,7 @@ session_start();
 require_once ("connection_sql.php");
 
 header('Content-Type: text/xml');
-
+// test
 date_default_timezone_set('Asia/Colombo');
 
 if ($_POST["Command"] == "getdt") {

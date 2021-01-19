@@ -224,7 +224,7 @@ $row_invpara = $result_invpara->fetch();
 <table width="800px;" align="center">
     <tr>
         <td> </td>
-        <td><?php echo   $_SESSION["CURRENT_USER"] ;?> </td>
+        <td><?php echo $_SESSION["CURRENT_USER"] ;?> </td>
         <td></td> 
         <td></td> 
         <td></td> 
@@ -235,3 +235,4 @@ $row_invpara = $result_invpara->fetch();
 </body>
 
 </html>
+perl hoise pvt td
