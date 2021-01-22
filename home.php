@@ -1,5 +1,10 @@
 
 <?php
+session_start();
+if ($_SESSION['UserName'] == "") {
+    echo "Invalid Session";
+    exit(header("Location: http://akeesha.coolmansl.com/dag/index.php"));
+}
 include './CheckCookie.php';
 require_once ('connection_sql.php');
 $cookie_name = "user";
@@ -80,6 +85,13 @@ if (isset($_GET['url'])) {
         include_once './worker.php';
     }
 
+      if ($_GET['url'] == "brandmas") {
+        include_once './brandmas.php';
+    }
+    
+    if ($_GET['url'] == "beltmas") {
+        include_once './beltmas.php';
+    }
 
 //////////////////////////////////
 
@@ -153,7 +165,7 @@ $(function () {
         var d = new Date();
 //   var dd = d.toLocaleDateString();
 var tt = d.toLocaleTimeString();
-// document.getElementById("time").innerHTML = tt;
+document.getElementById("time").innerHTML = tt;
 }
 
 </script>
