@@ -18,8 +18,7 @@ include_once './connection_sql.php';
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
 
 
-
-    <link rel="stylesheet" href="css/bootstrap.min.css">
+ 
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.1.3/css/bootstrap.css">
     <link rel="stylesheet" href="https://cdn.datatables.net/1.10.19/css/dataTables.bootstrap4.min.css">
 
@@ -28,7 +27,18 @@ include_once './connection_sql.php';
     <script language="JavaScript" src="https://code.jquery.com/jquery-3.3.1.js"></script>
     <script language="JavaScript" src="https://cdn.datatables.net/1.10.19/js/jquery.dataTables.min.js"></script>
     <script language="JavaScript" src="https://cdn.datatables.net/1.10.19/js/dataTables.bootstrap4.min.js"></script>
-
+    
+    <!--====-->
+  
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.1.3/jszip.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.53/pdfmake.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.53/vfs_fonts.js"></script> 
+    <script src="https://cdn.datatables.net/1.10.20/js/dataTables.bootstrap4.min.js"></script>
+    <script src="https://cdn.datatables.net/buttons/1.6.0/js/dataTables.buttons.min.js"></script>
+    <script src="https://cdn.datatables.net/buttons/1.6.0/js/buttons.bootstrap4.min.js"></script>
+    <script src="https://cdn.datatables.net/buttons/1.6.0/js/buttons.html5.min.js"></script>
+    <script src="https://cdn.datatables.net/buttons/1.6.0/js/buttons.print.min.js"></script>
+    <script src="https://cdn.datatables.net/buttons/1.6.0/js/buttons.colVis.min.js"></script>   
 
     <script language="JavaScript" src="js/sizemaster.js"></script> 
 
@@ -72,18 +82,28 @@ include_once './connection_sql.php';
             ?>
         </table> </div>
 
-        <script type="text/javascript">
-            $(document).ready(function() {
-                $('#example').dataTable( {
-                  "pageLength": 10
-              } );
-            } );
+       <script type="text/javascript">
+                $(document).ready(function() {
+          var table = $('#example').DataTable( {
+            lengthChange: true,
+            fixedHeader: true,
+            responsive: true,
+            "deferRender": true, 
+             "order": [[ 0, 'desc' ]], 
+              buttons: [ 'copy', 'excel', 'pdf', 'print', 'colvis' ],
+            lengthMenu: [[ 25, 50,100, -1 ],[ '25 rows', '50 rows', '100 rows', 'Show all' ]],
 
-// $('#example').DataTable( {
-//   "aaSorting": [[ 0, "desc" ]] // Sort by first column descending
-// } );
+        } );
 
-</script>
+$('div.dataTables_filter input', table.table().container()).focus();
+          table.buttons().container()
+          .appendTo( '#example_wrapper .col-md-6:eq(0)' );
+           
+      } );
+        </script>
+        
+       
+         
 
 
 </body>

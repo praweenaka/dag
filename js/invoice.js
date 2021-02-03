@@ -149,7 +149,7 @@ function showarmyresultdel() {
             document.getElementById('repair').value = "";
             document.getElementById('dis').value = "";
             document.getElementById('subtotal').value = "";
-
+            document.getElementById('rejectdag').disabled = true;
             // document.getElementById('amount').focus();
         } else {
             document.getElementById('msg_box').innerHTML = "<div class='alert alert-warning' role='alert'><span class='center-block'>" + XMLAddress1[0].childNodes[0].nodeValue + "</span></div>";
@@ -223,9 +223,10 @@ function save_inv() {
     }
     url = url + "&paymethod=" + paymethod;
     
-  
-    
-
+    url = url + "&rejectdag=" + document.getElementById('rejectdag').checked;
+   
+   
+ 
     xmlHttp.onreadystatechange = salessaveresult;
     xmlHttp.open("GET", url, true);
     xmlHttp.send(null);
@@ -278,8 +279,12 @@ function new_inv() {
     document.getElementById('discount').value = "";
     document.getElementById('dis').value = ""; 
     document.getElementById('serialno').value = ""; 
+    document.getElementById('design').value = ""; 
 
-    document.getElementById('paymethod_1').checked =true; 
+    document.getElementById('paymethod_0').checked =true; 
+    document.getElementById('rejectdag').checked = false;
+    document.getElementById('rejectdag').disabled = false;
+    
 
     document.getElementById('vattot').value = "";
     var url = "invoice_data.php";
@@ -405,14 +410,19 @@ function pass_rec_result()
         opener.document.getElementById('DANO').value = obj.dele_no;   
 
           
-
+        XMLAddress1 = xmlHttp.responseXML.getElementsByTagName("type"); 
+        if (XMLAddress1[0].childNodes[0].nodeValue == "CR") {
+             opener.document.getElementById('paymethod_0').checked = true;
+        }else{
+             opener.document.getElementById('paymethod_1').checked = true;
+        } 
  
 
         XMLAddress1 = xmlHttp.responseXML.getElementsByTagName("sales_table");
         window.opener.document.getElementById('itemdetails').innerHTML = XMLAddress1[0].childNodes[0].nodeValue;
 
-        XMLAddress1 = xmlHttp.responseXML.getElementsByTagName("subtot");
-        window.opener.document.getElementById('subtot').value = XMLAddress1[0].childNodes[0].nodeValue;
+        // XMLAddress1 = xmlHttp.responseXML.getElementsByTagName("subtot");
+        // window.opener.document.getElementById('subtot').value = XMLAddress1[0].childNodes[0].nodeValue;
 
 
         XMLAddress1 = xmlHttp.responseXML.getElementsByTagName("item_count");
@@ -423,6 +433,9 @@ function pass_rec_result()
 
         XMLAddress1 = xmlHttp.responseXML.getElementsByTagName("gtot");
         opener.document.form1.gtot.value = XMLAddress1[0].childNodes[0].nodeValue;
+ 
+        XMLAddress1 = xmlHttp.responseXML.getElementsByTagName("discount");
+        opener.document.form1.discount.value = XMLAddress1[0].childNodes[0].nodeValue;
  
         
 
@@ -516,18 +529,7 @@ function calc() {
 }
 
 
-
-function tickamouchange(cdate){
- document.getElementById('tick_amou').value="";
- if(cdate=="paymethod_1"){ 
-    document.getElementById('tick_amou').disabled = true; 
-}else if(cdate=="paymethod_0"){ 
-    document.getElementById('tick_amou').disabled = true;
-}else{ 
-    document.getElementById('tick_amou').disabled = false;
-}
-}
-
+ 
 
 
 function custno1(code)
@@ -612,5 +614,23 @@ function passcusresult_quot()
 
         self.close();
     }
+
+}
+
+function rejectdag1() {
+
+    xmlHttp = GetXmlHttpObject();
+    if (xmlHttp == null) {
+        alert("Browser does not support HTTP Request");
+        return;
+    }
+
+    var url = "invoice_data.php";
+    url = url + "?Command=" + "rejectdag"; 
+    url = url + "&rejectdag=" + document.getElementById('rejectdag').checked;
+     
+ 
+    xmlHttp.open("GET", url, true);
+    xmlHttp.send(null);
 
 }

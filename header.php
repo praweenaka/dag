@@ -5,6 +5,7 @@
 
  <title><?php 
  require_once ('connection_sql.php');
+session_start();
 
  $sqlinv = "select * from  doc where name = '". $_GET['url'] ."'";
  $resultinv = $conn->query($sqlinv);
@@ -14,7 +15,10 @@
 }else{
     echo "HOME";
 }
-
+if ($_SESSION['UserName'] == "") {
+    echo "Invalid Session";
+    exit(header("Location: http://akeesha.coolmansl.com/dag/index.php"));
+}
 
 
 ?></title>
@@ -50,6 +54,42 @@
                 margin-bottom: 8px;
             }
         </style>
+        <style>
+.dropbtn {
+  background-color: #4CAF50;
+  color: white;
+  padding: 16px;
+  font-size: 16px;
+  border: none;
+}
+
+.dropdown {
+  position: relative;
+  display: inline-block;
+}
+
+.dropdown-content {
+  display: none;
+  position: absolute;
+  background-color: #f1f1f1;
+  min-width: 160px;
+  box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
+  z-index: 1;
+}
+
+.dropdown-content a {
+  color: black;
+  padding: 12px 16px;
+  text-decoration: none;
+  display: block;
+}
+
+.dropdown-content a:hover {background-color: #ddd;}
+
+.dropdown:hover .dropdown-content {display: block;}
+
+.dropdown:hover .dropbtn {background-color: #3e8e41;}
+</style>
     </head>
 
     <body class="hold-transition skin-blue sidebar-mini">
@@ -57,13 +97,24 @@
 
             <header class="main-header">
                 <!-- Logo -->
-                <a style="font-size: 12px;" href="home.php" class="logo"> <!-- mini logo for sidebar mini 50x50 pixels --> <span class="logo-mini"><b></b></span> <!-- logo for regular state and mobile devices --> <span class="logo-lg"><b>SAMPLE</b></span>SAMPLE</a>
+                <a style="font-size: 12px;" href="home.php" class="logo"> <!-- mini logo for sidebar mini 50x50 pixels --> <span class="logo-mini"><b></b></span> <!-- logo for regular state and mobile devices --> <span class="logo-lg"><b>DAG</b></span>DAG</a>
                 <!-- Header Navbar: style can be found in header.less -->
                 <nav class="navbar navbar-static-top" role="navigation">
                     <!-- Sidebar toggle button-->
                     <a href="#" class="sidebar-toggle" data-toggle="offcanvas" role="button"> <span class="sr-only">Toggle navigation</span> </a>
                     <div class="navbar-custom-menu">
                         <ul class="nav navbar-nav">
+                            <!--=================-->
+                            <!--<div class="dropdown">-->
+                            <!--  <button class="dropbtn">Dropdown</button>-->
+                            <!--  <div class="dropdown-content">-->
+                            <!--    <a href="#">Link 1</a>-->
+                            <!--    <a href="#">Link 2</a>-->
+                            <!--    <a href="#">Link 3</a>-->
+                            <!--  </div>-->
+                            <!--</div>-->
+                            
+                            <!--======================-->
                             <!-- Messages: style can be found in dropdown.less-->
 
                             <!-- Notifications: style can be found in dropdown.less -->
@@ -157,8 +208,8 @@
                     $mgroup = "";
                     session_start();
                     include './connection_sql.php';
-                    $sql = "select * from view_menu where username ='" . $_SESSION["CURRENT_USER"] . "' and doc_view='1'       order by grp,docid";
-
+                    $sql = "select * from view_menu where username ='" . $_SESSION["CURRENT_USER"] . "' and doc_view='1'       order by grp desc";
+ 
                     foreach ($conn->query($sql) as $row1) {
                         if ($mgroup != $row1['grp']) {
                             if ($mgroup != "") {

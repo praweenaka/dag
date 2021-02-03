@@ -41,13 +41,16 @@ if ($_POST["Command"] == "save_inv") {
         $resultsalma_q = $conn->query($sqlisalma_q);
         if ($rowsalma_q = $resultsalma_q->fetch()) {
             
-            $sql = "update workers set name= '" . $_POST['des'] . "'   where code='" . $_POST['code'] . "'";
+            $sql = "update workers set name= '" . $_POST['des'] . "',nic= '" . $_POST['nic'] . "',land= '" . $_POST['land'] . "',mobile= '" . $_POST['mobile'] . "',address= '" . $_POST['address'] . "'   where code='" . $_POST['code'] . "'";
             $result = $conn->query($sql);
+            
+            $sqllog = "insert into entry_log(refno, username, docname, trnType, stime, sdate) values ('" . trim($_POST['code']) . "', '" . $_SESSION["CURRENT_USER"] . "', 'WORKER', 'Update', '" . date("Y-m-d H:i:s") . "', '" . date("Y-m-d") . "')";
+            $resultlog = $conn->query($sqllog);
 
             $conn->commit();
             echo "Updated";
         }else{
-            $sql2 = "insert into workers(code,name) values ('" . $_POST['code'] . "' , '" . $_POST['des'] . "')"; 
+            $sql2 = "insert into workers(code,name,nic,land,mobile,address) values ('" . $_POST['code'] . "' , '" . $_POST['des'] . "', '" . $_POST['nic'] . "', '" . $_POST['land'] . "', '" . $_POST['mobile'] . "', '" . $_POST['address'] . "')"; 
             $result2 = $conn->query($sql2);
 
             $sql = "SELECT worker FROM invpara";
@@ -58,6 +61,8 @@ if ($_POST["Command"] == "save_inv") {
             $sql = "update invpara set worker = $no2 where worker = $no";
             $result = $conn->query($sql);
 
+            $sqllog = "insert into entry_log(refno, username, docname, trnType, stime, sdate) values ('" . trim($_POST['code']) . "', '" . $_SESSION["CURRENT_USER"] . "', 'WORKER', 'Save', '" . date("Y-m-d H:i:s") . "', '" . date("Y-m-d") . "')";
+            $resultlog = $conn->query($sqllog);
 
             $conn->commit();
             echo "Saved";

@@ -171,9 +171,15 @@ $row_invpara = $result_invpara->fetch();
                 <td class="left" ><?php echo $row1['serialno']; ?> </td>
                 <td class="left" ><?php echo $row1['design']; ?> </td>
                 <td class="left" ><?php echo $row1['make']; ?> </td>
-                <td class="right"><?php echo number_format($row1['selling'], 0, ".", ","); ?></td>
+            <?php if($row1['reject'] =="0"){?>
+                 <td class="right"><?php echo number_format($row1['selling'], 0, ".", ","); ?></td>
                 <td class="right"><?php echo number_format($row1['repair1'], 2, ".", ","); ?></td> 
                 <td class="right"><?php echo number_format($row1['subtot'], 2, ".", ","); ?></td> 
+              <?php  }else{?>
+                     <td class="right"><?php  echo "REJECTED"; ?></td> 
+               <?php }
+                ?>
+               
             </tr>
             <?php
             $i=$i+1; 
@@ -182,7 +188,7 @@ $row_invpara = $result_invpara->fetch();
 
         <?php
 
-        $t=35;
+        $t=34;
         while ($i <$t) {
 
          echo "<tr>
@@ -201,7 +207,7 @@ $row_invpara = $result_invpara->fetch();
      }
 
      ?>
-
+         
 
      <tr>
 
@@ -224,7 +230,7 @@ $row_invpara = $result_invpara->fetch();
 <table width="800px;" align="center">
     <tr>
         <td> </td>
-        <td><?php echo $_SESSION["CURRENT_USER"] ;?> </td>
+        <td><?php echo   $_SESSION["CURRENT_USER"] ;?> </td>
         <td></td> 
         <td></td> 
         <td></td> 
@@ -235,4 +241,3 @@ $row_invpara = $result_invpara->fetch();
 </body>
 
 </html>
-perl hoise pvt td

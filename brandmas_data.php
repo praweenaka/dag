@@ -6,7 +6,7 @@ session_start();
 require_once ("connection_sql.php");
 
 header('Content-Type: text/xml');
-// test
+
 date_default_timezone_set('Asia/Colombo');
 
 if ($_POST["Command"] == "getdt") {
@@ -43,6 +43,9 @@ if ($_POST["Command"] == "save_inv") {
             
             $sql = "update marker set name= '" . $_POST['des'] . "'   where code='" . $_POST['code'] . "'";
             $result = $conn->query($sql);
+            
+            $sqllog = "insert into entry_log(refno, username, docname, trnType, stime, sdate) values ('" . trim($_POST['code']) . "', '" . $_SESSION["CURRENT_USER"] . "', 'BELT', 'Update', '" . date("Y-m-d H:i:s") . "', '" . date("Y-m-d") . "')";
+            $resultlog = $conn->query($sqllog);
 
             $conn->commit();
             echo "Updated";
@@ -58,6 +61,9 @@ if ($_POST["Command"] == "save_inv") {
             $sql = "update invpara set brandmas = $no2 where brandmas = $no";
             $result = $conn->query($sql);
 
+
+            $sqllog = "insert into entry_log(refno, username, docname, trnType, stime, sdate) values ('" . trim($_POST['code']) . "', '" . $_SESSION["CURRENT_USER"] . "', 'BRAND', 'Save', '" . date("Y-m-d H:i:s") . "', '" . date("Y-m-d") . "')";
+             $resultlog = $conn->query($sqllog);
 
             $conn->commit();
             echo "Saved";

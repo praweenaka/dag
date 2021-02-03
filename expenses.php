@@ -30,7 +30,7 @@
             
 
             <div class="row">
-                <div class="col-md-6">
+                <div class="col-md-9">
                     <div class="form-group">
                         <label class="col-sm-2 control-label" for="txt_usernm">CODE</label>
                         <div class="col-sm-3">
@@ -61,8 +61,8 @@
                     </div> 
                 </div>
 
-                <div class="col-md-6">
-                    <table class="table">
+                <div class="col-md-3">
+                    <table class="table hidden">
                         <tr>
                             <td>gfdg</td>
                             <td>gfdg</td>

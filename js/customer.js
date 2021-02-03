@@ -28,7 +28,7 @@ function new_inv() {
     }
 
     document.getElementById('code').value = "";
-    document.getElementById('title').value = "";
+    document.getElementById('cus_type').value = "";
     document.getElementById('name').value = "";
     document.getElementById('shopname').value = "";
     document.getElementById('nic').value = "";
@@ -91,10 +91,20 @@ function save_inv()
         return;
     }
 
+    document.getElementById('msg_box').innerHTML = "";
+    if (document.getElementById('name').value == "") {
+        document.getElementById('msg_box').innerHTML = "<div class='alert alert-warning' role='alert'><span class='center-block'>Enter Customer Name</span></div>";
+        return false;
+    }
+    if (document.getElementById('cus_type').value == "") {
+        document.getElementById('msg_box').innerHTML = "<div class='alert alert-warning' role='alert'><span class='center-block'>Select Customer TYPE</span></div>";
+        return false;
+    }
+    
     var url = 'customer_data.php';
     var params = 'Command=' + 'save_inv';
     params = params + '&code=' + document.getElementById('code').value;
-    params = params + '&title=' + document.getElementById('title').value;
+    params = params + '&cus_type=' + document.getElementById('cus_type').value;
     params = params + '&name=' + document.getElementById('name').value;
     params = params + '&shopname=' + document.getElementById('shopname').value; 
     params = params + '&nic=' + document.getElementById('nic').value; 
@@ -176,7 +186,7 @@ function passcusresult_quot()
       
        opener.document.getElementById('code').value = obj.CODE;  
        opener.document.getElementById('name').value = obj.NAME;   
-       opener.document.getElementById('title').value = obj.title;   
+       opener.document.getElementById('cus_type').value = obj.cus_type;   
        opener.document.getElementById('shopname').value = obj.shopname;              
        opener.document.getElementById('nic').value = obj.nic;   
        opener.document.getElementById('land').value = obj.TELE1;   

@@ -1,4 +1,15 @@
-<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+ <!-- Main content -->
+ 
+    <link rel="stylesheet" href="css/bootstrap.min.css"> 
+    <link rel="stylesheet" href="https://cdn.datatables.net/1.10.19/css/dataTables.bootstrap4.min.css"> 
+    <script language="JavaScript" src="https://code.jquery.com/jquery-3.3.1.js"></script>
+    <script language="JavaScript" src="https://cdn.datatables.net/1.10.19/js/jquery.dataTables.min.js"></script>
+    <script language="JavaScript" src="https://cdn.datatables.net/1.10.19/js/dataTables.bootstrap4.min.js"></script>
+    <!--<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>-->
+     
+<script src="https://cdn.datatables.net/buttons/1.6.5/js/dataTables.buttons.min.js"></script>
+<script src="https://cdn.datatables.net/buttons/1.6.5/js/buttons.print.min.js"></script>
+<script src="https://cdn.datatables.net/buttons/1.6.0/js/buttons.colVis.min.js"></script>
 
 <?php
 require_once("./connection_sql.php");
@@ -10,6 +21,9 @@ require_once("./connection_sql.php");
         background-color: red;
         color: white; 
     }
+    .table-hover tbody tr:hover td {
+        background: aqua;
+    }
 
 </style>
 <section class="content" onload="search1();">
@@ -17,30 +31,31 @@ require_once("./connection_sql.php");
     <div class="box box-primary">
         <div class="box-header with-border">
             <h3 class="box-title">PRODUCTION LIST</h3>
+            <h4 style="float: right;height: 3px;"><b id="time"></b></h4>
         </div>
         <form role="form" class="form-horizontal">
             <div class="box-body"> 
-                <div class="panel-body">
-                    <table width="100%" class="table table-striped table-bordered table-hover" id="dataTables-example1">
-                     <thead>   
-                        <tr>
-                            <th width="80%"> </th>    
-                            <th><input type="text" name="search" placeholder="Search" id="search"  class="form-control input-sm"></th>  
-                        </tr>
-                    </thead>
-                </table>
-                <table width="100%" class="table table-striped table-bordered table-hover" id="dataTables-example">
+                <div class="panel-body" style="overflow-x: auto">
+                     
+                <table width="100%" class="table table-striped table-bordered table-hover" id="dataTables-example" style="width:auto">
                     <thead> 
 
-                     <tr>
+                     <tr class="danger">
                         <th>#</th>
-                        <th>DATE</th>   
-                        <th>CUSTOMER</th>
                         <th>JOB NO</th>
+                        <th>INVOICE NO</th>
+                        <th>REG DATE</th>   
+                        <th>ONHAND DATE</th>   
+                        <th>CUSTOMER</th>
+                        <th>DESIGN</th> 
                         <th>MAKE</th> 
                         <th>SIZE</th>  
+                        <th>BELT</th>  
                         <th>SERIAL NO</th>  
-                        <th>REMARK</th>  
+                        <th>AD PAY</th>  
+                        <th>CASING COST</th>  
+                        <th>TOTAL</th>
+                        <th>REMARK</th>
                         <th></th>  
                     </tr>
                 </thead>
@@ -59,14 +74,21 @@ require_once("./connection_sql.php");
 
                         ?>
                         <tr>
-                            <td><?php echo $i; ?></td>
-                            <td><?php echo $row['sdate']; ?></td>   
-                            <td><?php echo $row['cuscode'].'-'.$row['cusname']; ?></td>   
-                            <td><?php echo $row['refno']; ?></td> 
-                            <td><?php echo $row['marker']; ?></td>   
-                            <td><?php echo $row['size']; ?></td>   
-                            <td><?php echo $row['serialno']; ?></td>   
-                            <td><?php echo $row['remark']; ?></td>  
+                            <td onclick="name(this)" ><?php echo $i; ?></td>
+                            <td onclick="name(this)" ><?php echo $row['jobno']; ?></td> 
+                            <td onclick="name(this)" ><?php echo $row['refno']; ?></td> 
+                            <td onclick="name(this)" ><?php echo $row['sdate']; ?></td>
+                            <td onclick="name(this)" ><?php echo $row['onhand_date']; ?></td>
+                            <td onclick="name(this)" ><?php echo $row['cusname']; ?></td>   
+                            <td onclick="name(this)" ><?php echo $row['design']; ?></td>   
+                            <td onclick="name(this)" ><?php echo $row['marker']; ?></td>   
+                            <td onclick="name(this)" ><?php echo $row['size']; ?></td>   
+                            <td onclick="name(this)" ><?php echo $row['belt']; ?></td>   
+                            <td onclick="name(this)" ><?php echo $row['serialno']; ?></td>   
+                            <td onclick="name(this)" ><?php echo $row['adpayment']; ?></td>  
+                            <td onclick="name(this)" ><?php echo $row['cascost']; ?></td>  
+                            <td onclick="name(this)" ><?php echo $row['total']; ?></td>  
+                            <td onclick="name(this)" ><?php echo $row['remark']; ?></td>  
                             <td onclick="name(this)"  >
                                 <button type="button" class="btn btn-primary"><span class="glyphicon glyphicon-fullscreen"></span> &nbsp;VIEW</button>
                             </td>
@@ -92,10 +114,10 @@ require_once("./connection_sql.php");
             <div class="modal-content">
               <div class="modal-header">
                 <div class="col-sm-5">
-                 <center><h4 class="modal-title" id="myModalLabel">PRODUCTION</h4></center>
-                 <input type="text" id="refno"  >
-                 <input type="text" id="serialno"  >
-                 <input type="text" id="id"  >
+                 <center><h4 class="modal-title" id="myModalLabel">PRODUCTION</h4></center> 
+                 <input type="hidden" id="id" disabled >
+                 <input type="hidden" id="size" disabled >
+                 <input type="hidden" id="cascost" disabled >
              </div>
              <div class="col-sm-3">
               <a onclick="sendonhand();" class="btn btn-primary">
@@ -115,37 +137,42 @@ require_once("./connection_sql.php");
 
  <div class="container-fluid">
     <div class="row">
-        <div class="col-md-12">
+         <div class="col-md-12">
 
-            <span class="pull-left">Customer: <?php echo $row['sdate']; ?></strong></span>
-            <span class="pull-right">REG.DATE: <strong><?php echo $row['sdate']; ?></strong></span>
+            <span class="pull-left">CUSTOMER:&nbsp;&nbsp;&nbsp;&nbsp;  <strong> <input type="text" id="cusname"  disabled></strong></span>
 
+            <span class="pull-right">SEND DATE: <strong><input type="text" id="onhanddate"  disabled></strong></span>
         </div>
         <div class="col-lg-12">
-            <span class="pull-left">JOB NO: <strong><?php echo ucwords($row['refno']); ?></strong></span>
-            <span class="pull-right">SERIAL NO: <strong><?php echo $row['serialno']; ?></strong></span>
+            <span class="pull-left">REF NO: &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<strong><input type="text" id="refno"  disabled></strong></span>
+            
+            <span class="pull-right">REG.DATE: <strong><input type="text" id="regdate"  disabled></strong></span>
         </div>
         <div class="col-lg-12">
-            <span class="pull-left">MAKE: <strong><?php echo ucwords($row['marker']); ?></strong></span>
-            <span class="pull-right">TYPE: <strong><?php echo ""; ?></strong></span>
+            <span class="pull-left">JOBNO: &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<strong><input type="text" id="jobno"  disabled></strong></span>
+            <span class="pull-right">AD PAY: <strong><input type="text" id="adpay"  disabled> </strong></span>
+            
         </div>
         <div class="col-lg-12">
-            <span class="pull-left">SEND DATE: <strong><?php echo ucwords($row['sdate']); ?></strong></span>
-            <span class="pull-right">TOTAL AMOUNT <strong><?php echo number_format($row['adpayment'],2); ?></strong></span>
+            <span class="pull-left">SERIAL NO:  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<strong><input type="text" id="serialno"  disabled></strong></span>
+            <span class="pull-right">TOTAL AMOUNT <strong><input type="text" id="totalamou"  disabled> </strong></span>
         </div>
 
     </div>
+    <div class="form-group"> </div>
+    <div id="msg_box"  class="span12 text-center"  ></div>
     <!-- ============================ -->
     <div class="form-group"> 
         <ul class="nav nav-tabs">
           <li class="active"><a data-toggle="tab" href="#home">SPARE ITEM</a></li>
           <li><a data-toggle="tab" href="#menu1" onclick=" add_workersview();">JOB WORKERS</a></li>
+          <li><a data-toggle="tab" href="#menu3" onclick=" add_buildersview();">JOB BILDERS</a></li>
           <li><a data-toggle="tab" href="#menu2">FINISH</a></li>
       </ul>
   </div>
   <div class="tab-content">
       <div id="home" class="tab-pane fade in active"> 
-
+    
        <div class="row">
            <table width="100%" class="table table-striped table-bordered table-hover">
             <thead>
@@ -157,11 +184,11 @@ require_once("./connection_sql.php");
                     <th>#</th> 
                 </tr>
                 <tr>
-                    <td> <select name="spareitem" id="spareitem"    class="text_purchase3 col-sm-9 form-control" > 
-                        <?php
-
-
-                        $sql = "Select * from size order by code";
+                    <td> <select name="spareitem" id="spareitem" onchange="spareprice();"   class="text_purchase3 col-sm-9 form-control" > 
+                            <option value=""></option>
+                        <?php 
+                        
+                        $sql = "Select * from spareitem order by code";
                         foreach ($conn->query($sql) as $row) {
                             echo "<option value=\"" . $row["name"] . "\">" . $row["name"] . "</option>";
                         }
@@ -169,10 +196,10 @@ require_once("./connection_sql.php");
 
                     </select></td>
 
-                    <td><input type="number" onkeyup="totqty();" placeholder="PRICE" id="price"   class="form-control"></td>
-                    <td><input type="number" onkeyup="totqty();" placeholder="QTY" id="qty"   class="form-control"></td>
+                    <td><input type="number" onchange="totqty();" disabled placeholder="PRICE" id="price"   class="form-control"></td>
+                    <td><input type="number" onchange="totqty();" placeholder="QTY" id="qty"   class="form-control"></td>
                     <td><input type="number" placeholder="TOTAL" id="total" disabled=""   class="form-control"></td>
-                    <td><a onclick="add_spare();" class="btn btn-default btn-sm"> <span class="fa fa-plus"></span> &nbsp; </a></td>
+                    <td><a onclick="add_spare();" class="btn btn-default btn-sm"> <span class="fa fa-plus"></span>ADD &nbsp; </a></td>
                 </tr>
                 <tr>
                    <div id="itemdetails" > </div>
@@ -203,6 +230,7 @@ require_once("./connection_sql.php");
         </tr>
         <tr>
             <td> <select name="workers" id="workers"    class="text_purchase3 col-sm-9 form-control" > 
+            <option value=""></option>
                 <?php
                 require_once("./connection_sql.php");
 
@@ -213,14 +241,51 @@ require_once("./connection_sql.php");
                 ?>
             </select></td> 
             <td><input type="number" placeholder="HOURS" id="hours"   class="form-control"></td>
-            <td><a onclick="add_workers();" class="btn btn-default btn-sm"> <span class="fa fa-plus"></span> &nbsp; </a></td>
+            <td><a onclick="add_workers();" class="btn btn-default btn-sm"> <span class="fa fa-plus"></span> ADD&nbsp; </a></td>
         </tr>
     </thead>
     <tbody>
 
         <div id="itemdetails1" > </div>
         <tr>
-            <td align="right" colspan="3"><strong>Total</strong></td>
+            <td align="right" colspan="2"><strong>Total</strong></td>
+            <td align="right"><strong><?php echo number_format($total, 2); ?></strong></td>
+        </tr>
+    </tbody>
+</table>
+</div>
+</div>
+<!-- ======================== -->
+<div id="menu3" class="tab-pane fade">
+ <div class="row">
+  <table width="100%" class="table table-striped table-bordered table-hover">
+    <thead>
+        <tr>
+            <th>NAME</th> 
+            <th>HOURS</th> 
+            <th>#</th> 
+        </tr>
+        <tr>
+            <td> <select name="builders" id="builders"    class="text_purchase3 col-sm-9 form-control" > 
+            <option value=""></option>
+                <?php
+                require_once("./connection_sql.php");
+
+                $sql = "Select * from workers order by code";
+                foreach ($conn->query($sql) as $row) {
+                    echo "<option value=\"" . $row["name"] . "\">" . $row["name"] . "</option>";
+                }
+                ?>
+            </select></td> 
+            <td><input type="number" placeholder="HOURS" id="hours1"   class="form-control"></td>
+            <td><a onclick="add_builders();" class="btn btn-default btn-sm"> <span class="fa fa-plus"></span>ADD &nbsp; </a></td>
+        </tr>
+    </thead>
+    <tbody>
+
+        <div id="itemdetails2" > </div>
+        <tr>
+            <td align="right" colspan="2"><strong>Total</strong></td>
             <td align="right"><strong><?php echo number_format($total, 2); ?></strong></td>
         </tr>
     </tbody>
@@ -250,9 +315,9 @@ require_once("./connection_sql.php");
             <?php
             require_once("./connection_sql.php");
 
-            $sql = "Select * from workers order by code";
+            $sql = "Select * from design order by code";
             foreach ($conn->query($sql) as $row) {
-                echo "<option value=\"" . $row["name"] . "\">" . $row["name"] . "</option>";
+                echo "<option value=\"" . $row["design"] . "\">" . $row["design"] . "</option>";
             }
             ?>
         </select>
@@ -315,10 +380,25 @@ require_once("./connection_sql.php");
         var cell_5 = row.cells[5].innerHTML; 
         var cell_6 = row.cells[6].innerHTML; 
         var cell_7 = row.cells[7].innerHTML; 
+        var cell_8 = row.cells[8].innerHTML; 
+        var cell_9 = row.cells[9].innerHTML; 
+        var cell_10 = row.cells[10].innerHTML; 
+        var cell_11 = row.cells[11].innerHTML; 
+        var cell_12 = row.cells[12].innerHTML; 
+        var cell_13 = row.cells[13].innerHTML; 
 
-        document.getElementById("id").value=cell_0; 
-         document.getElementById("refno").value=cell_3; 
-        document.getElementById("serialno").value=cell_6;
+         document.getElementById("id").value=cell_0; 
+         document.getElementById("jobno").value=cell_1;
+         document.getElementById("refno").value=cell_2;
+         document.getElementById("onhanddate").value=cell_3;
+         document.getElementById("regdate").value=cell_4;
+         document.getElementById("cusname").value=cell_5; 
+         document.getElementById("size").value=cell_8;
+         document.getElementById("serialno").value=cell_10;
+         document.getElementById("adpay").value=cell_11;
+         document.getElementById("cascost").value=cell_12;
+         document.getElementById("totalamou").value=cell_13;
+         
 
         $("#exampleModal").modal("show");
         add_spareview();
@@ -328,3 +408,28 @@ require_once("./connection_sql.php");
 
 
 </script>
+
+<script type="text/javascript">
+                $(document).ready(function() {
+          var table = $('#dataTables-example').DataTable( {
+             lengthChange: true,
+            fixedHeader: true,
+            responsive: true,
+            "deferRender": true, 
+             "order": [[ 0, 'asc' ]], 
+               dom: 'Bfrtip',
+        lengthMenu: [[ 25, 50,100, -1 ],[ '25 rows', '50 rows', '100 rows', 'Show all' ]],
+         "pageLength": -1,
+        buttons: [
+            'pageLength','print','colvis'
+        ]
+              
+
+        } );
+
+$('div.dataTables_filter input', table.table().container()).focus();
+          table.buttons().container()
+          .appendTo( '#example_wrapper .col-md-6:eq(0)' );
+           
+      } );
+        </script>

@@ -37,6 +37,7 @@ function new_inv() {
     document.getElementById('remark').value="";
     document.getElementById('uniq').value="";
     document.getElementById('jobno').value="";
+     document.getElementById('cascost').value="";
     document.getElementById('belt').value="";
     document.getElementById('department').value="01";
     document.getElementById('msg_box').innerHTML="";
@@ -85,7 +86,7 @@ function assign_dt() {
         document.getElementById("uniq").value = XMLAddress1[0].childNodes[0].nodeValue;
         
          XMLAddress1 = xmlHttp.responseXML.getElementsByTagName("scode"); 
-        if (XMLAddress1[0].childNodes[0].nodeValue=="K") {
+        if (XMLAddress1[0].childNodes[0].nodeValue=="AK") {
             document.getElementById("jobno").disabled=false;
         }else{
             document.getElementById("jobno").disabled=true;
@@ -124,7 +125,7 @@ function re_setjobno() {
     if (xmlHttp.readyState == 4 || xmlHttp.readyState == "complete") {
 
          XMLAddress1 = xmlHttp.responseXML.getElementsByTagName("scode"); 
-        if (XMLAddress1[0].childNodes[0].nodeValue=="K") {
+        if (XMLAddress1[0].childNodes[0].nodeValue=="AK") {
             document.getElementById("jobno").disabled=false;
         }else{
             document.getElementById("jobno").disabled=true;
@@ -188,6 +189,7 @@ function add_tmp()
     params = params + "&sdate="+document.getElementById('sdate').value;
     params = params + "&belt="+document.getElementById('belt').value;
     params = params + "&department="+document.getElementById('department').value;
+    params = params + "&cascost="+document.getElementById('cascost').value;
     
     document.getElementById('msg_box').innerHTML = "";
     
@@ -210,7 +212,8 @@ function add()
 
     if (xmlHttp.readyState == 4 || xmlHttp.readyState == "complete")
     {
-     XMLAddress1 = xmlHttp.responseXML.getElementsByTagName("sales_table");
+    //  if (xmlHttp.responseText == "ADDED") {
+         XMLAddress1 = xmlHttp.responseXML.getElementsByTagName("sales_table");
      document.getElementById('itemdetails').innerHTML = XMLAddress1[0].childNodes[0].nodeValue;
 
      document.getElementById('warranty').value = "";
@@ -224,6 +227,10 @@ function add()
      document.getElementById('department').disabled=true;
      XMLAddress1 = xmlHttp.responseXML.getElementsByTagName("jobno");
     document.getElementById("jobno").value = XMLAddress1[0].childNodes[0].nodeValue;
+    //  } else {
+    //   document.getElementById('msg_box').innerHTML = "<div class='alert alert-warning' role='alert'><span class='center-block'>" + xmlHttp.responseText + "</span></div>";
+
+    //  } 
 
  }
 }
@@ -253,6 +260,7 @@ function save_inv()
     params = params + "&cuscode="+document.getElementById('cuscode').value;
     params = params + "&cusname="+document.getElementById('cusname').value;
     params = params + '&adpayment=' + document.getElementById('adpayment').value;   
+    params = params + '&cascost=' + document.getElementById('cascost').value;   
     xmlHttp.open("POST", url, true);
     xmlHttp.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
     xmlHttp.setRequestHeader("Content-length", params.length);
@@ -274,7 +282,7 @@ function save()
     {
 
 
-        if (xmlHttp.responseText == "Saved") {
+      if (xmlHttp.responseText == "Saved") {
          document.getElementById('msg_box').innerHTML = "<div class='alert alert-success' role='alert'><span class='center-block'>Saved</span></div>";
          setTimeout("location.reload(true);", 500); 
      } else {
@@ -283,6 +291,18 @@ function save()
    }
 
 }
+}
+
+
+function print_inv(cdata) {
+
+    var url = "dag_print.php";
+    url = url + "?refno=" + document.getElementById('refno').value;
+    url = url + "&action=" + cdata;
+
+    window.open(url, '_blank');
+
+
 }
 
 function del_item(id)
@@ -363,6 +383,7 @@ function passcusresult_quot()
         opener.document.getElementById('sdate').value = obj.sdate;   
         opener.document.getElementById('cuscode').value = obj.cuscode;   
         opener.document.getElementById('cusname').value = obj.cusname;    
+        // opener.document.getElementById('cascost').value = obj.cascost;    
         
         XMLAddress1 = xmlHttp.responseXML.getElementsByTagName("sales_table");
         opener.document.getElementById('itemdetails').innerHTML = XMLAddress1[0].childNodes[0].nodeValue;

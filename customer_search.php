@@ -60,6 +60,7 @@ include_once './connection_sql.php';
             echo "<th>CUS CODE</th>";
             echo "<th>CUS NAME</th>";
             echo "<th>ADDRESS</th>"; 
+            echo "<th>TYPE</th>"; 
 
             echo "</tr></thead><tbody>";
 
@@ -69,23 +70,30 @@ include_once './connection_sql.php';
                 <td onclick=\"custno('$cuscode', '$stname');\">" . $row['CODE'] . "</a></td>
                 <td onclick=\"custno('$cuscode', '$stname');\">" . $row['NAME'] . "</a></td>
                 <td onclick=\"custno('$cuscode', '$stname');\">" . $row['ADD1'] . "</a></td>  
+                 <td onclick=\"custno('$cuscode', '$stname');\">" . $row['cus_type'] . "</a></td>  
                 </tr>";
             }
             ?>
         </table> </div>
 
-        <script type="text/javascript">
-            $(document).ready(function() {
-                $('#example').dataTable( {
-                  "pageLength": 10
-              } );
-            } );
+       <script type="text/javascript">
+                $(document).ready(function() {
+           var table = $('#example').DataTable( {
+            lengthChange: true,
+            fixedHeader: true,
+            responsive: true,
+            "deferRender": true, 
+             "order": [[ 0, 'desc' ]], 
+            lengthMenu: [[ 25, 50,100, -1 ],[ '25 rows', '50 rows', '100 rows', 'Show all' ]],
 
-// $('#example').DataTable( {
-//   "aaSorting": [[ 0, "desc" ]] // Sort by first column descending
-// } );dd
+        } );
 
-</script>
+$('div.dataTables_filter input', table.table().container()).focus();
+           table.buttons().container()
+           .appendTo( '#example_wrapper .col-md-6:eq(0)' );
+           
+       } );
+        </script>
 
 
 </body>

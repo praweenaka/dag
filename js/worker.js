@@ -28,6 +28,10 @@ function new_inv() {
     }
     document.getElementById('code').value=""; 
     document.getElementById('des').value="";
+     document.getElementById('nic').value = "";
+    document.getElementById('land').value = "";
+    document.getElementById('mobile').value = "";
+    document.getElementById('address').value = ""; 
     document.getElementById('msg_box').innerHTML = "";
     
     var url = "worker_data.php";
@@ -84,12 +88,19 @@ function save_inv()
         alert("Browser does not support HTTP Request");
         return;
     }
-
+    if (document.getElementById('des').value == "") {
+        document.getElementById('msg_box').innerHTML = "<div class='alert alert-warning' role='alert'><span class='center-block'>Enter Name</span></div>";
+        return false;
+    }
     var url = 'worker_data.php';
     var params = 'Command=' + 'save_inv';
     params = params + '&code=' + document.getElementById('code').value; 
     params = params + '&des=' + document.getElementById('des').value;
     params = params + '&uniq=' + document.getElementById('uniq').value; 
+    params = params + '&nic=' + document.getElementById('nic').value; 
+    params = params + '&land=' + document.getElementById('land').value; 
+    params = params + '&mobile=' + document.getElementById('mobile').value; 
+    params = params + '&address=' + document.getElementById('address').value;  
     xmlHttp.open("POST", url, true);
     xmlHttp.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
     xmlHttp.setRequestHeader("Content-length", params.length);
@@ -158,6 +169,10 @@ function passcusresult_quot()
 
         opener.document.getElementById('code').value = obj.code;  
         opener.document.getElementById('des').value = obj.name;    
+        opener.document.getElementById('nic').value = obj.nic;    
+        opener.document.getElementById('land').value = obj.land;    
+        opener.document.getElementById('mobile').value = obj.mobile;    
+        opener.document.getElementById('address').value = obj.address;    
 
         self.close();
     }

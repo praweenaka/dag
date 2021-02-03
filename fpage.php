@@ -9,10 +9,7 @@ if ($_SESSION["CURRENT_USER"] == "") {
 
  // exit();
 }
-// if ($_SESSION['company'] !="THT") {
-//     echo "Please Loging Again.. Different Company !!!";
-//     exit();
-// }
+ 
 ?>
 <link rel="stylesheet" href="css/bootstrap/css/bootstrap.min.css">
 <link rel="stylesheet" href="css/bootstrap_custom.css">
@@ -46,7 +43,7 @@ if ($_SESSION["CURRENT_USER"] == "") {
     session_start();
     include './connection_sql.php';
 
-    $sql = "select * from view_menu where username ='" . $_SESSION["CURRENT_USER"] . "' and doc_view='1'  order by grp";
+    $sql = "select * from view_menu where username ='" . $_SESSION["CURRENT_USER"] . "' and doc_view='1'  order by  grp desc ";
 
     $grp = ""; 
     foreach ($conn->query($sql) as $row) {
@@ -71,7 +68,7 @@ if ($_SESSION["CURRENT_USER"] == "") {
        echo "<i class='".trim($row1['icon'])."'></i>";
        echo "</div>";
 
-       echo "<a href='home.php?url=" . $row["name"] . "' target='_blank' class='small-box-footer'><i class='fa fa-arrow-circle-right'></i>" . trim($row['docname']) . "</a>";
+       echo "<a href='home.php?url=" . $row["name"] . "'   class='small-box-footer'><i class='fa fa-arrow-circle-right'></i>" . trim($row['docname']) . "</a>";
 
 
        echo "</div>";
@@ -89,7 +86,7 @@ if ($_SESSION["CURRENT_USER"] == "") {
        echo "<i class='".trim($row1['icon'])."'></i>";
        echo "</div>";
 
-       echo "<a href='home.php?url=" . $row["name"] . "' target='_blank' class='small-box-footer'><i class='fa fa-arrow-circle-right'></i>" . trim($row['docname']) . "</a>";
+       echo "<a href='home.php?url=" . $row["name"] . "'  class='small-box-footer'><i class='fa fa-arrow-circle-right'></i>" . trim($row['docname']) . "</a>";
 
        echo "</div>";
        echo "</div>";

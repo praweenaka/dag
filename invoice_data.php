@@ -12,13 +12,23 @@ date_default_timezone_set('Asia/Colombo');
 
 /////////////////////////////////////// GetValue //////////////////////////////////////////////////////////////////////////
 ///////////////////////////////////// Registration ////s/////////////////////////////////////////////////////////////////////
+if ($_GET["Command"] == "rejectdag") {
+  
+    echo "<?xml version=\"1.0\" encoding=\"utf-8\"?>\n";
+ 
+    $_SESSION['rejectdag']="";
+     $_SESSION['rejectdag']=$_GET["rejectdag"];
+
+    
+}
 
 if ($_GET["Command"] == "new_inv") {
     echo "<?xml version=\"1.0\" encoding=\"utf-8\"?>\n";
 
     $ResponseXML = "";
     $ResponseXML .= "<new>";
-
+    $_SESSION['customer']="";
+    $_SESSION['rejectdag']="";
     $sql = "SELECT INVNO FROM invpara"; 
     $result = $conn->query($sql);
 
@@ -47,30 +57,33 @@ if ($_GET["Command"] == "setitem") {
     
 
     if ($_GET["Command1"] == "add_tmp") {
-        $amount = str_replace(",", "", $_GET["amount"]); 
-        $repair=str_replace(",", "", $_GET["repair"]);
+        $amount = str_replace(",", "", $_GET["selling"]+$_GET["repair"]);  
         $discount =  $_GET["dis"];
 
-        $subtotal = $repair+($amount - ($amount * $_GET["dis"] / 100));
+        $subtotal =($amount - ($amount * $_GET["dis"] / 100));
 
-        $sql = "Insert into t_invo_tmp (jobref, jobno, size, make,amount, repair,dis,subtot,invno,tmpno)values 
-        ('" . $_GET['jobref'] . "', '" . $_GET['jobno'] . "', '" . $_GET['size'] . "', '" . $_GET['make'] . "', '" . $_GET['amount'] . "', '" . $_GET['repair'] . "', '" . $_GET['dis'] . "', '" . $subtotal . "', '" . $_GET['invno'] . "','" . $_GET['tmpno'] . "' ) ";
-        $result = $conn->query($sql);
+        $sql = "Insert into t_invo_tmp (refno, jobno, make,design,size, serialno,adpay,cost,selling, dis,repair1,subtot,tmpno)values 
+        ('" . $_GET['txt_entno'] . "', '" . $_GET['jobno'] . "', '" . $_GET['make'] . "', '" . $_GET['design'] . "', '" . $_GET['size'] . "', '" . $_GET['serialno'] . "', '" . $_GET['adpay'] . "', '" . $_GET['cost'] . "', '" . $_GET['selling'] . "', '" . $_GET['dis'] . "', '" . $_GET['repair'] . "' , '" . $subtotal . "',  '" . $_GET['tmpno'] . "' ) ";
+       $result = $conn->query($sql);
 
     }
 
     $ResponseXML .= "<sales_table><![CDATA[<table class=\"table table-bordered\">
     <tr>
-    <th style=\"width: 120px;\">JOB REF</th>
+    <th style=\"width: 10px;\">#</th>
+    <th style=\"width: 100px;\">JOB NO</th>
     <th style=\"width: 10px;\"></th>
-    <th style=\"width: 120px;\">JOB NO</th> 
-    <th style=\"width: 120px;\">SIZE</th>
-    <th style=\"width: 120px;\">MAKE</th>
-    <th style=\"width: 10px;\">AMOUNT</th>
-    <th style=\"width: 10px;\">REPAIR</th>
-    <th style=\"width: 120px;\">Dis</th>
+    <th style=\"width: 100px;\">MAKE</th> 
+    <th style=\"width: 70px;\">SIZE</th>
+    <th style=\"width: 70px;\">DESIGN</th>
+    <th style=\"width: 100px;\">SERIAL NO</th>
+    <th style=\"width: 90px;\">AD PAY</th>
+    <th style=\"width: 90px;\">COST</th>
+    <th style=\"width: 120px;\">SELLING</th>
+    <th style=\"width: 90px;\">REPAIR</th>
+    <th style=\"width: 60px;\">Dis</th>
     <th style=\"width: 120px;\">SubTotal</th>
-    <th style=\"width: 100px;\"></th>
+    <th style=\"width: 50px;\"></th>
     </tr>";
 
     $i = 1;
@@ -80,20 +93,25 @@ if ($_GET["Command"] == "setitem") {
     $sql = "Select * from t_invo_tmp where tmpno='" . $_GET['tmpno'] . "'";
     foreach ($conn->query($sql) as $row) {
 
-        $ResponseXML .= "<tr>                              
-        <td>" . $row['jobref'] . "</td>
+        $ResponseXML .= "<tr>         
+        <td>" . $i . "</td>   
+        <td>" . $row['jobno'] . "</td>   
         <td></td>
-        <td>" . $row['jobno'] . "</td>
-        <td>" . $row['size'] . "</td>
-        <td>" . $row['make'] . "</td> 
-        <td>" . number_format($row['amount'], 2, ".", ",") . "</td>
-        <td>" . number_format($row['repair'], 2, ".", ",") . "</td>
+        <td>" . $row['make'] . "</td>
+        <td>" . $row['size'] . "</td> 
+        <td>" . $row['design'] . "</td> 
+        <td>" . $row['serialno'] . "</td> 
+        <td>" . number_format($row['adpay'], 2, ".", ",") . "</td>
+        <td>" . number_format($row['cost'], 2, ".", ",") . "</td>
+        <td>" . number_format($row['selling'], 2, ".", ",") . "</td>
+        <td>" . number_format($row['repair1'], 2, ".", ",") . "</td>
         <td>" . number_format($row['dis'], 2, ".", ",") . "</td>
         <td>" . number_format($row['subtot'], 2, ".", ",") . "</td>
         <td><a class=\"btn btn-danger btn-xs\" onClick=\"del_item('" . $row['id'] . "')\"> <span class='fa fa-remove'></span></a></td>
         </tr>";
-        $discount=$discount+($row['amount']*$row['dis']/100);
+        $discount=$discount+(($row['selling']+$row['repair1'])*$row['dis']/100);
         $mtot = $mtot + $row['subtot']; 
+        
         $i = $i + 1;
     }
 
@@ -141,6 +159,10 @@ if ($_GET["Command"] == "save_item") {
             echo "Invalid Session";
             exit();
         }
+        // if ($_SESSION['company'] == "") {
+        //     echo "Invalid Session";
+        //     exit();
+        // }
 
 
 
@@ -163,7 +185,7 @@ if ($_GET["Command"] == "save_item") {
 
 
 
-        $sql = "delete from t_invo where REF_NO = '" . $invno . "'";
+        $sql = "delete from t_invo where refno = '" . $invno . "'";
         $conn->exec($sql);
 
 
@@ -177,63 +199,68 @@ if ($_GET["Command"] == "save_item") {
         $sql = "select * from t_invo_tmp where tmpno='" . $_GET["tmpno"] . "'";
         foreach ($conn->query($sql) as $row) {
 
-           $subdis =  $row["amount"]*$row["dis"] /100;
+          $subdis =  $row["subtot"]*$row["dis"] /100;
 
 
 
-           $sqlvat = "select vatrate from invpara";
-           $resultvat = $conn->query($sqlvat);
-           $rowvat = $resultvat->fetch();
+          $sqldag = "select * from dag_item where jobno = '" . $row["jobno"] . "' and serialno = '" . $row["serialno"] . "'";
+          $resultdag = $conn->query($sqldag);
+          $rowdag = $resultdag->fetch();
+          
+          $sqlvat = "select vatrate from invpara";
+          $resultvat = $conn->query($sqlvat);
+          $rowvat = $resultvat->fetch();
+
+          $sql = "Insert into t_invo (refno,sdate,department,rep,tax_per, jobno, make,design,size, serialno,adpay,cost,selling, dis,repair1,subtot,tmpno,reject)values 
+          ('" . $_GET['txt_entno'] . "', '" . $_GET['invdate'] . "','01','" . $_GET['salesrep'] . "','" . $rowvat["vatrate"] . "','" . $row['jobno'] . "', '" . $row['make'] . "', '" . $row['design'] . "', '" . $row['size'] . "', '" . $row['serialno'] . "', '" . $row['adpay'] . "', '" . $row['cost'] . "', '" . $row['selling'] . "', '" . $row['dis'] . "', '" . $row['repair1'] . "' , '" . $row['subtot'] . "',  '" . $row['tmpno'] . "' ,  '" . $rowdag['reject'] . "') ";
+          $result = $conn->query($sql);
+       
+          
+
+          $sql = "Insert into s_trn (`SDATE`, `STK_NO`, `REFNO`, `QTY`, `LEDINDI`, `DEPARTMENT`) values 
+          ('" . $_GET['invdate'] . "','" . $row["jobref"] . "','" . trim($invno) . "', '1','INV', '01')";
+          $result = $conn->query($sql);
+
+          $sql3 = "update dag_item set invno='".$invno."',flag='7',inv_date='" . $_GET['invdate'] . "',amount1 = '" . $row["selling"] . "',repair1 = '" . $row["repair1"] . "',total1 = '" . $row["subtot"] . "',dis1 = '" . $row["dis"] . "' where jobno = '" . $row["jobno"] . "' and serialno = '" . $row["serialno"] . "'";
+          $result3 = $conn->query($sql3);
+
+          $mtot = $mtot + ($row["subtot"]);
+      }
 
 
-           $sql = "Insert into t_invo (REF_NO, SDATE, CardNO, jobno , prec_amo,DIS_per,DIS_rs,subtot,DEPARTMENT,REP,TAX_PER, BRAND,repair,t_size,make) values 
-           ('" . trim($invno) . "', '" . $_GET['invdate'] . "','" . $row["jobref"] . "','" . $row["jobno"] . "'," . $row["amount"] . "," . $row["dis"] . "," . $subdis . "," . $row["subtot"] . ",'01','" . $_GET["salesrep"] . "','".$rowvat["vatrate"]."','','".$row["repair"]."','".$row["size"]."','".$row["make"]."')";
-           $result = $conn->query($sql);
-
-           $sql = "Insert into s_trn (`SDATE`, `STK_NO`, `REFNO`, `QTY`, `LEDINDI`, `DEPARTMENT`) values 
-           ('" . $_GET['invdate'] . "','" . $row["jobref"] . "','" . trim($invno) . "', '1','INV', '01')";
-           $result = $conn->query($sql);
-
-           $sql3 = "update t_jobcard set STEP='7' where cardno = '" . $row["jobref"] . "'";
-           $result3 = $conn->query($sql3);
-
-           $mtot = $mtot + ($row["subtot"]);
-       }
-
-
-       $sql = "select vatrate from invpara";
-       $result = $conn->query($sql);
-       $row = $result->fetch();
-
-
-
-
-       $mgrand_tot = number_format($mtot* $_GET['txt_rate'], 2, ".", ""); 
-       $sql = "insert s_salma (REF_NO,SDATE,trn_type,C_CODE, CUS_NAME,c_add1,vat,tmp_no,REMARK,grand_tot,SAL_EX,gst,use_name,DEPARTMENT,dele_no,TYPE,TYPE1,DISCOU) values 
-       ('" . $invno . "', '" . $_GET['invdate'] . "','INV' ,'" . $_GET["customercode"] . "', '" . $_GET["customername"] . "','" . $_GET["cus_address"] . "','" . $mtot1 . "','" . $_GET["tmpno"] . "','" . $_GET['txt_remarks'] . "' ,'" . $mgrand_tot . "','" . $_GET['salesrep'] . "','" . $row['vatrate'] . "','" . $_SESSION['UserName'] . "','01','" . $_GET['DANO'] . "','".$_GET["paymethod"]."','".$_GET["paymethod1"]."','" . $_GET['discount'] . "')";
-       $result = $conn->query($sql);
+      $sql = "select vatrate from invpara";
+      $result = $conn->query($sql);
+      $row = $result->fetch();
 
 
 
 
-       if ($_GET["paymethod"] == "CA") {
+      $mgrand_tot = number_format($mtot, 2, ".", ""); 
+      $sql = "insert s_salma (REF_NO,SDATE,trn_type,C_CODE, CUS_NAME,c_add1,vat,tmp_no,REMARK,grand_tot,SAL_EX,gst,use_name,DEPARTMENT,dele_no,TYPE,DISCOU,TYPE1) values 
+      ('" . $invno . "', '" . $_GET['invdate'] . "','INV' ,'" . $_GET["customercode"] . "', '" . $_GET["customername"] . "','" . $_GET["cus_address"] . "','" . $mtot1 . "','" . $_GET["tmpno"] . "','" . $_GET['txt_remarks'] . "' ,'" . $mgrand_tot . "','" . $_GET['salesrep'] . "','" . $row['vatrate'] . "','" . $_SESSION['UserName'] . "','01','" . $_GET['DANO'] . "','".$_GET["paymethod"]."','".$subdis."','".$_GET["rejectdag"]."' )";
+      $result = $conn->query($sql);
 
-        $sql = "select INV_RECNO from invpara where COMCODE='" . $_SESSION['company'] . "'";
+ 
+
+
+      if ($_GET["paymethod"] == "CA") {
+
+        // $sql = "select RECNO from invpara where COMCODE='" . $_SESSION['company'] . "'";
+        $sql = "select RECNO from invpara";
         $result = $conn->query($sql);
         $row = $result->fetch();
 
-        $tmprecno = "000000" . $row["INV_RECNO"];
+        $tmprecno = "000000" . $row["RECNO"];
         $lenth = strlen($tmprecno);
-        $recno = $_SESSION['company'] . trim("RN/CR/") . substr($tmprecno, $lenth - 5);
-
+        $recno =  trim("CRN/CR/") . substr($tmprecno, $lenth - 5);
+ 
         $sql = "insert into s_crec(CA_REFNO, CA_DATE, CA_CODE, CA_CASSH, CA_AMOUNT, overpay, FLAG, pay_type, CA_SALESEX, CANCELL, tmp_no, DEPARTMENT, cus_ref, AC_REFNO, TTDATE, DEV) values
         ('" . $recno . "', '" . $_GET["invdate"] . "', '" . trim($_GET["customercode"]) . "', " . $mgrand_tot . ", " . $mgrand_tot . ", 0, 'REC', 'Cash', '" . trim($_GET["salesrep"]) . "', '0', '" . $_GET["tmpno"] . "', 'O', '0', '', '',  '" . $_SESSION['dev'] . "' )";
-                //echo $sql;
+                 
         $result = $conn->query($sql);
 
         $sql1 = "insert into s_sttr(ST_REFNO, ST_DATE, ST_INVONO, ST_PAID, ST_CHNO, st_chdate, ST_FLAG, st_days, ap_days, st_chbank, cus_code, DEV, del_days, deliin_days, deliin_amo, deliin_lock, department) values
         ('" . $recno . "', '" . $_GET["invdate"] . "', '" . $invno . "', " . $mgrand_tot . ", '', '" . $_GET["invdate"] . "', 'CAS', '', '', '', '" . trim($_GET["customercode"]) . "', '" . $_SESSION['dev'] . "', 0, 0, 0, '0', 'O')";
-                //  echo $sql1;
         $result1 = $conn->query($sql1);
 
         $sql2 = "update s_salma set TOTPAY=TOTPAY + " . $mgrand_tot . " where REF_NO = '" . $invno . "'";
@@ -242,13 +269,17 @@ if ($_GET["Command"] == "save_item") {
         $sql3 = "update s_salma set CASH=CASH + " . $mgrand_tot . " where REF_NO = '" . $invno . "'";
         $result3 = $conn->query($sql3);
 
-        $sql4 = "update invpara set INV_RECNO=INV_RECNO + 1 where COMCODE='" . $_SESSION['company'] . "'";
+        // $sql4 = "update invpara set RECNO=RECNO + 1 where COMCODE='" . $_SESSION['company'] . "'";
+        $sql4 = "update invpara set RECNO=RECNO + 1";
         $result4 = $conn->query($sql4);
     }
 
 
     $sql = "update invpara set INVNO=INVNO+1";
     $conn->exec($sql);
+    
+    $sqllog = "insert into entry_log(refno, username, docname, trnType, stime, sdate) values ('" . trim($invno) . "', '" . $_SESSION["CURRENT_USER"] . "', 'INVOICE', 'Save', '" . date("Y-m-d H:i:s") . "', '" . date("Y-m-d") . "')";
+            $resultlog = $conn->query($sqllog);
 
     $conn->commit();
     echo "Saved";
@@ -268,82 +299,66 @@ if ($_GET["Command"] == "pass_rec") {
     $sql = "Select * from s_salma where REF_NO='" . $_GET['refno'] . "'";
     $result = $conn->query($sql);
 
-    if ($row = $result->fetch()) {
-        $ResponseXML .= "<C_REFNO><![CDATA[" . $row["REF_NO"] . "]]></C_REFNO>";
-        $ResponseXML .= "<C_DATE><![CDATA[" . $row["SDATE"] . "]]></C_DATE>";
-        $ResponseXML .= "<C_CODE><![CDATA[" . $row["C_CODE"] . "]]></C_CODE>";
-        $ResponseXML .= "<name><![CDATA[" . $row["CUS_NAME"] . "]]></name>";
-        $ResponseXML .= "<txt_remarks><![CDATA[" . $row["REMARK"] . "]]></txt_remarks>";
-        $ResponseXML .= "<Attn><![CDATA[" . $row['C_ADD1'] . "]]></Attn>";
-        $ResponseXML .= "<tmp_no><![CDATA[" . $row["tmp_no"] . "]]></tmp_no>";
-
-        $ResponseXML .= "<currency><![CDATA[LKR]]></currency>";
-        $ResponseXML .= "<txt_rate><![CDATA[1]]></txt_rate>"; 
-        $ResponseXML .= "<DANO><![CDATA[" . $row["dele_no"] . "]]></DANO>";
-
-        $ResponseXML .= "<salesrep><![CDATA[" . $row["SAL_EX"] . "]]></salesrep>";
-        $ResponseXML .= "<accname><![CDATA[" . $row["Accname"] . "]]></accname>";
-
-
-
+   if ($row = $result->fetch()) {
+        $ResponseXML .= "<id><![CDATA[" . json_encode($row) .  "]]></id>";
+    
+ 
         $msg = "";
         if ($row['CANCELL'] == "1") {
             $msg = "Cancelled";
         }
         $ResponseXML .= "<msg><![CDATA[" . $msg . "]]></msg>";
 
-        $sql = "delete from t_invo_tmp where tmpno='" . $row["tmp_no"] . "'";
-        $result = $conn->query($sql);
+         
 
-
-        // $sql = "Select * from s_invo where REF_NO='" . $row["REF_NO"] . "'";
-        // foreach ($conn->query($sql) as $row1) {
-        //     $subtotal = $row1['QTY'] * $row1['PRICE'];
-        //     $sql = "Insert into tmp_po_data (stk_no, descript,rate, qty,subtot, tmp_no) values 
-        //     ('" . $row1['STK_NO'] . "', '" . $row1['DESCRIPT'] . "', " . $row1['QTY'] . ", " . $row1['PRICE'] . ",'" . $subtotal . "','" . $row["tmp_no"] . "') ";
-        //     $result_t = $conn->query($sql);
-        // }
-
+        
 
         $ResponseXML .= "<sales_table><![CDATA[<table class=\"table\">
-        <tr>
-        <th style=\"width: 120px;\">JOB REF</th>
-        <th style=\"width: 10px;\"></th>
-        <th style=\"width: 120px;\">JOB NO</th> 
-        <th style=\"width: 120px;\">SIZE</th>
-        <th style=\"width: 120px;\">MAKE</th>
-        <th style=\"width: 10px;\">AMOUNT</th>
-        <th style=\"width: 10px;\">REPAIR</th>
-        <th style=\"width: 120px;\">Dis</th>
-        <th style=\"width: 120px;\">SubTotal</th>
-        <th style=\"width: 100px;\"></th>
-        </tr>";
+      <tr>
+    <th style=\"width: 100px;\">JOB NO</th>
+    <th style=\"width: 10px;\"></th>
+    <th style=\"width: 100px;\">MAKE</th> 
+    <th style=\"width: 70px;\">DESIGN</th>
+    <th style=\"width: 70px;\">SIZE</th>
+    <th style=\"width: 100px;\">SERIAL NO</th>
+    <th style=\"width: 90px;\">AD PAY</th>
+    <th style=\"width: 90px;\">COST</th>
+    <th style=\"width: 120px;\">SELLING</th>
+    <th style=\"width: 90px;\">REPAIR</th>
+    <th style=\"width: 60px;\">Dis</th>
+    <th style=\"width: 120px;\">SubTotal</th>
+    <th style=\"width: 50px;\"></th>
+    </tr>";
 
         $i = 1; 
-        $mtot = 0; 
-        $sql = "Select * from t_invo where REF_NO='" . $row["REF_NO"] . "'";
+        $mtot = 0;  
+        $sql = "Select * from t_invo where refno='" . $row["REF_NO"] . "'";
         foreach ($conn->query($sql) as $row1) {
 
             $ResponseXML .= "<tr>                              
-            <td>" . $row1['CardNO'] . "</td>
-            <td></td>
-            <td>" . $row1['jobno'] . "</td>
-            <td>" . $row1['t_size'] . "</td>
-            <td>" . $row1['make'] . "</td>
-            <td>" . number_format($row1['prec_amo'], 2, ".", ",") . "</td>
-            <td>" . number_format($row1['repair'], 2, ".", ",") . "</td>
-            <td>" . number_format($row1['DIS_per'], 2, ".", ",") . "</td>
-            <td>" . number_format($row1['subtot'], 2, ".", ",") . "</td>
+            <td>" . $row1['jobno'] . "</td>   
+        <td></td>
+        <td>" . $row1['make'] . "</td>
+        <td>" . $row1['design'] . "</td> 
+        <td>" . $row1['size'] . "</td> 
+        <td>" . $row1['serialno'] . "</td> 
+        <td>" . number_format($row1['adpay'], 2, ".", ",") . "</td>
+        <td>" . number_format($row1['cost'], 2, ".", ",") . "</td>
+        <td>" . number_format($row1['selling'], 2, ".", ",") . "</td>
+        <td>" . number_format($row1['repair1'], 2, ".", ",") . "</td>
+        <td>" . number_format($row1['dis'], 2, ".", ",") . "</td>
+        <td>" . number_format($row1['subtot'], 2, ".", ",") . "</td>
 
             </tr>";
 
             $i = $i + 1;
-            $mtot=$mtot+$row1['subtot'];
+            $mtot=$mtot+$row1['subtot']; 
         }
 
         $ResponseXML .= "   </table>]]></sales_table>";
 
-        $ResponseXML .= "<item_count><![CDATA[" . $i . "]]></item_count>"; 
+        $ResponseXML .= "<item_count><![CDATA[" . $i . "]]></item_count>";
+         $ResponseXML .= "<type><![CDATA[" . $row['TYPE'] . "]]></type>";
         $ResponseXML .= "<discount><![CDATA[" . number_format($row['DISCOU'], 2, ".", "") . "]]></discount>"; 
         $ResponseXML .= "<gtot><![CDATA[" . number_format($row['GRAND_TOT'], 2, ".", ",") . "]]></gtot>";
         $ResponseXML .= "<subtot><![CDATA[" . number_format($mtot+$row['DISCOU'], 2, ".", ",") . "]]></subtot>";
@@ -388,14 +403,10 @@ if ($_GET["Command"] == "del_inv") {
                 echo "Already Paid";
                 exit();
             }
-
-
-
+ 
 
             $invno = $row['REF_NO'];
-
-
-            
+ 
             $sql = "delete from s_trn where refno = '" . $invno . "'";
             $conn->exec($sql);
             
@@ -404,9 +415,15 @@ if ($_GET["Command"] == "del_inv") {
             $sql = "update s_salma set CANCELL='1' where REF_NO = '" . $row['REF_NO'] . "'";
             $conn->exec($sql);
 
-            $sql = "update t_invo set CANCELL='1' where REF_NO = '" . $row['REF_NO'] . "'";
+            $sql = "update t_invo set cancel='1' where refno = '" . $row['REF_NO'] . "'";
             $conn->exec($sql);
-
+            
+            $sql = "update dag_item set flag='2',inv_date=  '',amount1 = '0.00',repair1 = '0.00',total1 = '0.00',dis1 = '0.00' where invno = '" . $row['REF_NO'] . "'";
+           $result = $conn->query($sql);
+            
+            $sqllog = "insert into entry_log(refno, username, docname, trnType, stime, sdate) values ('" . trim($row['REF_NO']) . "', '" . $_SESSION["CURRENT_USER"] . "', 'INVOICE', 'CANCEL', '" . date("Y-m-d H:i:s") . "', '" . date("Y-m-d") . "')";
+            $resultlog = $conn->query($sqllog);
+            
             echo "ok";
             $conn->commit();
         } else {
@@ -430,6 +447,8 @@ if ($_GET["Command"] == "pass_cus") {
     $ResponseXML .= "<salesdetails>";
 
     $cuscode = $_GET["custno"];
+    $_SESSION['customer']="";
+     $_SESSION['customer']=$_GET["custno"];
 
     $sql = "Select * from vendor where   CODE ='" . $cuscode . "'";
     $result = $conn->query($sql);
@@ -453,7 +472,7 @@ if ($_GET["Command"] == "pass_card") {
 
     $cuscode = $_GET["custno"];
 
-    $sql = "Select * from t_jobcard where   cardno ='" . $cuscode . "'";
+    $sql = "SELECT * from dag_item where id='".$cuscode."' ";
     $result = $conn->query($sql);
 
     if ($rowM = $result->fetch()) {

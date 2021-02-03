@@ -14,6 +14,9 @@
                     <a onclick="save_inv();" class="btn btn-success">
                         <span class="fa fa-save"></span> &nbsp; Save
                     </a> 
+                    <a onclick="print_inv();" class="btn btn-default btn-sm">
+                        <span class="fa fa-print"></span> &nbsp; Print
+                    </a>
                     <a onclick="cancel_inv();" class="btn btn-danger">
                         <span class="fa fa-trash"></span> &nbsp; Cancel
                     </a>
@@ -67,30 +70,22 @@
                 <div class="col-sm-1">
                     <a onfocus="this.blur()" onclick="NewWindow('customer_search.php?stname=dag', 'mywin', '800', '700', 'yes', 'center');
                     return false" href="">
-                    <input type="button" class="btn btn-default" value="..." id="searchcust" name="searchcust">
+                    <input type="button" class="btn btn-danger" value="..." id="searchcust" name="searchcust">
                 </a>
             </div>  
          
-               <label class="col-sm-2 control-label" for="txt_usernm">ADVANCE PAYMENT</label>
+               <label class="col-sm-1  " for="txt_usernm">CASING COST</label>
             <div class="col-sm-2">
-                <input type="number" placeholder="ADVANCE PAYMENT" id="adpayment"   class="form-control">
+                <input type="number" placeholder="CASING COST" id="cascost"   class="form-control">
+            </div>
+             <label class="col-sm-1 " for="txt_usernm">ADVANCE PAYMENT</label>
+            <div class="col-sm-1">
+                <input type="number" placeholder="ADVANCE PAYMENT" disabled id="adpayment"   class="form-control">
             </div>
         </div>
 
         <div class="form-group"> 
-         <label class="col-sm-1 control-label" for="txt_usernm">BELT DESIGN</label>
-                <div class="col-sm-2">
-              <select name="belt" id="belt"    class="text_purchase3 col-sm-9 form-control" > 
-                <?php
-                require_once("./connection_sql.php");
-
-                $sql = "Select * from belt order by code";
-                foreach ($conn->query($sql) as $row) {
-                    echo "<option value=\"" . $row["name"] . "\">" . $row["name"] . "</option>";
-                }
-                ?>
-            </select>
-        </div>        
+          
                
             <label class="col-sm-1 control-label" for="txt_usernm">SIZE</label>
             <div class="col-sm-2">
@@ -105,7 +100,7 @@
                 ?>
             </select>
         </div>        
-        <label class="col-sm-1 control-label" for="txt_usernm">MARKER</label>
+        <label class="col-sm-1 control-label" for="txt_usernm">MAKE</label>
         <div class="col-sm-2">
           <select name="marker" id="marker"    class="text_purchase3 col-sm-9 form-control" > 
             <?php
@@ -118,6 +113,19 @@
             ?>
         </select>
     </div>     
+      <label class="col-sm-1 control-label" for="txt_usernm">BELT DESIGN</label>
+                <div class="col-sm-2">
+              <select name="belt" id="belt"    class="text_purchase3 col-sm-9 form-control" > 
+                <?php
+                require_once("./connection_sql.php");
+
+                $sql = "Select * from belt order by code";
+                foreach ($conn->query($sql) as $row) {
+                    echo "<option value=\"" . $row["name"] . "\">" . $row["name"] . "</option>";
+                }
+                ?>
+            </select>
+        </div>     
     <label class="col-sm-1 control-label" for="txt_usernm">JOB NO</label>
         <div class="col-sm-2">
           <input type="text" placeholder="JOB NO" id="jobno" disabled  class="form-control">

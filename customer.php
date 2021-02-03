@@ -2,7 +2,7 @@
 <section class="content">
     <div class="box box-primary">
         <div class="box-header with-border">
-            <h3 class="box-title">CUSTOMER MASTER New</h3>
+            <h3 class="box-title">CUSTOMER MASTER</h3>
             <h4 style="float: right;height: 3px;"><b id="time"></b></h4>
         </div>
         <form role="form" class="form-horizontal">
@@ -39,18 +39,22 @@
 
             </div>
             <div class="form-group">
-                <label class="col-sm-1 control-label" for="cus_address">Title</label>
-                <div class="col-sm-3">
-                    <input type="text" placeholder="Title" id="title" class="form-control input-sm">
-                </div>
+               
 
                 <label class="col-sm-1 control-label" for="txt_remarks">Name</label>
                 <div class="col-sm-3">
                     <input type="text" placeholder="Name" id="name" class="form-control input-sm">
                 </div>
-  
+                    <label class="col-sm-1 control-label" for="cus_address">TYPE</label>
+                <div class="col-sm-3">
+                     <select name="cus_type" id="cus_type"    class="text_purchase3 col-sm-9 form-control" > 
+                        <option value="WHOLESALE">WHOLESALE</option>
+                        <option value="RETAIL">RETAIL</option>
+                        <option value="BOTH">BOTH</option>
+                    </select>
+                </div>
             </div>
-            <div class="form-group">
+            <div class="form-group hidden">
                 <label class="col-sm-1 control-label" for="cus_address">Shop Name</label>
                 <div class="col-sm-3">
                     <input type="text" placeholder="Shop Name" id="shopname" class="form-control input-sm">

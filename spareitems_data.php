@@ -43,6 +43,9 @@ if ($_POST["Command"] == "save_inv") {
             
             $sql = "update spareitem set name='" . $_POST['name'] . "', des= '" . $_POST['des'] . "',cost='" . $_POST['cost'] . "', sale= '" . $_POST['sale'] . "'   where code='" . $_POST['code'] . "'";
             $result = $conn->query($sql);
+            
+            $sqllog = "insert into entry_log(refno, username, docname, trnType, stime, sdate) values ('" . trim($_POST['code']) . "', '" . $_SESSION["CURRENT_USER"] . "', 'SPAREITEM', 'Update', '" . date("Y-m-d H:i:s") . "', '" . date("Y-m-d") . "')";
+            $resultlog = $conn->query($sqllog);
 
             $conn->commit();
             echo "Updated";
@@ -58,6 +61,8 @@ if ($_POST["Command"] == "save_inv") {
             $sql = "update invpara set spareitem = $no2 where spareitem = $no";
             $result = $conn->query($sql);
 
+            $sqllog = "insert into entry_log(refno, username, docname, trnType, stime, sdate) values ('" . trim($_POST['code']) . "', '" . $_SESSION["CURRENT_USER"] . "', 'SPAREITEM', 'Save', '" . date("Y-m-d H:i:s") . "', '" . date("Y-m-d") . "')";
+            $resultlog = $conn->query($sqllog);
 
             $conn->commit();
             echo "Saved";

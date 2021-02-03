@@ -43,6 +43,9 @@ if ($_POST["Command"] == "save_inv") {
             
             $sql = "update size set name= '" . $_POST['des'] . "'   where code='" . $_POST['code'] . "'";
             $result = $conn->query($sql);
+            
+            $sqllog = "insert into entry_log(refno, username, docname, trnType, stime, sdate) values ('" . trim($_POST['code']) . "', '" . $_SESSION["CURRENT_USER"] . "', 'SIZE', 'Update', '" . date("Y-m-d H:i:s") . "', '" . date("Y-m-d") . "')";
+            $resultlog = $conn->query($sqllog);
 
             $conn->commit();
             echo "Updated";
@@ -57,7 +60,9 @@ if ($_POST["Command"] == "save_inv") {
             $no2 = $no + 1;
             $sql = "update invpara set sizemas = $no2 where sizemas = $no";
             $result = $conn->query($sql);
-
+            
+            $sqllog = "insert into entry_log(refno, username, docname, trnType, stime, sdate) values ('" . trim($_POST['code']) . "', '" . $_SESSION["CURRENT_USER"] . "', 'SIZE', 'Save', '" . date("Y-m-d H:i:s") . "', '" . date("Y-m-d") . "')";
+            $resultlog = $conn->query($sqllog);
 
             $conn->commit();
             echo "Saved";

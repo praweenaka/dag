@@ -30,7 +30,7 @@
             
 
             <div class="form-group">
-                <label class="col-sm-2 control-label" for="txt_usernm">CODE</label>
+                <label class="col-sm-1 control-label" for="txt_usernm">CODE</label>
                 <div class="col-sm-2">
                     <input type="text" placeholder="Code" id="code" disabled class="form-control">
                 </div>
@@ -38,12 +38,41 @@
            
 
             <div class="form-group">
-                <label class="col-sm-2 control-label" for="txt_password">WORKER</label>
+                <label class="col-sm-1 control-label" for="txt_password">WORKER</label>
                 <div class="col-sm-3">
                     <input type="text" placeholder="WORKER" id="des" class="form-control">
 
                 </div>
             </div>
+            <div class="form-group">
+                <label class="col-sm-1 control-label" for="cus_address">NIC</label>
+                <div class="col-sm-3">
+                    <input type="text" placeholder="NIC" id="nic" class="form-control input-sm">
+                </div>
+
+            </div>
+            <div class="form-group">
+                <label class="col-sm-1 control-label" for="cus_address">Land</label>
+                <div class="col-sm-3">
+                    <input type="text" placeholder="Land" id="land" class="form-control input-sm">
+                </div>
+
+                <label class="col-sm-1 control-label" for="txt_remarks">Mobile</label>
+                <div class="col-sm-3">
+                    <input type="text" placeholder="Mobile" id="mobile" class="form-control input-sm">
+                </div>
+
+                <div class="col-sm-1">
+                    &nbsp;
+                </div> 
+            </div>
+            <div class="form-group">
+                <label class="col-sm-1 control-label" for="cus_address">Address</label>
+                <div class="col-sm-3">
+                    <input type="text" placeholder="Address" id="address" class="form-control input-sm">
+                </div> 
+            </div>
+
 
             <div id="itemdetails"></div>
         </div>

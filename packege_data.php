@@ -38,26 +38,33 @@ if ($_POST["Command"] == "add_spare") {
         $result2 = $conn->query($sql2);
 
     }
-
+  
     $sql_p = "SELECT sum(total) as tot FROM packegelist_spare where code='" . $_POST['packegecode'] . "'  ";  
     $result_p = $conn->query($sql_p); 
     $row_p = $result_p->fetch();
+    
+    $sql_e = "SELECT sum(cost) as tot FROM packegelist_expense where code='" . $_POST['packegecode'] . "'  ";  
+    $result_e = $conn->query($sql_e); 
+    $row_e = $result_e->fetch();
+    
+    $cost=0;
+    $cost=$row_e['tot']+$row_p['tot'] ;
 
-
-    $sql = "update packegelist set  cost='" . $row_p['tot'] . "'   where code='" . $_POST['packegecode'] . "'  ";  
-    $result = $conn->query($sql);
-
-
+    $sql = "update packegelist set   spcost='" . $row_p['tot'] . "',cost='" .$cost . "'    where code='" . $_POST['packegecode'] . "'  ";  
+    $result = $conn->query($sql); 
+     
 
     $ResponseXML .= "<sales_table><![CDATA[<table class=\"table\">  ";
     $ResponseXML .= " <tr>  
     </tr>";
     
-
+$i=1;
+$tot=0;
     $sql = "Select * from packegelist_spare where   code='" . $_POST['packegecode'] . "'  ";   
     foreach ($conn->query($sql) as $row) {
 
         $ResponseXML .= "<tr>  
+        <td style=\"width:10px;\">" . $i. "</td> 
         <td style=\"width:200px;\">" . $row['spareitem'] . "</td> 
         <td style=\"width:200px;\">" . $row['cost'] . "</td> 
         <td style=\"width:200px;\">" . $row['qty'] . "</td> 
@@ -65,9 +72,18 @@ if ($_POST["Command"] == "add_spare") {
         <td><button   onClick=\"del_spare('" . $row['id'] . "')\" type=\"button\" class=\"btn btn-danger btnDelete btn-sm\">Remove</button>
         </td>
         </tr>";  
-
+    $i=$i+1;
+    $tot=$tot+$row['total'];
 
     }
+     $ResponseXML .= "<tr>  
+        <td style=\"width:10px;\">&nbsp;</td> 
+        <td style=\"width:200px;\"> </td> 
+        <td style=\"width:200px;\"> </td> 
+        <td style=\"width:200px;\"><b>Total</b> </td> 
+        <td style=\"width:200px;\"><b>" . $tot . "</b></td>  
+        <td>   </td>
+        </tr>";
 
     $ResponseXML .= "</table>]]></sales_table>";   
     $ResponseXML .= "</salesdetails>";
@@ -113,31 +129,53 @@ if ($_POST["Command"] == "add_expense") {
 
     }
 
-    $sql_p = "SELECT sum(cost) as tot FROM packegelist_expense where code='" . $_POST['packegecode'] . "'  ";  
+   
+    
+    $sql_p = "SELECT sum(total) as tot FROM packegelist_spare where code='" . $_POST['packegecode'] . "'  ";  
     $result_p = $conn->query($sql_p); 
     $row_p = $result_p->fetch();
+    
+    $sql_e = "SELECT sum(cost) as tot FROM packegelist_expense where code='" . $_POST['packegecode'] . "'  ";  
+    $result_e = $conn->query($sql_e); 
+    $row_e = $result_e->fetch();
+    
+    $cost=0;
+    $cost=$row_e['tot']+$row_p['tot'] ;
 
-
-    $sql = "update packegelist set  expense='" . $row_p['tot'] . "'   where code='" . $_POST['packegecode'] . "'  ";  
-    $result = $conn->query($sql);
+    $sql = "update packegelist set   expense='" . $row_e['tot'] . "',cost='" .$cost . "'    where code='" . $_POST['packegecode'] . "'  ";  
+    $result = $conn->query($sql); 
+     
+    
 
     $ResponseXML .= "<sales_table><![CDATA[<table class=\"table\">  ";
     $ResponseXML .= " <tr>  
     </tr>";
     
-
+    $i=1;
+    $tot=0;
     $sql = "Select * from packegelist_expense where   code='" . $_POST['packegecode'] . "'  "; 
     foreach ($conn->query($sql) as $row) {
 
         $ResponseXML .= "<tr>  
+         <td style=\"width:10px;\">" . $i. "</td> 
         <td style=\"width:200px;\">" . $row['name'] . "</td> 
         <td style=\"width:200px;\">" . $row['cost'] . "</td>   
         <td><button   onClick=\"del_expense('" . $row['id'] . "')\" type=\"button\" class=\"btn btn-danger btnDelete btn-sm\">Remove</button>
         </td>
         </tr>";  
+$i=$i+1;
 
+    $tot=$tot+$row['cost'];
 
     }
+     $ResponseXML .= "<tr>  
+        <td style=\"width:10px;\">&nbsp;</td> 
+        <td style=\"width:200px;\"> </td> 
+        <td style=\"width:200px;\"> </td> 
+        <td style=\"width:200px;\"><b>Total</b> </td> 
+        <td style=\"width:200px;\"><b>" . $tot . "</b></td>  
+        <td>   </td>
+        </tr>";
 
     $ResponseXML .= "</table>]]></sales_table>";   
     $ResponseXML .= "</salesdetails>";
@@ -175,13 +213,28 @@ if ($_POST["Command"] == "add_summeryview") {
     $sql_pack = "SELECT * FROM packegelist where code='" . $_POST['packegecode'] . "' and cancel='0'  ";  
     $result_pack = $conn->query($sql_pack); 
     $row_pack = $result_pack->fetch();
-
-    $ResponseXML .= "<spare><![CDATA[" . number_format($row_spare['total'], 2, ".", ","). "]]></spare>";
-    $ResponseXML .= "<expense><![CDATA[" .number_format($row_expen['total'], 2, ".", ","). "]]></expense>";
-    $ResponseXML .= "<wmargin><![CDATA[" .number_format($row_pack['wmargin'], 2, ".", ","). "]]></wmargin>";
-    $ResponseXML .= "<wprice><![CDATA[" .number_format($row_pack['wprice'], 2, ".", ","). "]]></wprice>";
-    $ResponseXML .= "<rmargin><![CDATA[" .number_format($row_pack['rmargin'], 2, ".", ","). "]]></rmargin>";
-    $ResponseXML .= "<rprice><![CDATA[" .number_format($row_pack['rprice'], 2, ".", ","). "]]></rprice>";
+    
+    $cost=0;
+    $cost=$row_spare['total']+$row_expen['total'];
+    $spare=0;
+    $spare=$row_spare['total'];
+    $expense=0;
+    $expense=$row_expen['total'] ;
+    $wmargin=0;
+    $wmargin=$row_pack['wmargin'];
+    $wprice=0;
+    $wprice=$row_pack['wprice'];
+    
+    
+    
+    
+    $ResponseXML .= "<spare><![CDATA[" .  $spare . "]]></spare>";
+    $ResponseXML .= "<cost><![CDATA[" .  $cost . "]]></cost>";
+    $ResponseXML .= "<expense><![CDATA[" . $expense . "]]></expense>";
+    $ResponseXML .= "<wmargin><![CDATA[" . $wmargin . "]]></wmargin>";
+    $ResponseXML .= "<wprice><![CDATA[" . $wprice . "]]></wprice>";
+    $ResponseXML .= "<rmargin><![CDATA[" . $row_pack['rmargin'] . "]]></rmargin>";
+    $ResponseXML .= "<rprice><![CDATA[" . $row_pack['rprice'] . "]]></rprice>";
 
     $ResponseXML .= "</salesdetails>";
 
@@ -264,7 +317,7 @@ if ($_POST["Command"] == "updatepackege") {
         $resultsalma_q = $conn->query($sqlisalma_q);
         if ($rowsalma_q = $resultsalma_q->fetch()) {
 
-            $sql = "update packegelist set cost='" . $_POST['spcost'] . "',expense='" . $_POST['fix_expen'] . "', wmargin= '" . $_POST['w_margin'] . "', wprice= '" . $_POST['wprice'] . "', rmargin= '" . $_POST['r_margin'] . "', rprice= '" . $_POST['rprice'] . "'    where code='" . $_POST['packegecode'] . "'";
+            $sql = "update packegelist set cost='" . $_POST['tot_cost'] . "',spcost='" . $_POST['spcost'] . "',expense='" . $_POST['fix_expen'] . "', wmargin= '" . $_POST['w_margin'] . "', wprice= '" . $_POST['wprice'] . "', rmargin= '" . $_POST['r_margin'] . "', rprice= '" . $_POST['rprice'] . "'    where code='" . $_POST['packegecode'] . "'";
             $result = $conn->query($sql);
 
             $conn->commit();
@@ -275,6 +328,40 @@ if ($_POST["Command"] == "updatepackege") {
         echo $e;
     }
     
+}
+
+if ($_POST["Command"] == "expensecost") {
+ header('Content-Type: text/xml');
+ 
+ $ResponseXML = "";
+ $ResponseXML .= "<salesdetails>";
+ $amou=0;
+ $sqlisalma_q = "select * from expenses where name='" . $_POST["name"] . "'";
+ $resultsalma_q = $conn->query($sqlisalma_q);
+ if ($rowsalma_q = $resultsalma_q->fetch()) {
+    $amou = $rowsalma_q['cost'];   
+ }
+  
+$ResponseXML .= "<price><![CDATA[$amou]]></price>";
+$ResponseXML .= "</salesdetails>";
+echo $ResponseXML;
+}
+
+if ($_POST["Command"] == "spareprice") {
+ header('Content-Type: text/xml');
+ 
+ $ResponseXML = "";
+ $ResponseXML .= "<salesdetails>";
+ $amou=0;
+ $sqlisalma_q = "select * from spareitem where name='" . $_POST["spareitem"] . "'";
+ $resultsalma_q = $conn->query($sqlisalma_q);
+ if ($rowsalma_q = $resultsalma_q->fetch()) {
+    $amou = $rowsalma_q['sale'];   
+ }
+  
+$ResponseXML .= "<price><![CDATA[$amou]]></price>";
+$ResponseXML .= "</salesdetails>";
+echo $ResponseXML;
 }
 
 ?>

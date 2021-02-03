@@ -43,7 +43,10 @@ if ($_POST["Command"] == "save_inv") {
 
             $sql = "update packegelist set design='" . $_POST['design'] . "',size='" . $_POST['size'] . "', des= '" . $_POST['des'] . "'   where code='" . $_POST['code'] . "'";
             $result = $conn->query($sql);
-
+            
+            $sqllog = "insert into entry_log(refno, username, docname, trnType, stime, sdate) values ('" . trim($_POST['code']) . "', '" . $_SESSION["CURRENT_USER"] . "', 'PACKEGELIST', 'UPDATE', '" . date("Y-m-d H:i:s") . "', '" . date("Y-m-d") . "')";
+            $resultlog = $conn->query($sqllog);
+            
             $conn->commit();
             echo "Updated";
         }else{
@@ -58,6 +61,8 @@ if ($_POST["Command"] == "save_inv") {
             $sql = "update invpara set packegelist = $no2 where packegelist = $no";
             $result = $conn->query($sql);
 
+$sqllog = "insert into entry_log(refno, username, docname, trnType, stime, sdate) values ('" . trim($_POST['code']) . "', '" . $_SESSION["CURRENT_USER"] . "', 'PACKEGELIST', 'Save', '" . date("Y-m-d H:i:s") . "', '" . date("Y-m-d") . "')";
+            $resultlog = $conn->query($sqllog);
 
             $conn->commit();
             echo "Saved";

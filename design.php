@@ -2,8 +2,8 @@
 <section class="content">
     <div class="box box-primary">
         <div class="box-header with-border">
-            <h3 class="box-title">DESIGN MASTER New</h3>
-            <h4 style="float: right;height: 3px;"><b id="time"></b></h4>
+            <h3 class="box-title">DESIGN MASTER</h3>
+           <h4 style="float: right;height: 3px;"><b id="time"></b></h4>
         </div>
         <form role="form" class="form-horizontal">
             <div class="box-body">

@@ -30,7 +30,7 @@ function new_inv() {
     document.getElementById('name').value="";
     document.getElementById('des').value="";
     document.getElementById('cost').value=""; 
-
+    document.getElementById('msg_box').innerHTML = "";
     var url = "expenses_data.php";
     var params = "Command=" + "getdt";
     params = params + "&ls=" + "new";
@@ -84,6 +84,11 @@ function save_inv()
     {
         alert("Browser does not support HTTP Request");
         return;
+    }
+    
+    if (document.getElementById('name').value == "") {
+        document.getElementById('msg_box').innerHTML = "<div class='alert alert-warning' role='alert'><span class='center-block'>Enter Name</span></div>";
+        return false;
     }
 
     var url = 'expenses_data.php';

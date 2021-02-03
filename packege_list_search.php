@@ -74,18 +74,24 @@ include_once './connection_sql.php';
             ?>
         </table> </div>
 
-        <script type="text/javascript">
-            $(document).ready(function() {
-                $('#example').dataTable( {
-                  "pageLength": 10
-              } );
-            } );
+       <script type="text/javascript">
+                $(document).ready(function() {
+           var table = $('#example').DataTable( {
+            lengthChange: true,
+            fixedHeader: true,
+            responsive: true,
+            "deferRender": true, 
+             "order": [[ 0, 'desc' ]], 
+            lengthMenu: [[ 25, 50,100, -1 ],[ '25 rows', '50 rows', '100 rows', 'Show all' ]],
 
-// $('#example').DataTable( {
-//   "aaSorting": [[ 0, "desc" ]] // Sort by first column descending
-// } );
+        } );
 
-</script>
+$('div.dataTables_filter input', table.table().container()).focus();
+           table.buttons().container()
+           .appendTo( '#example_wrapper .col-md-6:eq(0)' );
+           
+       } );
+        </script>
 
 
 </body>

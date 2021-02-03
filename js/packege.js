@@ -29,7 +29,7 @@ function getcode(cdata,cdata1,cdata2) {
     document.getElementById('packegecode').value = cdata;
     window.scrollTo(0, 0);
 
-    
+     document.getElementById('msg_box').innerHTML = "";
     add_summeryview();
 
 }
@@ -41,6 +41,29 @@ function add_spare() {
         alert("Browser does not support HTTP Request");
         return;
     }
+    
+     if (document.getElementById('packegecode').value == "") {
+        document.getElementById('msg_box').innerHTML = "<div class='alert alert-warning' role='alert'><span class='center-block'>Select Packege</span></div>";
+        return false;
+    }
+    if (document.getElementById('spareitem').value == "") {
+        document.getElementById('msg_box').innerHTML = "<div class='alert alert-warning' role='alert'><span class='center-block'>Select Item</span></div>";
+        return false;
+    }
+    if (document.getElementById('cost').value == "") {
+        document.getElementById('msg_box').innerHTML = "<div class='alert alert-warning' role='alert'><span class='center-block'>Select  Item</span></div>";
+        return false;
+    }
+     if (document.getElementById('qty').value == "") {
+        document.getElementById('msg_box').innerHTML = "<div class='alert alert-warning' role='alert'><span class='center-block'>Enter Qty</span></div>";
+        return false;
+    }
+    
+    if (document.getElementById('total').value == "0") {
+        document.getElementById('msg_box').innerHTML = "<div class='alert alert-warning' role='alert'><span class='center-block'>Enter Qty</span></div>";
+        return false;
+    }
+        
     var url = "packege_data.php";                                 
     var params ="Command="+"add_spare"; 
     params = params + "&Command1=add_tmp";      
@@ -50,7 +73,7 @@ function add_spare() {
     params = params + "&qty=" + document.getElementById('qty').value; 
     params = params + "&total=" + document.getElementById('total').value; 
 
-
+    document.getElementById('msg_box').innerHTML = "";
     xmlHttp.open("POST", url, true);
 
     xmlHttp.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
@@ -60,7 +83,7 @@ function add_spare() {
     xmlHttp.onreadystatechange=re_spare;
 
     xmlHttp.send(params);  
-
+     
 }
 
 function re_spare()
@@ -146,6 +169,20 @@ function add_expense() {
         alert("Browser does not support HTTP Request");
         return;
     }
+    if (document.getElementById('packegecode').value == "") {
+        document.getElementById('msg_box').innerHTML = "<div class='alert alert-warning' role='alert'><span class='center-block'>Select Packege</span></div>";
+        return false;
+    }
+    if (document.getElementById('name').value == "") {
+        document.getElementById('msg_box').innerHTML = "<div class='alert alert-warning' role='alert'><span class='center-block'>Select Item</span></div>";
+        return false;
+    }
+    if (document.getElementById('cost1').value == "") {
+        document.getElementById('msg_box').innerHTML = "<div class='alert alert-warning' role='alert'><span class='center-block'>Select  Item</span></div>";
+        return false;
+    }
+      
+    
     var url = "packege_data.php";                                 
     var params ="Command="+"add_expense"; 
     params = params + "&Command1=add_tmp";      
@@ -153,7 +190,7 @@ function add_expense() {
     params = params + "&name=" + document.getElementById('name').value;
     params = params + "&cost=" + document.getElementById('cost1').value; 
 
-
+    document.getElementById('msg_box').innerHTML = "";
     xmlHttp.open("POST", url, true);
 
     xmlHttp.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
@@ -177,7 +214,8 @@ function re_expense()
        document.getElementById('itemdetails1').innerHTML = XMLAddress1[0].childNodes[0].nodeValue;  
 
        document.getElementById('cost1').value=""; 
-
+        
+        add_summeryview();
    }
 }
 
@@ -270,6 +308,9 @@ function re_summery()
     {
         XMLAddress1 = xmlHttp.responseXML.getElementsByTagName("spare"); 
         document.getElementById('spcost').value = XMLAddress1[0].childNodes[0].nodeValue;
+        
+         XMLAddress1 = xmlHttp.responseXML.getElementsByTagName("cost"); 
+        document.getElementById('tot_cost').value = XMLAddress1[0].childNodes[0].nodeValue;
 
         XMLAddress1 = xmlHttp.responseXML.getElementsByTagName("expense"); 
         document.getElementById('fix_expen').value = XMLAddress1[0].childNodes[0].nodeValue;
@@ -385,6 +426,11 @@ function updatepackege()
         alert("Browser does not support HTTP Request");
         return;
     }
+    
+    if (document.getElementById('packegecode').value == "") {
+        document.getElementById('msg_box').innerHTML = "<div class='alert alert-warning' role='alert'><span class='center-block'>Select Packege</span></div>";
+        return false;
+    }
 
     var url = 'packege_data.php';
     var params = 'Command=' + 'updatepackege';  
@@ -394,7 +440,8 @@ function updatepackege()
     params = params + '&w_margin=' + document.getElementById('w_margin').value;   
     params = params + '&wprice=' + document.getElementById('wprice').value;   
     params = params + '&r_margin=' + document.getElementById('r_margin').value;   
-    params = params + '&rprice=' + document.getElementById('rprice').value;   
+    params = params + '&rprice=' + document.getElementById('rprice').value;  
+    params = params + '&tot_cost=' + document.getElementById('tot_cost').value;  
     
     xmlHttp.open("POST", url, true);
     xmlHttp.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
@@ -457,6 +504,86 @@ function re_sparecal()
     {
         XMLAddress1 = xmlHttp.responseXML.getElementsByTagName("toot"); 
         document.getElementById('total').value = XMLAddress1[0].childNodes[0].nodeValue;
+
+
+    }
+}
+
+function expensecost()
+{
+
+    xmlHttp = GetXmlHttpObject();
+    if (xmlHttp == null)
+    {
+        alert("Browser does not support HTTP Request");
+        return;
+    }
+
+    var url = 'packege_data.php';
+    var params = 'Command=' + 'expensecost'; 
+    params = params + '&name=' + document.getElementById('name').value;  
+    
+    xmlHttp.open("POST", url, true);
+    xmlHttp.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
+    xmlHttp.setRequestHeader("Content-length", params.length);
+    xmlHttp.setRequestHeader("Connection", "close");
+
+    xmlHttp.onreadystatechange =re_expensecost;
+
+    xmlHttp.send(params);
+
+
+
+}
+
+function re_expensecost()
+{
+    var XMLAddress1;
+
+    if (xmlHttp.readyState == 4 || xmlHttp.readyState == "complete")
+    {
+        XMLAddress1 = xmlHttp.responseXML.getElementsByTagName("price"); 
+        document.getElementById('cost1').value = XMLAddress1[0].childNodes[0].nodeValue;
+
+
+    }
+}
+
+function spareprice()
+{
+
+    xmlHttp = GetXmlHttpObject();
+    if (xmlHttp == null)
+    {
+        alert("Browser does not support HTTP Request");
+        return;
+    }
+
+    var url = 'packege_data.php';
+    var params = 'Command=' + 'spareprice'; 
+    params = params + '&spareitem=' + document.getElementById('spareitem').value;  
+    
+    xmlHttp.open("POST", url, true);
+    xmlHttp.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
+    xmlHttp.setRequestHeader("Content-length", params.length);
+    xmlHttp.setRequestHeader("Connection", "close");
+
+    xmlHttp.onreadystatechange =re_spareprice;
+
+    xmlHttp.send(params);
+
+
+
+}
+
+function re_spareprice()
+{
+    var XMLAddress1;
+
+    if (xmlHttp.readyState == 4 || xmlHttp.readyState == "complete")
+    {
+        XMLAddress1 = xmlHttp.responseXML.getElementsByTagName("price"); 
+        document.getElementById('cost').value = XMLAddress1[0].childNodes[0].nodeValue;
 
 
     }

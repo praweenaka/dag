@@ -85,7 +85,10 @@ function save_inv()
         alert("Browser does not support HTTP Request");
         return;
     }
-
+    if (document.getElementById('design').value == "") {
+        document.getElementById('msg_box').innerHTML = "<div class='alert alert-warning' role='alert'><span class='center-block'>Enter Design</span></div>";
+        return false;
+    }
     var url = 'packege_list_data.php';
     var params = 'Command=' + 'save_inv';
     params = params + '&code=' + document.getElementById('code').value;

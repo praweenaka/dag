@@ -5,15 +5,16 @@
             <h3 class="box-title">OUTSTANDNG</h3>
             <h4 style="float: right;height: 3px;"><b id="time"></b></h4>
         </div>
-        <form role="form" class="form-horizontal">
+        <form role="form" name ="form1" class="form-horizontal" target="_blank" action="outstanding_report.php">
             <div class="box-body">
                 <div class="form-group">
                     <a onclick="location.reload();" class="btn btn-default">
                         <span class="fa fa-user-plus"></span> &nbsp; New
                     </a>  
-                    <a onclick="print_inv();" class="btn btn-default btn-sm">
+                    <button><a onclick="print_inv();" class="btn btn-primary btn-sm">
                         <span class="fa fa-print"></span> &nbsp; Print
-                    </a>
+                    </a></button>
+                    
                    
                 </div>
 
@@ -23,23 +24,12 @@
 
             </div>
 
-            <div class="form-group">
-                
-                 
-                <label class="col-sm-1 control-label" for="txt_usernm">Date From</label>
-                <div class="col-sm-2">
-                    <input type="text" name="dtfrom" id="dtfrom" value="<?php echo date('Y-m-d')?>"  class="form-control dt">
-                </div>
-                 <label class="col-sm-1 control-label" for="txt_usernm">Date To</label>
-                <div class="col-sm-2">
-                    <input type="text" name="dtto" id="dtto" value="<?php echo date('Y-m-d')?>"  class="form-control dt">
-                </div>
-            </div>
+            
 
             <div class="form-group">
                 <label class="col-sm-1 control-label" for="txt_usernm">CUSTOMER CODE</label>
                 <div class="col-sm-2">
-                    <input type="text" placeholder="CUSTOMER CODE" id="cuscode" disabled   class="form-control">
+                    <input type="text" placeholder="CUSTOMER CODE" id="cuscode" name="cuscode"     class="form-control">
                 </div>
                 <label class="col-sm-1 control-label" for="txt_usernm">CUSTOMER NAME</label>
                 <div class="col-sm-2">

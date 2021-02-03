@@ -31,14 +31,14 @@ if ($Command == "CheckUsers") {
         $_SESSION['UserName'] = $UserName; 
         $_SESSION['user_type'] = $row['user_type'];
         $_SESSION['CURRENT_USER'] = $UserName;
-        $_SESSION['company']='THT';
+        $_SESSION['company']=$row['user_depart'];
 
         $action = "ok";
         $cookie_name = "user";
         $cookie_value = $UserName;
 
         $token = substr(hash('sha512', mt_rand() . microtime()), 0, 50);
-        $extime = time() + 100000;
+        $extime = time() + 1000000;
 
 
         $domain = $_SERVER['HTTP_HOST'];

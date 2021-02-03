@@ -40,13 +40,16 @@ if ($_POST["Command"] == "save_inv") {
         $sqlisalma_q = "select * from vendor where code='" . $_POST['code'] . "'";
         $resultsalma_q = $conn->query($sqlisalma_q);
         if ($rowsalma_q = $resultsalma_q->fetch()) {
-            $sql = "update vendor set title = '" . $_POST['title'] . "', name = '" . $_POST['name'] . "',shopname =  '" . $_POST['shopname'] . "',nic =  '" . $_POST['nic'] . "', TELE1 = '" . $_POST['land'] . "',TELE2 =  '" . $_POST['mobile'] . "', ADD1 = '" . $_POST['address'] . "'  where code='" . $_POST['code'] . "'";
+            $sql = "update vendor set cus_type = '" . $_POST['cus_type'] . "', name = '" . $_POST['name'] . "',shopname =  '" . $_POST['shopname'] . "',nic =  '" . $_POST['nic'] . "', TELE1 = '" . $_POST['land'] . "',TELE2 =  '" . $_POST['mobile'] . "', ADD1 = '" . $_POST['address'] . "'  where code='" . $_POST['code'] . "'";
             $result = $conn->query($sql);
-
+            
+            $sqllog = "insert into entry_log(refno, username, docname, trnType, stime, sdate) values ('" . trim($_POST['code']) . "', '" . $_SESSION["CURRENT_USER"] . "', 'CUSTOMER', 'Update', '" . date("Y-m-d H:i:s") . "', '" . date("Y-m-d") . "')";
+            $resultlog = $conn->query($sqllog);
+        
             $conn->commit();
             echo "Updated";
         }else{
-            $sql2 = "insert into vendor(code,title,NAME,shopname,nic,TELE1,TELE2,ADD1) values ('" . $_POST['code'] . "', '" . $_POST['title'] . "', '" . $_POST['name'] . "', '" . $_POST['shopname'] . "', '" . $_POST['nic'] . "', '" . $_POST['land'] . "', '" . $_POST['mobile'] . "', '" . $_POST['address'] . "')"; 
+            $sql2 = "insert into vendor(code,cus_type,NAME,shopname,nic,TELE1,TELE2,ADD1) values ('" . $_POST['code'] . "', '" . $_POST['cus_type'] . "', '" . $_POST['name'] . "', '" . $_POST['shopname'] . "', '" . $_POST['nic'] . "', '" . $_POST['land'] . "', '" . $_POST['mobile'] . "', '" . $_POST['address'] . "')"; 
             $result2 = $conn->query($sql2);
 
             $sql = "SELECT customer FROM invpara";
@@ -56,7 +59,9 @@ if ($_POST["Command"] == "save_inv") {
             $no2 = $no + 1;
             $sql = "update invpara set customer = $no2 where customer = $no";
             $result = $conn->query($sql);
-
+            
+            $sqllog = "insert into entry_log(refno, username, docname, trnType, stime, sdate) values ('" . trim($_POST['code']) . "', '" . $_SESSION["CURRENT_USER"] . "', 'CUSTOMER', 'Save', '" . date("Y-m-d H:i:s") . "', '" . date("Y-m-d") . "')";
+            $resultlog = $conn->query($sqllog);
             $conn->commit();
             echo "Saved";
         }

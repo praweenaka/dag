@@ -11,7 +11,7 @@ include_once './connection_sql.php';
     <link href="style.css" rel="stylesheet" type="text/css" media="screen" />
 
 
-    <title>Search T Card</title>
+    <title>Search Customer</title>
     <link rel="stylesheet" href="css/bootstrap.min.css">
 
 
@@ -23,16 +23,14 @@ include_once './connection_sql.php';
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.1.3/css/bootstrap.css">
     <link rel="stylesheet" href="https://cdn.datatables.net/1.10.19/css/dataTables.bootstrap4.min.css">
 
-
-
-    <!-- <script language="JavaScript" src="js/search_joborder.js"></script> -->
+ 
 
     <script language="JavaScript" src="https://code.jquery.com/jquery-3.3.1.js"></script>
     <script language="JavaScript" src="https://cdn.datatables.net/1.10.19/js/jquery.dataTables.min.js"></script>
     <script language="JavaScript" src="https://cdn.datatables.net/1.10.19/js/dataTables.bootstrap4.min.js"></script>
 
 
-    <script language="JavaScript" src="js/invoice.js"></script> 
+    <script language="JavaScript" src="js/receipt.js"></script> 
 
 
 
@@ -54,43 +52,48 @@ include_once './connection_sql.php';
         <table id="testTable"  class="table table-bordered">
             <?php
 
-            $sql2 = "SELECT * from t_jobcard where STEP='5' ";
+            $sql2 = "SELECT * from vendor  ";
 
             echo "<table id='example'  class='table table-bordered' style='font-size: 14px;'>";
 
             echo "<thead><tr>";
-            echo "<th>CARD NO</th>";
-            echo "<th>JOb NO</th>";
-            echo "<th>Customer Name</th>"; 
-            echo "<th>Date Finished</th>";
-
+            echo "<th>CUS CODE</th>";
+            echo "<th>CUS NAME</th>";
+            echo "<th>ADDRESS</th>"; 
+            echo "<th>TYPE</th>"; 
 
             echo "</tr></thead><tbody>";
 
             foreach ($conn->query($sql2) as $row) { 
-                $cuscode = $row['cardno']; 
+                $cuscode = $row['CODE']; 
                 echo "<tr>               
-                <td onclick=\"custno1('$cuscode', '$stname');\">" . $row['cardno'] . "</a></td>
-                <td onclick=\"custno1('$cuscode', '$stname');\">" . $row['jobno'] . "</a></td>
-                <td onclick=\"custno1('$cuscode', '$stname');\">" . $row['cusname'] . "</a></td>
-                <td onclick=\"custno1('$cuscode', '$stname');\">" . $row['datefini'] . "</a></td> 
+                <td onclick=\"search_cust_ind('$cuscode', '$stname');\">" . $row['CODE'] . "</a></td>
+                <td onclick=\"search_cust_ind('$cuscode', '$stname');\">" . $row['NAME'] . "</a></td>
+                <td onclick=\"search_cust_ind('$cuscode', '$stname');\">" . $row['ADD1'] . "</a></td>  
+                <td onclick=\"search_cust_ind('$cuscode', '$stname');\">" . $row['cus_type'] . "</a></td>  
                 </tr>";
             }
             ?>
         </table> </div>
 
         <script type="text/javascript">
-            $(document).ready(function() {
-                $('#example').dataTable( {
-                  "pageLength": 10
-              } );
-            } );
+                $(document).ready(function() {
+           var table = $('#example').DataTable( {
+            lengthChange: true,
+            fixedHeader: true,
+            responsive: true,
+            "deferRender": true, 
+             "order": [[ 0, 'asc' ]], 
+            lengthMenu: [[ 25, 50,100, -1 ],[ '25 rows', '50 rows', '100 rows', 'Show all' ]],
 
-// $('#example').DataTable( {
-//   "aaSorting": [[ 0, "desc" ]] // Sort by first column descending
-// } );
+        } );
 
-</script>
+$('div.dataTables_filter input', table.table().container()).focus();
+           table.buttons().container()
+           .appendTo( '#example_wrapper .col-md-6:eq(0)' );
+           
+       } );
+        </script>
 
 
 </body>

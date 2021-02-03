@@ -1,6 +1,10 @@
 <?php
 session_start();
 include './connection_sql.php';
+if ($_SESSION["CURRENT_USER"] == "") {
+ echo "Please Logging Again..";
+ 
+}
 ?>
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script> 
 <!-- Main content -->
@@ -9,6 +13,7 @@ include './connection_sql.php';
     <div class="box box-primary">
         <div class="box-header with-border">
             <h3 class="box-title">Invoice</h3>
+            <h4 style="float: right;height: 3px;"><b id="time"></b></h4>
         </div>
         <form name= "form1" role="form" class="form-horizontal">
             <div class="box-body">
@@ -42,8 +47,6 @@ include './connection_sql.php';
                 <label style="background-color: #00CCCC"><input type="radio" name="paymethod" onclick="tickamouchange('paymethod_1');" value="credit" id="paymethod_1" />&nbsp;CASH&nbsp;&nbsp;&nbsp;</label> 
                 <label style="background-color: #00CCCC"><input type="radio" name="paymethod" onclick="tickamouchange('paymethod_0');" value="credit" id="paymethod_0" />&nbsp;CREDIT&nbsp;&nbsp;&nbsp;</label>
 
-                <label style="background-color: #00CCCC"><input type="radio" name="paymethod1" onclick="tickamouchange('paymethod1_1');" value="credit" id="paymethod1_1" />&nbsp;NORMAL&nbsp;&nbsp;&nbsp;</label> 
-                <label style="background-color: #00CCCC"><input type="radio" name="paymethod1" onclick="tickamouchange('paymethod1_0');" value="credit" id="paymethod1_0" />&nbsp;FOC&nbsp;&nbsp;&nbsp;</label>
                 
 
                 <div class="form-group">
@@ -73,7 +76,7 @@ include './connection_sql.php';
                     <input type="text" placeholder="Code" name="c_code" id="c_code" disabled class="form-control  input-sm">
                 </div>
                 <div class="col-sm-3">
-                    <input type="text" placeholder="Name" name = "c_name" id="c_name" class="form-control input-sm">
+                    <input type="text" placeholder="Name" disabled name = "c_name" id="c_name" class="form-control input-sm">
                 </div>
                 <div class="col-sm-1">
 
@@ -98,7 +101,7 @@ include './connection_sql.php';
         <div class="form-group">
             <label class="col-sm-1 control-label" for="cus_address">Address</label>
             <div class="col-sm-2">
-                <input type="text" placeholder="Name" id="cus_address" class="form-control input-sm">
+                <input type="text" placeholder="Address" id="cus_address" class="form-control input-sm">
             </div>
 
             <label class="col-sm-1 control-label" for="txt_remarks">Remark</label>
@@ -117,9 +120,9 @@ include './connection_sql.php';
             <label class="col-sm-1 control-label" for="invno">Sales Ex.</label> 
             <div class="col-sm-2"> 
                 <select id="salesrep" class="form-control input-sm" >
-
                     <?php 
-                    $sql = "select * from s_salrep WHERE cancel='1' order by REPCODE "; 
+                    include './connection_sql.php';
+                    $sql = "select * from s_salrep WHERE cancel='0' order by REPCODE "; 
                     foreach ($conn->query($sql) as $row) {
                      echo "<option value='" . $row["REPCODE"] . "'>" . $row["REPCODE"] . " " . $row["Name"] . "</option>";
                  }
@@ -128,51 +131,67 @@ include './connection_sql.php';
                  ?>
              </select>
          </div> 
-
+        <label class="col-sm-1 control-label" for="invno">Reject Dag</label> 
+            <div class="col-sm-2"> 
+            <input type="checkbox" class=" input-sm" id="rejectdag" name="rejectdag" onclick="rejectdag1();" />
+            
+            </div>
 
      </div>
      <table class="table table-bordered">
-        <tr class='info'>
-            <th style="width: 120px;">JOB REF</th>
+        <tr class='info'> 
+            <th style="width: 100px;">JOB NO</th> 
             <th style="width: 10px;"></th>
-            <th style="width: 120px;">JOB NO</th> 
-            <th style="width: 120px;">SIZE</th>
-            <th style="width: 120px;">MAKE</th>
-            <th style="width: 30px;">AMOUNT</th>
-            <th style="width: 30px;">REPAIR</th>
-            <th style="width: 80px;">Dis</th>
+            <th style="width: 100px;">MAKE</th> 
+            <th style="width: 100px;">DESIGN</th> 
+            <th style="width: 70px;">SIZE</th> 
+            <th style="width: 100px;">SERIAL NO</th> 
+            <th style="width: 90px;">AD PAY</th> 
+            <th style="width: 90px;">COST</th>
+            <th style="width: 120px;">SELLING</th>
+            <th style="width: 90px;">REPAIR</th>
+            <th style="width: 60px;">Dis</th>
             <th style="width: 120px;">SubTotal</th>
-            <th style="width: 100px;"></th>
+            <th style="width: 50px;"></th>
         </tr>
 
         <tr>
             <td>
-                <input type="text" placeholder="JOB REF" id="jobref" disabled class="form-control input-sm">
+                <input type="text" placeholder="JOB REF" id="jobno" disabled class="form-control input-sm">
             </td>
             <td>
-                <a href="" onclick="NewWindow('search_cardno.php', 'mywin', '800', '700', 'yes', 'center');
+                <a href="" onclick="NewWindow('invoice_search_item.php', 'mywin', '800', '700', 'yes', 'center');
                 return false" onfocus="this.blur()">
                 <input type="button" name="searchcusti" id="searchcusti" value="..." class="btn btn-default btn-sm">
             </a>
         </td>
         <td>
-            <input type="text" placeholder="JOBNO" id="jobno" disabled class="form-control input-sm">
+            <input type="text" placeholder="MAKE" id="make" disabled class="form-control input-sm">
+        </td>
+        <td>
+            <input type="text" placeholder="DESIGN" id="design" disabled class="form-control input-sm">
         </td>
 
         <td>
             <input type="text" placeholder="SIZE" id="size" disabled class="form-control input-sm">
         </td>
         <td>
-            <input type="text" placeholder="MAKE" id="make" disabled class="form-control input-sm">
+            <input type="text" placeholder="SERIAL NO" id="serialno" disabled class="form-control input-sm">
         </td> 
         <td>
-            <input type="number" placeholder="AMOUNT" id="amount" onkeyup="calc();"  class="form-control input-sm">
+            <input type="text" placeholder="AD PAY" id="adpay" onkeyup="calc();" disabled class="form-control input-sm">
+        </td> 
+        <td>
+            <input type="number" placeholder="COST" id="cost" disabled onkeyup="calc();"  class="form-control input-sm">
+        </td>
+        <td>
+            <input type="number" placeholder="SELLING" id="selling" onkeyup="calc();" class="form-control input-sm">
         </td>
         <td>
             <input type="number" placeholder="REPAIR" id="repair" onkeyup="calc();" class="form-control input-sm">
         </td>
         <td>
-            <input type="number" placeholder="Dis" id="dis"   onkeyup="calc();" class="form-control input-sm">
+            <input type="number" placeholder="Dis" id="dis" disabled  onkeyup="calc();" class="form-control input-sm">
         </td>
         <td>
             <input type="number" placeholder="Subtotal" id="subtotal" disabled="" class="form-control input-sm">

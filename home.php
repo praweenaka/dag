@@ -92,7 +92,21 @@ if (isset($_GET['url'])) {
     if ($_GET['url'] == "beltmas") {
         include_once './beltmas.php';
     }
-
+    
+    if ($_GET['url'] == "receipt") {
+        include_once './receipt.php';
+    }
+    
+    if ($_GET['url'] == "outstanding") {
+        include_once './outstanding.php';
+    }
+    
+    if ($_GET['url'] == "item_mas") {
+        include_once './item_mas.php';
+    }
+     if ($_GET['url'] == "po") {
+        include_once './po.php';
+    }
 //////////////////////////////////
 
 
@@ -121,6 +135,7 @@ include_once './footer.php';
 </script>
 <?php
 include './autocomple_gl.php';
+
 ?>
 
 
