@@ -45,7 +45,8 @@ require_once("./connection_sql.php");
                         <th>DATE</th>   
                         <th>CUSTOMER</th>
                         <th>MAKE</th> 
-                        <th>SIZE</th>  
+                        <th>SIZE</th> 
+                        <th>BELT</th> 
                         <th>SERIAL NO</th>  
                         <th>AD PAY</th>  
                         <th>AMOUNT</th>  
@@ -72,13 +73,14 @@ require_once("./connection_sql.php");
 
                         ?>
                         <tr>
-                            <td  onclick="upjobno('<?php echo $row['jobno']; ?>','<?php echo $row['serialno']; ?>');"><?php echo $i; ?></td>
-                            <td onclick="name(this)"><?php echo $row['jobno']; ?></td> 
+                            <td ><?php echo $i; ?></td>
+                            <td onclick="upjobno('<?php echo $row['refno']; ?>','<?php echo $row['serialno']; ?>');"><?php echo $row['jobno']; ?></td> 
                             <td onclick="name(this)"><?php echo $row['refno']; ?></td> 
                             <td onclick="name(this)"><?php echo $row['sdate']; ?></td>   
                             <td onclick="name(this)"><?php echo $row['cusname']; ?></td>   
                             <td onclick="name(this)"><?php echo $row['marker']; ?></td>   
-                            <td onclick="name(this)"><?php echo $row['size']; ?></td>   
+                            <td onclick="name(this)"><?php echo $row['size']; ?></td>  
+                            <td onclick="name(this)"><?php echo $row['belt']; ?></td>  
                             <td onclick="name(this)"><?php echo $row['serialno']; ?></td> 
                             <td onclick="name(this)"><?php echo $row['adpayment']; ?></td> 
                            <?php  if($row['flag']=='7'){
@@ -337,6 +339,7 @@ require_once("./connection_sql.php");
         var cell_11 = row.cells[11].innerHTML; 
         var cell_12 = row.cells[12].innerHTML;
         var cell_13 = row.cells[13].innerHTML;
+        var cell_14 = row.cells[14].innerHTML;
 
         document.getElementById("id").value=cell_0; 
         document.getElementById("jobno").value=cell_1;
@@ -344,10 +347,10 @@ require_once("./connection_sql.php");
          document.getElementById("regdate").value=cell_3; 
         document.getElementById("cusname").value=cell_4;
          document.getElementById("size").value=cell_6;
-         document.getElementById("serialno").value=cell_7;
-         document.getElementById("adpay").value=cell_8;
-         document.getElementById("totalamou").value=cell_11;
-         document.getElementById("finishdate").value=cell_13;
+         document.getElementById("serialno").value=cell_8;
+         document.getElementById("adpay").value=cell_9;
+         document.getElementById("totalamou").value=cell_12;
+         document.getElementById("finishdate").value=cell_14;
          
 
         $("#exampleModal").modal("show");
