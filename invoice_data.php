@@ -94,8 +94,8 @@ if ($_GET["Command"] == "setitem") {
     <th style=\"width: 90px;\">COST</th>
     <th style=\"width: 120px;\">SELLING</th>
     <th style=\"width: 90px;\">REPAIR</th>
-    <th style=\"width: 60px;\">Dis</th>
-    <th style=\"width: 120px;\">SubTotal</th>
+    <th style=\"width: 60px;\">DIS</th>
+    <th style=\"width: 120px;\">SUBTOTAL</th>
     <th style=\"width: 50px;\"></th>
     </tr>";
 
