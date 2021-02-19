@@ -159,9 +159,11 @@ $row_invpara = $result_invpara->fetch();
         <?php
         $i=1;
         $part="";
-        $sql1 = "Select * from t_invo where refno='" . $row['REF_NO'] . "' order by refno desc";
+        $sql1 = "Select * from t_invo where refno='" . $row['REF_NO'] . "'   order by refno desc";
         foreach ($conn->query($sql1) as $row1) {
-
+            
+            
+            if($row1['type']=="dag"){ 
             ?>
             <tr> 
 
@@ -171,6 +173,12 @@ $row_invpara = $result_invpara->fetch();
                 <td class="left" ><?php echo $row1['serialno']; ?> </td>
                 <td class="left" ><?php echo $row1['design']; ?> </td>
                 <td class="left" ><?php echo $row1['make']; ?> </td>
+                 <?php if($row1['warrenty']=="NO"){?>
+                <td class="left" ><?php echo "N.G" ?> </td>
+              <?php  }else{?>
+                    <td class="left" ><?php echo "" ?> </td>
+                <?php  }?>
+                
             <?php if($row1['reject'] =="0"){?>
                  <td class="right"><?php echo number_format($row1['selling'], 0, ".", ","); ?></td>
                 <td class="right"><?php echo number_format($row1['repair1'], 2, ".", ","); ?></td> 
@@ -181,6 +189,34 @@ $row_invpara = $result_invpara->fetch();
                 ?>
                
             </tr>
+            
+        <?php    }else if($row1['type']=="product"){ 
+                ?>
+                <tr> 
+                <td class="left" ><?php echo $row1['stk_no']; ?> </td>
+                <td class="left" ><?php echo $row1['name']; ?> </td>  
+                <td class="left" >&nbsp;</td> 
+                <td class="left" >&nbsp; </td>
+                <td class="left" ><?php echo $row1['qty']; ?> </td>
+                <td class="left" >&nbsp; </td>
+                <td class="right" ><?php echo $row1['selling']; ?> </td>
+                <td class="left" >&nbsp; </td>
+                <td class="right" ><?php echo $row1['subtot']; ?> </td> 
+                 </tr>
+         <?php    }else if($row1['type']=="service"){ 
+                ?>
+                <tr> 
+                <td class="left" ><?php echo $row1['vehicleno']; ?> </td> 
+                <td class="left" >&nbsp; </td>
+                <td class="left" ><?php echo $row1['service']; ?> </td>
+                <td class="left" >&nbsp; </td>
+                <td class="left" >&nbsp; </td>
+                <td class="left" >&nbsp; </td>
+                <td class="left" >&nbsp; </td>
+                <td class="left" >&nbsp; </td> 
+                <td class="right" ><?php echo $row1['subtot']; ?> </td> 
+                 </tr>
+        <?php }?>
             <?php
             $i=$i+1; 
         }
@@ -188,7 +224,7 @@ $row_invpara = $result_invpara->fetch();
 
         <?php
 
-        $t=34;
+        $t=36;
         while ($i <$t) {
 
          echo "<tr>
@@ -211,7 +247,12 @@ $row_invpara = $result_invpara->fetch();
 
      <tr>
 
-        <td></td>
+        <td><?php if($row['TYPE']=="CA"){
+             echo "PAID";
+        }
+       
+
+        ?></td>
         <td></td>
         <td></td>
         <td></td>
