@@ -57,7 +57,7 @@ include_once './connection_sql.php';
             $rowven = $resultven->fetch(); 
             
             if($_SESSION['rejectdag']=="true"){
-                $sql2 = "SELECT * from dag_item where flag!='0' and cancel='1'"; 
+                $sql2 = "SELECT * from dag_item where flag!='0' and cancel='0'"; 
             }else{
                 $sql2 = "SELECT * from dag_item where flag='2' and cancel='0'  "; 
             }
