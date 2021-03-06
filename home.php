@@ -81,8 +81,8 @@ if (isset($_GET['url'])) {
         include_once './packege_list.php';
     }
 
-    if ($_GET['url'] == "worker") {
-        include_once './worker.php';
+    if ($_GET['url'] == "man") {
+        include_once './man.php';
     }
 
       if ($_GET['url'] == "brandmas") {
@@ -106,6 +106,21 @@ if (isset($_GET['url'])) {
     }
      if ($_GET['url'] == "po") {
         include_once './po.php';
+    }
+     if ($_GET['url'] == "profit_dag") {
+        include_once './profit_dag.php';
+    }
+    if ($_GET['url'] == "profit_inv") {
+        include_once './profit_inv.php';
+    }
+    if ($_GET['url'] == "sales_register") {
+        include_once './sales_register.php';
+    }
+    if ($_GET['url'] == "audit_trail") {
+        include_once './audit_trail.php';
+    }
+    if ($_GET['url'] == "salary") {
+        include_once './salary.php';
     }
 //////////////////////////////////
 

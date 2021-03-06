@@ -194,13 +194,12 @@ function re_finish()
      
 		var newjobno= prompt("Please enter New JOb No", "");
     
-    	var url = "reject_list_data.php";
+    	var url = "all_list_data.php";
         var params ="Command="+"upjobno";    
       params = params + "&refno=" + refno;  
-       params = params + "&serialno=" + serialno;  
-       
+       params = params + "&serialno=" + serialno;   
        params = params + "&newjobno=" + newjobno;  
-
+ 
         xmlHttp.open("POST", url, true);
 
         xmlHttp.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
@@ -214,6 +213,47 @@ function re_finish()
  }
  
  function re_upjobno() {
+
+    var XMLAddress1;
+
+    if (xmlHttp.readyState == 4 || xmlHttp.readyState == "complete") {
+        alert(xmlHttp.responseText);
+        setTimeout("location.reload(true);", 500);
+    }
+}
+
+
+
+ function canceldag() {
+    
+    xmlHttp = GetXmlHttpObject();
+    if (xmlHttp == null) {
+        alert("Browser does not support HTTP Request");
+        return;
+    }
+    var msg = confirm("Do you want to CANCEL this ! ");
+    if (msg == true) {
+     
+		 
+    
+    	var url = "all_list_data.php";
+        var params ="Command="+"canceldag";    
+       params = params + "&refno=" +document.getElementById('refno').value;
+       params = params + "&jobno=" +document.getElementById('jobno').value;
+ 
+        xmlHttp.open("POST", url, true);
+
+        xmlHttp.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
+        xmlHttp.setRequestHeader("Content-length", params.length);
+        xmlHttp.setRequestHeader("Connection", "close");
+
+        xmlHttp.onreadystatechange=re_canceldag;
+
+        xmlHttp.send(params);  
+    }
+ }
+ 
+  function re_canceldag() {
 
     var XMLAddress1;
 

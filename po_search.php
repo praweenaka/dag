@@ -45,8 +45,7 @@ include_once './connection_sql.php';
             echo "<thead><tr>";
             echo "<th>Reference NO</th>";
             echo "<th>Date</th>";
-            echo "<th>Code</th>";
-            echo "<th>COST</th>";
+            echo "<th>Code</th>"; 
             echo "<th>Name</th>"; 
             echo "<th>Amount</th>"; 
  

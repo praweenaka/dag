@@ -182,23 +182,76 @@ function passcusresult_quot()
      if (XMLAddress1[0].childNodes[0].nodeValue=="dag") {
        opener.document.getElementById('cuscode').value = obj.CODE;  
        opener.document.getElementById('cusname').value = obj.NAME; 
-   }else{
-      
-       opener.document.getElementById('code').value = obj.CODE;  
-       opener.document.getElementById('name').value = obj.NAME;   
-       opener.document.getElementById('cus_type').value = obj.cus_type;   
-       opener.document.getElementById('shopname').value = obj.shopname;              
-       opener.document.getElementById('nic').value = obj.nic;   
-       opener.document.getElementById('land').value = obj.TELE1;   
-       opener.document.getElementById('mobile').value = obj.TELE2;   
-       opener.document.getElementById('address').value = obj.ADD1;  
-   }
+       }else{
+          
+           opener.document.getElementById('code').value = obj.CODE;  
+           opener.document.getElementById('name').value = obj.NAME;   
+           opener.document.getElementById('cus_type').value = obj.cus_type;   
+           opener.document.getElementById('shopname').value = obj.shopname;              
+           opener.document.getElementById('nic').value = obj.nic;   
+           opener.document.getElementById('land').value = obj.TELE1;   
+           opener.document.getElementById('mobile').value = obj.TELE2;   
+           opener.document.getElementById('address').value = obj.ADD1;  
+       }
+ 
 
-
-
-
-
-   self.close();
-}
+       self.close();
+    }
 
 } 
+
+
+
+
+function cancel_inv()
+{
+
+    xmlHttp = GetXmlHttpObject();
+    if (xmlHttp == null)
+    {
+        alert("Browser does not support HTTP Request");
+        return;
+    }
+
+    document.getElementById('msg_box').innerHTML = "";
+    if (document.getElementById('code').value == "") {
+        document.getElementById('msg_box').innerHTML = "<div class='alert alert-warning' role='alert'><span class='center-block'>Select CUSTOMER</span></div>";
+        return false;
+    }
+
+
+
+    var url = 'customer_data.php';
+    var params = 'Command=' + 'cancel_inv'; 
+    params = params + '&code=' + document.getElementById('code').value;  
+    xmlHttp.open("POST", url, true);
+    xmlHttp.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
+    xmlHttp.setRequestHeader("Content-length", params.length);
+    xmlHttp.setRequestHeader("Connection", "close");
+
+    xmlHttp.onreadystatechange = re_cancel;
+
+    xmlHttp.send(params);
+
+
+
+}
+
+function re_cancel()
+{
+    var XMLAddress1;
+
+    if (xmlHttp.readyState == 4 || xmlHttp.readyState == "complete")
+    {
+
+
+        if (xmlHttp.responseText == "cancel") {
+         document.getElementById('msg_box').innerHTML = "<div class='alert alert-success' role='alert'><span class='center-block'>Canceled</span></div>";
+         setTimeout("location.reload(true);", 500); 
+     } else {
+       document.getElementById('msg_box').innerHTML = "<div class='alert alert-warning' role='alert'><span class='center-block'>" + xmlHttp.responseText + "</span></div>";
+
+   }
+
+}
+}

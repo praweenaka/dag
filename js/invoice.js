@@ -158,6 +158,203 @@ function showarmyresultdel() {
 }
 
 
+function add_product() {
+
+
+    xmlHttp = GetXmlHttpObject();
+    if (xmlHttp == null) {
+        alert("Browser does not support HTTP Request");
+        return;
+    }
+    
+
+    document.getElementById('msg_box').innerHTML =""; 
+    if (parseFloat(document.getElementById('qty1').value) > parseFloat(document.getElementById('qtyhand').value)) {
+        document.getElementById('msg_box').innerHTML = "<div class='alert alert-warning' role='alert'><span class='center-block'>Insufficient Quantity in this Department</span></div>";
+        return false;
+    }
+    
+     if (document.getElementById('tmpno').value == "") {
+        document.getElementById('msg_box').innerHTML = "<div class='alert alert-warning' role='alert'><span class='center-block'>New Not Selected</span></div>";
+        return false;
+    }
+    if (document.getElementById('c_code').value == "") {
+        document.getElementById('msg_box').innerHTML = "<div class='alert alert-warning' role='alert'><span class='center-block'>Customer Not Selected</span></div>";
+        return false;
+    }
+    if (document.getElementById('code').value == "") {
+        document.getElementById('msg_box').innerHTML = "<div class='alert alert-warning' role='alert'><span class='center-block'>Product Not Selected</span></div>";
+        return false;
+    }
+    if (document.getElementById('qty1').value == "") {
+        document.getElementById('msg_box').innerHTML = "<div class='alert alert-warning' role='alert'><span class='center-block'>QYY Not Entered</span></div>";
+        return false;
+    }
+    if (document.getElementById('cost1').value == "") {
+        document.getElementById('msg_box').innerHTML = "<div class='alert alert-warning' role='alert'><span class='center-block'>Cost Not Entered</span></div>";
+        return false;
+    }
+     if (document.getElementById('selling1').value == "") {
+        document.getElementById('msg_box').innerHTML = "<div class='alert alert-warning' role='alert'><span class='center-block'>Selling Not Entered</span></div>";
+        return false;
+    }
+    
+        var url = "invoice_data.php";
+        url = url + "?Command=" + "setproduct";
+        url = url + "&Command1=" + "add_tmp";
+        url = url + "&txt_entno=" + document.getElementById('txt_entno').value;  
+        url = url + "&tmpno=" + document.getElementById('tmpno').value; 
+        url = url + "&invdate=" + document.getElementById('invdate').value;
+          
+        url = url + "&code=" + document.getElementById('code').value;
+        url = url + "&name=" + document.getElementById('name').value;
+        url = url + "&qty1=" + document.getElementById('qty1').value;
+        url = url + "&qtyhand=" + document.getElementById('qtyhand').value;
+        url = url + "&cost1=" + document.getElementById('cost1').value;
+        url = url + "&selling1=" + document.getElementById('selling1').value; 
+        url = url + "&dis1=" + document.getElementById('dis1').value; 
+        url = url + "&subtotal1=" + document.getElementById('subtotal1').value; 
+        
+        xmlHttp.onreadystatechange = show_product;
+        xmlHttp.open("GET", url, true);
+        xmlHttp.send(null);
+
+   
+}
+
+function show_product() {
+    var XMLAddress1;
+
+    if (xmlHttp.readyState == 4 || xmlHttp.readyState == "complete") {
+
+        XMLAddress1 = xmlHttp.responseXML.getElementsByTagName("sales_table");
+        document.getElementById('itemdetails1').innerHTML = XMLAddress1[0].childNodes[0].nodeValue;
+
+        XMLAddress1 = xmlHttp.responseXML.getElementsByTagName("item_count");
+        document.getElementById('item_count').value = XMLAddress1[0].childNodes[0].nodeValue;
+
+        XMLAddress1 = xmlHttp.responseXML.getElementsByTagName("subtot");
+        document.getElementById('subtot').value = XMLAddress1[0].childNodes[0].nodeValue;
+
+        XMLAddress1 = xmlHttp.responseXML.getElementsByTagName("gtot");
+        document.getElementById('gtot').value = XMLAddress1[0].childNodes[0].nodeValue;
+
+        XMLAddress1 = xmlHttp.responseXML.getElementsByTagName("discount");
+        document.getElementById('discount').value = XMLAddress1[0].childNodes[0].nodeValue;
+        
+
+
+
+        XMLAddress1 = xmlHttp.responseXML.getElementsByTagName("err");
+        if (XMLAddress1[0].childNodes[0].nodeValue=="") {
+            document.getElementById('qty1').value = "";
+            document.getElementById('cost1').value = "";
+            document.getElementById('selling1').value = ""; 
+            document.getElementById('dis1').value = "";
+            document.getElementById('subtotal1').value = "";
+            document.getElementById('rejectdag').disabled = true;
+            // document.getElementById('amount').focus();
+        } else {
+            document.getElementById('msg_box').innerHTML = "<div class='alert alert-warning' role='alert'><span class='center-block'>" + XMLAddress1[0].childNodes[0].nodeValue + "</span></div>";
+        }
+    }
+}
+
+
+
+function add_service() {
+
+
+    xmlHttp = GetXmlHttpObject();
+    if (xmlHttp == null) {
+        alert("Browser does not support HTTP Request");
+        return;
+    }
+    
+
+    document.getElementById('msg_box').innerHTML =""; 
+
+    
+    if (document.getElementById('tmpno').value == "") {
+        document.getElementById('msg_box').innerHTML = "<div class='alert alert-warning' role='alert'><span class='center-block'>New Not Selected</span></div>";
+        return false;
+    }
+    if (document.getElementById('c_code').value == "") {
+        document.getElementById('msg_box').innerHTML = "<div class='alert alert-warning' role='alert'><span class='center-block'>Customer Not Selected</span></div>";
+        return false;
+    }
+    if (document.getElementById('vehino').value == "") {
+        document.getElementById('msg_box').innerHTML = "<div class='alert alert-warning' role='alert'><span class='center-block'>Vehicle NO Not Entered</span></div>";
+        return false;
+    }
+    if (document.getElementById('employee').value == "") {
+        document.getElementById('msg_box').innerHTML = "<div class='alert alert-warning' role='alert'><span class='center-block'>Employee Not Selected</span></div>";
+        return false;
+    }
+    if (document.getElementById('services').value == "") {
+        document.getElementById('msg_box').innerHTML = "<div class='alert alert-warning' role='alert'><span class='center-block'>Service Not Selected</span></div>";
+        return false;
+    }
+    if (document.getElementById('amount').value == "") {
+        document.getElementById('msg_box').innerHTML = "<div class='alert alert-warning' role='alert'><span class='center-block'>Amount Not Entered</span></div>";
+        return false;
+    }
+    
+        var url = "invoice_data.php";
+        url = url + "?Command=" + "setservice";
+        url = url + "&Command1=" + "add_tmp";
+        url = url + "&txt_entno=" + document.getElementById('txt_entno').value; 
+         url = url + "&invdate=" + document.getElementById('invdate').value; 
+        url = url + "&tmpno=" + document.getElementById('tmpno').value; 
+        
+        url = url + "&vehino=" + document.getElementById('vehino').value;
+        url = url + "&employee=" + document.getElementById('employee').value;
+        url = url + "&services=" + document.getElementById('services').value; 
+        url = url + "&amount=" + document.getElementById('amount').value;
+        
+        xmlHttp.onreadystatechange = show_services;
+        xmlHttp.open("GET", url, true);
+        xmlHttp.send(null);
+
+   
+}
+
+function show_services() {
+    var XMLAddress1;
+
+    if (xmlHttp.readyState == 4 || xmlHttp.readyState == "complete") {
+
+        XMLAddress1 = xmlHttp.responseXML.getElementsByTagName("sales_table");
+        document.getElementById('itemdetails2').innerHTML = XMLAddress1[0].childNodes[0].nodeValue;
+
+        XMLAddress1 = xmlHttp.responseXML.getElementsByTagName("item_count");
+        document.getElementById('item_count').value = XMLAddress1[0].childNodes[0].nodeValue;
+
+        XMLAddress1 = xmlHttp.responseXML.getElementsByTagName("subtot");
+        document.getElementById('subtot').value = XMLAddress1[0].childNodes[0].nodeValue;
+
+        XMLAddress1 = xmlHttp.responseXML.getElementsByTagName("gtot");
+        document.getElementById('gtot').value = XMLAddress1[0].childNodes[0].nodeValue;
+
+        XMLAddress1 = xmlHttp.responseXML.getElementsByTagName("discount");
+        document.getElementById('discount').value = XMLAddress1[0].childNodes[0].nodeValue;
+        
+
+
+
+        XMLAddress1 = xmlHttp.responseXML.getElementsByTagName("err");
+        if (XMLAddress1[0].childNodes[0].nodeValue=="") {
+
+            document.getElementById('vehino').value = ""; 
+            document.getElementById('employee').value = "";
+            document.getElementById('services').value = "";
+            document.getElementById('amount').value = ""; 
+            document.getElementById('rejectdag').disabled = true; 
+        } else {
+            document.getElementById('msg_box').innerHTML = "<div class='alert alert-warning' role='alert'><span class='center-block'>" + XMLAddress1[0].childNodes[0].nodeValue + "</span></div>";
+        }
+    }
+}
 
 function save_inv() {
 
@@ -205,6 +402,8 @@ function save_inv() {
     url = url + "&salesrep=" + document.getElementById('salesrep').value; 
     url = url + "&DANO=" + document.getElementById('DANO').value;   
     url = url + "&gtot=" + document.getElementById('gtot').value;   
+    url = url + "&recv_details=" + document.getElementById('recv_details').value;   
+    url = url + "&cpay=" + document.getElementById('cpay').value;   
 
     var vattype;
     if (document.getElementById('nonvat').checked == true) {
@@ -258,11 +457,16 @@ function new_inv() {
     var paymethod;
 
     document.getElementById('txt_entno').value = "";
+    document.getElementById('cpay').value = "";
+    document.getElementById('cpay').disabled = true;
     document.getElementById('c_code').value = "";
     document.getElementById('c_name').value = "";
     document.getElementById('cus_address').value = "";
     document.getElementById('nonvat').checked = true;
     document.getElementById('itemdetails').innerHTML = "";
+    document.getElementById('itemdetails1').innerHTML = "";
+    document.getElementById('itemdetails2').innerHTML = "";
+    document.getElementById('recv_details').value = "";
     document.getElementById('subtot').value = "";
     document.getElementById('msg_box').innerHTML = ""; 
     document.getElementById('jobno').value = "";
@@ -280,6 +484,18 @@ function new_inv() {
     document.getElementById('dis').value = ""; 
     document.getElementById('serialno').value = ""; 
     document.getElementById('design').value = ""; 
+    
+    document.getElementById('code').value = ""; 
+    document.getElementById('name').value = ""; 
+    document.getElementById('qty1').value = ""; 
+    document.getElementById('qtyhand').value = ""; 
+    document.getElementById('cost1').value = ""; 
+    document.getElementById('selling1').value = ""; 
+    document.getElementById('subtotal1').value = ""; 
+    document.getElementById('vehino').value = ""; 
+    document.getElementById('employee').value = ""; 
+    document.getElementById('services').value = ""; 
+    document.getElementById('amount').value = ""; 
 
     document.getElementById('paymethod_0').checked =true; 
     document.getElementById('rejectdag').checked = false;
@@ -358,9 +574,49 @@ function del_item(cdate) {
 
 
 
+function del_itemservice(cdate) {
 
+    xmlHttp = GetXmlHttpObject();
+    if (xmlHttp == null) {
+        alert("Browser does not support HTTP Request");
+        return;
+    }
 
+    var url = "invoice_data.php";
+    url = url + "?Command=" + "setservice";
+    url = url + "&Command1=" + "del_item";
+    url = url + "&id=" + cdate;
+    url = url + "&invno=" + document.getElementById('txt_entno').value;
+    url = url + "&tmpno=" + document.getElementById('tmpno').value;
+    
 
+    xmlHttp.onreadystatechange = show_services;
+    xmlHttp.open("GET", url, true);
+    xmlHttp.send(null);
+
+}
+
+function del_itemproduct(cdate) {
+
+    xmlHttp = GetXmlHttpObject();
+    if (xmlHttp == null) {
+        alert("Browser does not support HTTP Request");
+        return;
+    }
+
+    var url = "invoice_data.php";
+    url = url + "?Command=" + "setservice";
+    url = url + "&Command1=" + "del_item";
+    url = url + "&id=" + cdate;
+    url = url + "&invno=" + document.getElementById('txt_entno').value;
+    url = url + "&tmpno=" + document.getElementById('tmpno').value;
+    
+
+    xmlHttp.onreadystatechange = show_product;
+    xmlHttp.open("GET", url, true);
+    xmlHttp.send(null);
+
+}
 
 
 function crnview(custno, stname)
@@ -408,6 +664,8 @@ function pass_rec_result()
         opener.document.getElementById('cus_address').value = obj.C_ADD1;  
         opener.document.getElementById('salesrep').value = obj.SAL_EX;  
         opener.document.getElementById('DANO').value = obj.dele_no;   
+        opener.document.getElementById('cpay').value = obj.cpay; 
+        opener.document.getElementById('recv_details').value = obj.recv_details; 
 
           
         XMLAddress1 = xmlHttp.responseXML.getElementsByTagName("type"); 
@@ -415,11 +673,16 @@ function pass_rec_result()
              opener.document.getElementById('paymethod_0').checked = true;
         }else{
              opener.document.getElementById('paymethod_1').checked = true;
-        } 
- 
+        }  
 
         XMLAddress1 = xmlHttp.responseXML.getElementsByTagName("sales_table");
         window.opener.document.getElementById('itemdetails').innerHTML = XMLAddress1[0].childNodes[0].nodeValue;
+        
+        XMLAddress1 = xmlHttp.responseXML.getElementsByTagName("sales_table1");
+        window.opener.document.getElementById('itemdetails1').innerHTML = XMLAddress1[0].childNodes[0].nodeValue;
+        
+        XMLAddress1 = xmlHttp.responseXML.getElementsByTagName("sales_table2");
+        window.opener.document.getElementById('itemdetails2').innerHTML = XMLAddress1[0].childNodes[0].nodeValue;
 
         // XMLAddress1 = xmlHttp.responseXML.getElementsByTagName("subtot");
         // window.opener.document.getElementById('subtot').value = XMLAddress1[0].childNodes[0].nodeValue;
@@ -450,7 +713,7 @@ function pass_rec_result()
         XMLAddress1 = xmlHttp.responseXML.getElementsByTagName("msg");
         if (XMLAddress1[0].childNodes[0].nodeValue != "") {
             window.opener.document.getElementById('msg_box').innerHTML = "<div class='alert alert-warning' role='alert'><span class='center-block'>" + XMLAddress1[0].childNodes[0].nodeValue + "</span></div>";
-        }
+        } 
         self.close();
     }
 }
@@ -518,7 +781,7 @@ function calc() {
     }
 
     document.getElementById('dis').value = disper;
-    subtot1=parseFloat(document.getElementById('repair').value+document.getElementById('selling').value);
+    subtot1=parseFloat(document.getElementById('repair').value+document.getElementById('selling').value)*1;
     subtot = subtot1 - (subtot1  * parseFloat(document.getElementById('dis').value) / 100);
 
 
@@ -528,11 +791,35 @@ function calc() {
     // add_tmp('up');
 }
 
+function calc1() {
 
+
+    var disper = 0;
+    var disper1 = 0; 
+    var subtot = 0;
+    var subtot1 = 0;
+
+    if ((document.getElementById('dis1').value != '') && (document.getElementById('dis1').value != "0") && (document.getElementById('dis1').value != "0.00")) {
+
+        disper = document.getElementById('dis1').value;
+        disper1 = document.getElementById('dis1').value;
+
+    }
+
+    document.getElementById('dis1').value = disper;
+    subtot1=parseFloat(document.getElementById('selling1').value)*parseFloat(document.getElementById('qty1').value);
+    subtot = subtot1 - (subtot1  * parseFloat(document.getElementById('dis1').value) / 100);
+
+
+
+    document.getElementById('subtotal1').value = subtot;
+
+    // add_tmp('up');
+}
  
 
 
-function custno1(code)
+function custno1(code,jobno,serialno)
 {
     //alert(code);
     xmlHttp = GetXmlHttpObject();
@@ -541,9 +828,16 @@ function custno1(code)
         alert("Browser does not support HTTP Request");
         return;
     }
+     if (opener.document.getElementById('c_code').value == "") {
+        alert("Customer Not Selected");
+        return false;
+    }
+    
     var url = "invoice_data.php";
     url = url + "?Command=" + "pass_card";
     url = url + "&custno=" + code;
+    url = url + "&jobno=" + jobno;
+    url = url + "&serialno=" + serialno;
 
     xmlHttp.onreadystatechange = passcusresult_quot1;
     xmlHttp.open("GET", url, true);
@@ -558,24 +852,87 @@ function passcusresult_quot1()
 
     if (xmlHttp.readyState == 4 || xmlHttp.readyState == "complete")
     {
+        
+        XMLAddress1 = xmlHttp.responseXML.getElementsByTagName("val");  
+        if (XMLAddress1[0].childNodes[0].nodeValue == "no") {
+             XMLAddress1 = xmlHttp.responseXML.getElementsByTagName("id");
+            var obj = JSON.parse(XMLAddress1[0].childNodes[0].nodeValue);
+    
+            opener.document.getElementById('jobno').value = obj.jobno;  
+            opener.document.getElementById('make').value = obj.marker;
+            opener.document.getElementById('design').value = obj.design;  
+            opener.document.getElementById('size').value = obj.size;  
+            opener.document.getElementById('serialno').value = obj.serialno;   
+            opener.document.getElementById('adpay').value = obj.adpayment;   
+            opener.document.getElementById('cost').value = obj.cost;   
+            opener.document.getElementById('selling').value = obj.total;   
+        }else{
+            alert("ALready Added Dag...");
+            return false;
+        }
 
-        XMLAddress1 = xmlHttp.responseXML.getElementsByTagName("id");
-        var obj = JSON.parse(XMLAddress1[0].childNodes[0].nodeValue);
-
-        opener.document.getElementById('jobno').value = obj.jobno;  
-        opener.document.getElementById('make').value = obj.marker;
-        opener.document.getElementById('design').value = obj.design;  
-        opener.document.getElementById('size').value = obj.size;  
-        opener.document.getElementById('serialno').value = obj.serialno;   
-        opener.document.getElementById('adpay').value = obj.adpayment;   
-        opener.document.getElementById('cost').value = obj.cost;   
-        opener.document.getElementById('selling').value = obj.total;   
+       
+        
+        
 
 
         self.close();
     }
 
 }
+
+
+function custno21(code)
+{
+    //alert(code);
+    xmlHttp = GetXmlHttpObject();
+    if (xmlHttp == null)
+    {
+        alert("Browser does not support HTTP Request");
+        return;
+    }
+      
+    if (opener.document.getElementById('c_code').value == "") {
+        alert("Customer Not Selected");
+        return false;
+    }
+    
+    var url = "invoice_data.php";
+    url = url + "?Command=" + "pass_proitem";
+    url = url + "&custno=" + code;
+
+    xmlHttp.onreadystatechange = passcusresult_quot2;
+    xmlHttp.open("GET", url, true);
+    xmlHttp.send(null);
+ 
+}
+
+
+function passcusresult_quot2()
+{ 
+    var XMLAddress1;
+
+    if (xmlHttp.readyState == 4 || xmlHttp.readyState == "complete")
+    {
+
+        XMLAddress1 = xmlHttp.responseXML.getElementsByTagName("id");
+        var obj = JSON.parse(XMLAddress1[0].childNodes[0].nodeValue);
+ 
+        opener.document.getElementById('code').value = obj.STK_NO;  
+        opener.document.getElementById('name').value = obj.DESCRIPT;
+        opener.document.getElementById('cost1').value = obj.COST;   
+        opener.document.getElementById('qtyhand').value = obj.QTYINHAND; 
+        
+        XMLAddress1 = xmlHttp.responseXML.getElementsByTagName("selling");
+        opener.document.getElementById('selling1').value = XMLAddress1[0].childNodes[0].nodeValue;
+        
+        opener.document.getElementById('qty1').focus();
+
+        self.close();
+    }
+
+}
+
 
 function custno(code)
 {
@@ -633,4 +990,13 @@ function rejectdag1() {
     xmlHttp.open("GET", url, true);
     xmlHttp.send(null);
 
+}
+
+function cashpay(cdate){
+     document.getElementById('cpay').value="";
+    if(cdate=="paymethod_1"){ 
+        document.getElementById('cpay').disabled = false; 
+    }else if(cdate=="paymethod_0"){ 
+        document.getElementById('cpay').disabled = true;
+    } 
 }

@@ -103,6 +103,7 @@ function add_tmp() {
     url = url + "&qty=" + document.getElementById('qty').value;
     url = url + "&rate=" + document.getElementById('itemPrice').value;
     url = url + "&selling=" + document.getElementById('selling').value;
+    url = url + "&whprice=" + document.getElementById('whprice').value;
     url = url + "&tmpno=" + document.getElementById('tmpno').value;
  
     loc ="add";
@@ -114,6 +115,7 @@ function add_tmp() {
     document.getElementById('itemDesc').value = "";
     document.getElementById('itemPrice').value = "";
     document.getElementById('selling').value = "";
+    document.getElementById('whprice').value = "";
     document.getElementById('qty').value = "";
 
     
@@ -229,6 +231,7 @@ function new_inv() {
     document.getElementById('selling').value = "";
     document.getElementById('qty').value = "";
     document.getElementById('total_value').value = "";
+     document.getElementById('whprice').value = "";
 
     
     document.getElementById('lc_no').value = "";    
@@ -341,7 +344,10 @@ function pass_rec_result()
 
         XMLAddress1 = xmlHttp.responseXML.getElementsByTagName("name");
         opener.document.form1.c_name.value = XMLAddress1[0].childNodes[0].nodeValue;
-
+        
+        XMLAddress1 = xmlHttp.responseXML.getElementsByTagName("department");
+        opener.document.form1.department.value = XMLAddress1[0].childNodes[0].nodeValue;
+        
         XMLAddress1 = xmlHttp.responseXML.getElementsByTagName("C_DATE");
         opener.document.form1.invdate.value = XMLAddress1[0].childNodes[0].nodeValue;
 
@@ -352,8 +358,7 @@ function pass_rec_result()
         XMLAddress1 = xmlHttp.responseXML.getElementsByTagName("lc_no");
         opener.document.form1.lc_no.value = XMLAddress1[0].childNodes[0].nodeValue;
 
-        XMLAddress1 = xmlHttp.responseXML.getElementsByTagName("department");
-        opener.document.form1.department.value = XMLAddress1[0].childNodes[0].nodeValue;
+        
 
         XMLAddress1 = xmlHttp.responseXML.getElementsByTagName("amount");
         opener.document.form1.total_value.value = XMLAddress1[0].childNodes[0].nodeValue;     
@@ -476,11 +481,12 @@ function itno_undeliver_result()
         XMLAddress1 = xmlHttp.responseXML.getElementsByTagName("cost");
         opener.document.form1.itemPrice.value = XMLAddress1[0].childNodes[0].nodeValue;
 
-        if (loc == "") {
+        
             XMLAddress1 = xmlHttp.responseXML.getElementsByTagName("actual_selling");
             opener.document.form1.selling.value = XMLAddress1[0].childNodes[0].nodeValue; 
-        }
-
+        
+XMLAddress1 = xmlHttp.responseXML.getElementsByTagName("wholesale");
+            opener.document.form1.whprice.value = XMLAddress1[0].childNodes[0].nodeValue; 
       
  opener.document.form1.qty.focus();
 

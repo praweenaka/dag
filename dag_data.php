@@ -26,10 +26,15 @@ if ($_POST["Command"] == "getdt") {
     if($row1['short']=="AK"){
         $shcode=trim($row1['short']."/") ;
     }else{
-        $shcode=trim($row1['short']."/") .$row1['shortcode'];
+        $shcode=trim($row1['short']."/");
     }
+    
    
     $ResponseXML .= "<scode><![CDATA[".$row1['short']."]]></scode>";
+    
+    
+    $sql3 = "delete from dag_item_tmp "; 
+    $result3 = $conn->query($sql3);
     
     $no = $row['dag'];
     $uniq = uniqid();
@@ -57,7 +62,7 @@ if ($_POST["Command"] == "setjobno") {
     if($row1['short']=="AK"){
         $shcode=trim($row1['short']."/");
     }else{
-        $shcode=trim($row1['short']."/") .$row1['shortcode'];
+        $shcode=trim($row1['short']."/");
     }
      
      $ResponseXML .= "<scode><![CDATA[".$row1['short']."]]></scode>";
@@ -86,6 +91,7 @@ if ($_POST["Command"] == "add_tmp") {
         if ($row = $result->fetch()) {
             exit("Already Added Job No.!!!");
         }
+        
         $sql = "SELECT * from dag_item where  jobno='".$_POST['jobno']."'  and cancel='0'  "; 
         $result = $conn->query($sql);
         if ($row = $result->fetch()) {
@@ -157,7 +163,7 @@ $i=1;
     if($row1['short']=="AK"){
         $shcode=trim($row1['short']."/");
     }else{
-        $shcode=trim($row1['short']."/") .$row1['shortcode'];
+        $shcode=trim($row1['short']."/");
     }
       
     $ResponseXML .= "<jobno><![CDATA[".$shcode."]]></jobno>"; 
@@ -194,7 +200,7 @@ if ($_POST["Command"] == "save_item") {
         $i=1;
         $sqltmp= "select * from dag_item_tmp where refno='".$_POST['refno']."' and tmp_no='".$_POST['uniq']."'";
         foreach ($conn->query($sqltmp) as $rowtmp) {
-           $sql2 = "insert into dag_item(refno,cuscode,cusname,size,marker,adpayment,serialno,warrenty,remark,tmp_no,flag,sdate,jobno,belt,cascost,cost,total) values ('" . $_POST['refno'] . "', '" . $rowtmp['cuscode']  . "', '" . $rowtmp['cusname'] . "', '" . $rowtmp['size'] . "', '" . $rowtmp['marker'] . "', '" . $rowtmp['adpayment'] . "', '" . $rowtmp['serialno'] . "', '" . $rowtmp['warrenty'] . "', '" . $rowtmp['remark'] . "', '" . $_POST['uniq'] . "' ,'0', '" . $_POST['sdate'] . "', '" . $rowtmp['jobno'] . "', '" . $rowtmp['belt'] . "', '" . $rowtmp['cascost'] . "', '" . $rowtmp['cascost'] . "', '" . $rowtmp['cascost'] . "')"; 
+           $sql2 = "insert into dag_item(refno,cuscode,cusname,size,marker,adpayment,serialno,warrenty,remark,tmp_no,flag,sdate,jobno,belt,cascost,cost,total,department) values ('" . $_POST['refno'] . "', '" . $rowtmp['cuscode']  . "', '" . $rowtmp['cusname'] . "', '" . $rowtmp['size'] . "', '" . $rowtmp['marker'] . "', '" . $rowtmp['adpayment'] . "', '" . $rowtmp['serialno'] . "', '" . $rowtmp['warrenty'] . "', '" . $rowtmp['remark'] . "', '" . $_POST['uniq'] . "' ,'0', '" . $_POST['sdate'] . "', '" . $rowtmp['jobno'] . "', '" . $rowtmp['belt'] . "', '" . $rowtmp['cascost'] . "', '" . $rowtmp['cascost'] . "', '" . $rowtmp['cascost'] . "', '" . $_POST['department'] . "')"; 
            $result2 = $conn->query($sql2); 
            $i= $i+1;
        }

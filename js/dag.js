@@ -89,7 +89,7 @@ function assign_dt() {
         if (XMLAddress1[0].childNodes[0].nodeValue=="AK") {
             document.getElementById("jobno").disabled=false;
         }else{
-            document.getElementById("jobno").disabled=true;
+            document.getElementById("jobno").disabled=false;
         }
         
         XMLAddress1 = xmlHttp.responseXML.getElementsByTagName("jobno");
@@ -128,7 +128,7 @@ function re_setjobno() {
         if (XMLAddress1[0].childNodes[0].nodeValue=="AK") {
             document.getElementById("jobno").disabled=false;
         }else{
-            document.getElementById("jobno").disabled=true;
+            document.getElementById("jobno").disabled=false;
         }
         
         XMLAddress1 = xmlHttp.responseXML.getElementsByTagName("jobno");
@@ -150,7 +150,12 @@ function add_tmp()
         document.getElementById('msg_box').innerHTML = "<div class='alert alert-warning' role='alert'><span class='center-block'>Select Customer</span></div>";
         return false;
     }
-
+    if (document.getElementById('cuscode').value == "C/00021") {
+         if (document.getElementById('cascost').value == "") {
+            document.getElementById('msg_box').innerHTML = "<div class='alert alert-warning' role='alert'><span class='center-block'>Enter Casing Cost...</span></div>";
+            return false;
+         }
+    }
     if (document.getElementById('belt').value == "") {
         document.getElementById('msg_box').innerHTML = "<div class='alert alert-warning' role='alert'><span class='center-block'>Select Belt</span></div>";
         return false;
@@ -172,6 +177,9 @@ function add_tmp()
         document.getElementById('msg_box').innerHTML = "<div class='alert alert-warning' role='alert'><span class='center-block'>Select Warrenty</span></div>";
         return false;
     }
+    
+   
+    
     var url = 'dag_data.php';
     var params = 'Command=' + 'add_tmp';
     params = params + "&Command1=add";  
@@ -261,6 +269,7 @@ function save_inv()
     params = params + "&cusname="+document.getElementById('cusname').value;
     params = params + '&adpayment=' + document.getElementById('adpayment').value;   
     params = params + '&cascost=' + document.getElementById('cascost').value;   
+    params = params + '&department=' + document.getElementById('department').value;   
     xmlHttp.open("POST", url, true);
     xmlHttp.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
     xmlHttp.setRequestHeader("Content-length", params.length);

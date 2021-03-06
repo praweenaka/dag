@@ -24,6 +24,19 @@ require_once("./connection_sql.php");
     .table-hover tbody tr:hover td {
         background: aqua;
     }
+    .printer table{
+    counter-reset: rowNumber;
+}
+ 
+.printer tr {
+    counter-increment: rowNumber;
+}
+ 
+.printer tr td:first-child::before {
+    content: counter(rowNumber);
+    min-width: 1em;
+    margin-right: 0.5em;
+}
 </style>
 <section class="content" onload="search1();">
 
@@ -50,8 +63,7 @@ require_once("./connection_sql.php");
                         <th>SERIAL NO</th>  
                         <th>WARRENTY</th> 
                         <th>AD PAY</th>   
-                        <th>AMOUNT</th>  
-                        <th>CASING COST</th>  
+                        <th>AMOUNT</th>    
                         <th>REPAIR</th>  
                         <th>TOTAL</th>  
                         <th>PRO DATE</th>  
@@ -73,7 +85,7 @@ require_once("./connection_sql.php");
 
                         ?>
                         <tr>
-                            <td onclick="name(this)" ><?php echo $i; ?></td>
+                            <td onclick="name(this)" > </td>
                             <td onclick="name(this)" ><?php echo $row['jobno']; ?></td>  
                             <td onclick="name(this)" ><?php echo $row['refno']; ?></td>  
                             <td onclick="name(this)" ><?php echo $row['sdate']; ?></td>   
@@ -85,7 +97,7 @@ require_once("./connection_sql.php");
                             <td onclick="name(this)" ><?php echo $row['warrenty']; ?></td> 
                             <td onclick="name(this)" ><?php echo $row['adpayment']; ?></td>  
                             <td onclick="name(this)" ><?php echo $row['amount']; ?></td>  
-                            <td onclick="name(this)" ><?php echo $row['cascost']; ?></td>  
+                            
                             <td onclick="name(this)" ><?php echo $row['repair']; ?></td>  
                             <td onclick="name(this)" style="background-color:#f39c12"><?php echo number_format($row['total'],2); ?></td>   
                             <td onclick="name(this)" ><?php echo $row['pro_date']; ?></td>  
@@ -116,7 +128,7 @@ require_once("./connection_sql.php");
                 <div class="col-sm-5">
                  <center><h4 class="modal-title" id="myModalLabel">COMPLETE</h4></center>
                  <input type="hidden" id="make"  disabled>
-                 <input type="hidden" id="cascost"  disabled> 
+                 
                  <input type="hidden" id="size"  disabled>
                  <input type="hidden" id="id" disabled >
              </div>
@@ -324,7 +336,7 @@ require_once("./connection_sql.php");
         document.getElementById("size").value=cell_7; 
         document.getElementById("serialno").value=cell_8;
         document.getElementById("adpay").value=cell_10;
-        document.getElementById("cascost").value=cell_12;
+        
         document.getElementById("totalamou").value=cell_14;
         document.getElementById("prodate").value=cell_15;
          
@@ -339,32 +351,36 @@ require_once("./connection_sql.php");
 </script>
 
 <script type="text/javascript">
-                $(document).ready(function() {
-          var table = $('#dataTables-example').DataTable( {
-             lengthChange: true,
+      $(document).ready(function() {
+      var table =  $('#dataTables-example').DataTable( {
+            dom: 'Bfrtip',
+            lengthChange: true,
             fixedHeader: true,
             responsive: true,
-            "deferRender": true, 
-             "order": [[ 0, 'asc' ]], 
-               dom: 'Bfrtip',
-        lengthMenu: [[ 25, 50,100, -1 ],[ '25 rows', '50 rows', '100 rows', 'Show all' ]],
-         "pageLength": -1,
-        buttons: [
-            'pageLength','print','colvis'
-        ]
-              
-
+            "deferRender": true,
+            "pageLength": -1,
+            
+            buttons: ['pageLength','colvis',
+                {
+                    extend: 'print',
+                    customize: function ( win ) {
+                         $(win.document.body).find('table').addClass('printer');
+     
+                        
+                    }
+                }
+            ]
         } );
-
-$('div.dataTables_filter input', table.table().container()).focus();
+        
+            table.on( 'order.dt search.dt', function () {
+            table.column(0, {search:'applied', order:'applied'}).nodes().each( function (cell, i) {
+                cell.innerHTML = i+1;
+            } );
+             } ) 
+              $('div.dataTables_filter input', table.table().container()).focus();
           table.buttons().container()
           .appendTo( '#example_wrapper .col-md-6:eq(0)' );
-           
-      } );
-      
-      
-       
- 
+    } );
 
         </script>
         

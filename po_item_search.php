@@ -48,6 +48,7 @@ include_once './connection_sql.php';
             echo "<th>BRAND</th>";
             echo "<th>COST</th>";
             echo "<th>RETAIL PRICE</th>"; 
+            echo "<th>WHOLE SALE PRICE</th>"; 
             echo "<th>QTYINHAND</th>"; 
 
 
@@ -61,6 +62,7 @@ include_once './connection_sql.php';
                 <td onclick=\"itno_undeliver('$cuscode', '$stname');\">" . $row['BRAND_NAME'] . "</a></td>    
                 <td onclick=\"itno_undeliver('$cuscode', '$stname');\">" . $row['COST'] . "</a></td>
                 <td onclick=\"itno_undeliver('$cuscode', '$stname');\">" . $row['SELLING'] . "</a></td> 
+                <td onclick=\"itno_undeliver('$cuscode', '$stname');\">" . $row['whprice'] . "</a></td> 
                 <td onclick=\"itno_undeliver('$cuscode', '$stname');\">" . $row['QTYINHAND'] . "</a></td>
                 </tr>";
             }

@@ -48,7 +48,7 @@ if ($_POST["Command"] == "sendreject") {
         $conn->beginTransaction();
         
 
-        $sql = "UPDATE dag_item set cancel='1'  where refno='" . $_POST['refno'] . "' and  serialno='".$_POST['serialno']."'"; 
+        $sql = "UPDATE dag_item set reject='1'  where refno='" . $_POST['refno'] . "' and  serialno='".$_POST['serialno']."'"; 
         $result = $conn->query($sql); 
         $sqllog = "insert into entry_log(refno, username, docname, trnType, stime, sdate) values ('" . trim($_POST['refno']) . "', '" . $_SESSION["CURRENT_USER"] . "', 'SEND PRO TO REJECT', 'Save', '" . date("Y-m-d H:i:s") . "', '" . date("Y-m-d") . "')";
             $resultlog = $conn->query($sqllog);
@@ -130,7 +130,7 @@ if ($_POST["Command"] == "add_spare") {
         $resultV = $conn->query($sqlV); 
         $rowV = $resultV->fetch();
         
-        $sql2 = "insert into produ_spareitem(refno,serialno,price,qty,total,spareitem,cost) values ('" . $_POST['refno'] . "','" . $_POST['serialno'] . "','" . $_POST['price'] . "','" . $_POST['qty'] . "','" . $_POST['total'] . "','" . $_POST['spareitem'] . "','".$rowV['cost']."')";  
+        $sql2 = "insert into produ_spareitem(refno,serialno,price,qty,total,spareitem,cost) values ('" . $_POST['refno'] . "','" . $_POST['serialno'] . "','" . $_POST['price'] . "','" . $_POST['qty'] . "','" . $_POST['price'] * $_POST['qty']. "','" . $_POST['spareitem'] . "','".$rowV['cost']."')";  
         $result2 = $conn->query($sql2);
 
     }

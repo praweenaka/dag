@@ -149,9 +149,9 @@ if ($_POST["Command"] == "upjobno") {
     try {
         $conn->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
         $conn->beginTransaction();
-        
-         $sql = "UPDATE dag_item set refno='" . $_POST['newjobno'] . "'   where  refno='" . $_POST['refno'] . "' and  serialno='".$_POST['serialno']."'"; 
-        $result = $conn->query($sql);  
+        // AK/6094
+         $sql = "UPDATE dag_item set jobno='" . $_POST['newjobno'] . "'   where  refno='" . $_POST['refno'] . "' and  serialno='".$_POST['serialno']."'"; 
+         $result = $conn->query($sql);  
         
         $sqllog = "insert into entry_log(refno, username, docname, trnType, stime, sdate) values ('" . trim($_POST['refno']) . "', '" . $_SESSION["CURRENT_USER"] . "', 'UPDATE JOB NO TO ".$_POST['newjobno']."', 'UPDATE JOB NO', '" . date("Y-m-d H:i:s") . "', '" . date("Y-m-d") . "')";
             $resultlog = $conn->query($sqllog);
@@ -159,6 +159,36 @@ if ($_POST["Command"] == "upjobno") {
             
         $conn->commit();
         echo "Updated JOB NO";
+
+    } catch (Exception $e) {
+        $conn->rollBack();
+        echo $e;
+    }
+}
+
+if ($_POST["Command"] == "canceldag") {
+    try {
+        $conn->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+        $conn->beginTransaction();
+         
+         $sql = "SELECT * from t_invo where jobno='".$_POST['jobno']."'"; 
+         $sql = $conn->query($sql);
+         if (!$row=  $sql->fetch()) {
+             $sql = "UPDATE dag_item set cancel='1'   where  refno='" . $_POST['refno'] . "' and  jobno='".$_POST['jobno']."'"; 
+             $result = $conn->query($sql);  
+            
+             $sqllog = "insert into entry_log(refno, username, docname, trnType, stime, sdate) values ('" . trim($_POST['refno']) . "', '" . $_SESSION["CURRENT_USER"] . "', 'CANCEL DAG BY  ALL LIST ".$_POST['jobno']."', 'CANCEL DAG', '" . date("Y-m-d H:i:s") . "', '" . date("Y-m-d") . "')";
+             $resultlog = $conn->query($sqllog);
+             
+              $conn->commit();
+              
+              echo "Updated JOB NO";
+         }else{
+             echo "Please First Cancel Invoice";
+         }
+            
+       
+        
 
     } catch (Exception $e) {
         $conn->rollBack();

@@ -43,7 +43,7 @@ if ($_SESSION["CURRENT_USER"] == "") {
     session_start();
     include './connection_sql.php';
 
-    $sql = "select * from view_menu where username ='" . $_SESSION["CURRENT_USER"] . "' and doc_view='1'  order by  grp desc ";
+    $sql = "select * from view_menu where username ='" . $_SESSION["CURRENT_USER"] . "' and doc_view='1'  order by  odr,docid asc ";
 
     $grp = ""; 
     foreach ($conn->query($sql) as $row) {
@@ -57,7 +57,7 @@ if ($_SESSION["CURRENT_USER"] == "") {
 
        echo "<div class='col-xs-12'>";
        echo "<h1>&nbsp;&nbsp;" . $row["grp"] . "</h1>";
-       echo "<div class='col-lg-3 col-xs-12'>";
+       echo "<div class='col-lg-2 col-xs-12'>";
        echo "<div class='" . $row['color'] . "'>";
        echo "<div class='inner'>";
        echo"<h3 style=\"display: inline-block;
@@ -75,7 +75,7 @@ if ($_SESSION["CURRENT_USER"] == "") {
        echo "</div>";
        $grp = $row['grp'];
      }else{
-       echo "<div class='col-lg-3 col-xs-12'>";
+       echo "<div class='col-lg-2 col-xs-12'>";
        echo "<div class='" . $row['color']. "'>";
        echo "<div class='inner'>";
        echo"<h3 style=\"display: inline-block;

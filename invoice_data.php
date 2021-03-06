@@ -9,7 +9,8 @@ require_once ("connection_sql.php");
 header('Content-Type: text/xml');
 
 date_default_timezone_set('Asia/Colombo');
- 
+
+/////////////////////////////////////// GetValue //////////////////////////////////////////////////////////////////////////
 ///////////////////////////////////// Registration ////s/////////////////////////////////////////////////////////////////////
 if ($_GET["Command"] == "rejectdag") {
   
@@ -92,9 +93,9 @@ if ($_GET["Command"] == "setitem") {
     <th style=\"width: 90px;\">AD PAY</th>
     <th style=\"width: 90px;\">COST</th>
     <th style=\"width: 120px;\">SELLING</th>
-    <th style=\"width: 90px;\">REPAIR</th>
-    <th style=\"width: 60px;\">DIS</th>
-    <th style=\"width: 120px;\">SUBTOTAL</th>
+    <th style=\"width: 90px;\">REPAIR</th>s
+    <th style=\"width: 60px;\">Dis</th>
+    <th style=\"width: 120px;\">SubTotal</th>
     <th style=\"width: 50px;\"></th>
     </tr>";
 
@@ -358,10 +359,12 @@ if ($_GET["Command"] == "save_item") {
         //     exit("Under Stock");
         // }
  
-
+        $custype="";
         $sql = "select * from vendor where CODE = '" . trim($_GET["customercode"]) . "'";
         $result = $conn->query($sql);
         if ($row = $result->fetch()) {
+             $custype= $row["custype"];
+            
             if ($row["blacklist"] == "1") { 
                 exit("Invoice Facilitey Stoped for This Customer..!!!");
             }
@@ -394,8 +397,8 @@ if ($_GET["Command"] == "save_item") {
           $rowvat = $resultvat->fetch();
 
             if($row['type']=="dag"){
-                 $sql = "Insert into t_invo (refno,sdate,department,rep,tax_per, jobno, make,design,size, serialno,adpay,cost,selling, dis,repair1,subtot,tmpno,reject,type,qty)values 
-              ('" . $invno . "', '" . $_GET['invdate'] . "','01','" . $_GET['salesrep'] . "','" . $rowvat["vatrate"] . "','" . $row['jobno'] . "', '" . $row['make'] . "', '" . $row['design'] . "', '" . $row['size'] . "', '" . $row['serialno'] . "', '" . $row['adpay'] . "', '" . $row['cost'] . "', '" . $row['selling'] . "', '" . $row['dis'] . "', '" . $row['repair1'] . "' , '" . $row['subtot'] . "',  '" . $row['tmpno'] . "' ,  '" . $rowdag['reject'] . "','" . $row["type"] . "','" . $row["qty"] . "') ";
+                 $sql = "Insert into t_invo (refno,sdate,department,rep,tax_per, jobno, make,design,size, serialno,adpay,cost,selling, dis,repair1,subtot,tmpno,reject,type,qty,warrenty)values 
+              ('" . $invno . "', '" . $_GET['invdate'] . "','01','" . $_GET['salesrep'] . "','" . $rowvat["vatrate"] . "','" . $row['jobno'] . "', '" . $row['make'] . "', '" . $row['design'] . "', '" . $row['size'] . "', '" . $row['serialno'] . "', '" . $row['adpay'] . "', '" . $row['cost'] . "', '" . $row['selling'] . "', '" . $row['dis'] . "', '" . $row['repair1'] . "' , '" . $row['subtot'] . "',  '" . $row['tmpno'] . "' ,  '" . $rowdag['reject'] . "','" . $row["type"] . "','" . $row["qty"] . "','" . $rowdag["warrenty"] . "') ";
               $result = $conn->query($sql);
               
               $sql = "Insert into s_trn (`SDATE`, `STK_NO`, `REFNO`, `QTY`, `LEDINDI`, `DEPARTMENT`,type) values 
@@ -424,8 +427,8 @@ if ($_GET["Command"] == "save_item") {
           
             }else if($row['type']=="service"){
                 
-                $sql = "Insert into t_invo (refno,sdate,vehicleno,service,qty,department,rep,tax_per,cost,selling, dis,subtot,tmpno,reject,type)values 
-              ('" . $invno . "', '" . $_GET['invdate'] . "', '" . $row['vehicleno'] . "', '" . $row['service'] . "', '" . $row['qty'] . "','01','" . $_GET['salesrep'] . "','" . $rowvat["vatrate"] . "', '" . $row['amount'] . "', '" . $row['amount'] . "', '" . $row['dis'] . "', '" . $row['subtot'] . "',  '" . $row['tmpno'] . "' ,  '" . $rowdag['reject'] . "','" . $row["type"] . "') ";
+                $sql = "Insert into t_invo (refno,sdate,vehicleno,service,qty,department,rep,tax_per,cost,selling, dis,subtot,tmpno,reject,type,employee)values 
+              ('" . $invno . "', '" . $_GET['invdate'] . "', '" . $row['vehicleno'] . "', '" . $row['service'] . "', '" . $row['qty'] . "','01','" . $_GET['salesrep'] . "','" . $rowvat["vatrate"] . "', '" . $row['subtot'] . "', '" . $row['subtot'] . "', '" . $row['dis'] . "', '" . $row['subtot'] . "',  '" . $row['tmpno'] . "' ,  '" . $rowdag['reject'] . "','" . $row["type"] . "','" . $row["employee"] . "') ";
               $result = $conn->query($sql);
               
                  
@@ -443,13 +446,15 @@ if ($_GET["Command"] == "save_item") {
       $sql = "select vatrate from invpara";
       $result = $conn->query($sql);
       $row = $result->fetch();
+      
+     
 
 
-
+       
 
       $mgrand_tot = number_format($mtot, 2, ".", ""); 
-      $sql = "insert s_salma (REF_NO,SDATE,trn_type,C_CODE, CUS_NAME,c_add1,vat,tmp_no,REMARK,grand_tot,SAL_EX,gst,use_name,DEPARTMENT,dele_no,TYPE,DISCOU,TYPE1) values 
-      ('" . $invno . "', '" . $_GET['invdate'] . "','INV' ,'" . $_GET["customercode"] . "', '" . $_GET["customername"] . "','" . $_GET["cus_address"] . "','0','" . $_GET["tmpno"] . "','" . $_GET['txt_remarks'] . "' ,'" . $mgrand_tot . "','" . $_GET['salesrep'] . "','" . $row['vatrate'] . "','" . $_SESSION['UserName'] . "','01','" . $_GET['DANO'] . "','".$_GET["paymethod"]."','".$subdis."','".$_GET["rejectdag"]."' )";
+      $sql = "insert s_salma (REF_NO,SDATE,trn_type,C_CODE, CUS_NAME,c_add1,vat,tmp_no,REMARK,grand_tot,SAL_EX,gst,use_name,DEPARTMENT,dele_no,TYPE,DISCOU,TYPE1,cus_type,recv_details,cpay) values 
+      ('" . $invno . "', '" . $_GET['invdate'] . "','INV' ,'" . $_GET["customercode"] . "', '" . $_GET["customername"] . "','" . $_GET["cus_address"] . "','0','" . $_GET["tmpno"] . "','" . $_GET['txt_remarks'] . "' ,'" . $mgrand_tot . "','" . $_GET['salesrep'] . "','" . $row['vatrate'] . "','" . $_SESSION['UserName'] . "','01','" . $_GET['DANO'] . "','".$_GET["paymethod"]."','".$subdis."','".$_GET["rejectdag"]."','".$custype."','".$_GET["recv_details"]."','".$_GET["cpay"]."')";
       $result = $conn->query($sql);
 
  
@@ -458,6 +463,20 @@ if ($_GET["Command"] == "save_item") {
       if ($_GET["paymethod"] == "CA") {
 
         // $sql = "select RECNO from invpara where COMCODE='" . $_SESSION['company'] . "'";
+        
+        if($_GET["recv_details"] !="0.00"){
+            if($_GET["recv_details"] !="0"){
+                if($_GET["recv_details"] !=""){
+                    $mgrand_tot =$_GET["cpay"];
+                }else{
+                    $mgrand_tot =$mgrand_tot;
+                }
+            }else{
+                $mgrand_tot =$mgrand_tot;
+            }
+        }else{
+              $mgrand_tot =$mgrand_tot;
+        }
         $sql = "select RECNO from invpara";
         $result = $conn->query($sql);
         $row = $result->fetch();
@@ -518,7 +537,7 @@ if ($_GET["Command"] == "pass_rec") {
         $msg = "";
         if ($row['CANCELL'] == "1") {
             $msg = "Cancelled";
-        }
+        } 
         $ResponseXML .= "<msg><![CDATA[" . $msg . "]]></msg>";
 
          

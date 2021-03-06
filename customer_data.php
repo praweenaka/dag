@@ -97,4 +97,35 @@ if ($_POST["Command"] == "pass_quot") {
     $ResponseXML .= "</salesdetails>";
     echo $ResponseXML;
 }
+
+
+if ($_POST["Command"] == "cancel_inv") {
+
+
+    try {
+        $conn->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+        $conn->beginTransaction();
+        
+        
+            $sql = "update vendor set cancel = '1' where  CODE='".$_POST['code']."' ";
+            $result = $conn->query($sql);
+            
+            
+         
+           $sqllog = "insert into entry_log(refno, username, docname, trnType, stime, sdate) values ('" . trim($_POST['refno']) . "', '" . $_SESSION["CURRENT_USER"] . "', 'CUSTOMER', 'CANCEL', '" . date("Y-m-d H:i:s") . "', '" . date("Y-m-d") . "')";
+            $resultlog = $conn->query($sqllog);
+         
+            $conn->commit();
+            echo "Cancel";
+       
+
+        
+
+
+
+    } catch (Exception $e) {
+        $conn->rollBack();
+        echo $e;
+    }
+}
 ?>

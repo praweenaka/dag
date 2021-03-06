@@ -65,7 +65,7 @@ require_once("./connection_sql.php");
                     $i=1;
                     include './connection_sql.php';
 
-                    $sql = "select * from dag_item   ";
+                    $sql = "select * from dag_item  where cancel='0' ";
 
 
                     foreach ($conn->query($sql) as $row) {
@@ -100,7 +100,7 @@ require_once("./connection_sql.php");
                             <td onclick="name(this)"><?php echo $row['onhand_date']; ?></td>  
                             <td onclick="name(this)"><?php echo $row['pro_date']; ?></td> 
                             <?php
-                             if($row['cancel']=='0'){
+                             if($row['reject']=='0'){
                                  if($row['flag']=='0'){
                                      echo "<td style='background-color:yellow'>ONHAND </td>"; 
                                 }else if($row['flag']=='1'){
@@ -155,6 +155,11 @@ require_once("./connection_sql.php");
                  <input type="hidden" id="size"  disabled>
                  <input type="hidden" id="id" disabled >
              </div>
+             <div class="col-sm-3">
+              <a onclick="canceldag();" class="btn btn-primary">
+                <span class="fa fa-save"></span> &nbsp; SEND TO CANCELLED DAG
+            </a> 
+        </div> 
                
          
     <div class="col-sm-1"> 

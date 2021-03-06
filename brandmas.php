@@ -2,7 +2,7 @@
 <section class="content">
     <div class="box box-primary">
         <div class="box-header with-border">
-            <h3 class="box-title">BRAND MASTER </h3>
+            <h3 class="box-title">BRAND MASTER</h3>
             <h4 style="float: right;height: 3px;"><b id="time"></b></h4>
         </div>
         <form role="form" class="form-horizontal">
@@ -14,9 +14,9 @@
                     <a onclick="save_inv();" class="btn btn-success">
                         <span class="fa fa-save"></span> &nbsp; Save
                     </a> 
-                    <a   class="btn btn-danger">
+                  <!--   <a onclick="deleteuser();" class="btn btn-danger">
                         <span class="fa fa-trash"></span> &nbsp; Delete
-                    </a>
+                    </a> -->
                     <a onclick="NewWindow('brandmas_search.php', 'mywin', '800', '700', 'yes', 'center');" class="btn btn-info btn-sm">
                         <span class="glyphicon glyphicon-search"></span> &nbsp; FIND
                     </a>

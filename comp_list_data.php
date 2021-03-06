@@ -54,7 +54,7 @@ if ($_POST["Command"] == "sendreject") {
         $conn->beginTransaction();
         
 
-        $sql = "UPDATE dag_item set cancel='1'  where  refno='" . $_POST['refno'] . "' and  serialno='".$_POST['serialno']."'"; 
+        $sql = "UPDATE dag_item set reject='1'  where  refno='" . $_POST['refno'] . "' and  serialno='".$_POST['serialno']."'"; 
         $result = $conn->query($sql); 
         $sqllog = "insert into entry_log(refno, username, docname, trnType, stime, sdate) values ('" . trim($_POST['refno']) . "', '" . $_SESSION["CURRENT_USER"] . "', 'SEND COM TO REJECT', 'Save', '" . date("Y-m-d H:i:s") . "', '" . date("Y-m-d") . "')";
         $resultlog = $conn->query($sqllog);

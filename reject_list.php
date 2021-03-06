@@ -1,16 +1,19 @@
- <!-- Main content -->
+ <!--<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>-->
+     <link rel="stylesheet" href="css/bootstrap.min.css"> 
+    <link rel="stylesheet" href="https://cdn.datatables.net/1.10.19/css/dataTables.bootstrap4.min.css">
+         <!--Validate -->
+         <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-validate/1.17.0/jquery.validate.min.js"></script> 
+         <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-validate/1.17.0/additional-methods.min.js"></script> 
  
-    <link rel="stylesheet" href="css/bootstrap.min.css"> 
-    <link rel="stylesheet" href="https://cdn.datatables.net/1.10.19/css/dataTables.bootstrap4.min.css"> 
-    <script language="JavaScript" src="https://code.jquery.com/jquery-3.3.1.js"></script>
-    <script language="JavaScript" src="https://cdn.datatables.net/1.10.19/js/jquery.dataTables.min.js"></script>
-    <script language="JavaScript" src="https://cdn.datatables.net/1.10.19/js/dataTables.bootstrap4.min.js"></script>
-    <!--<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>-->
-     
-<script src="https://cdn.datatables.net/buttons/1.6.5/js/dataTables.buttons.min.js"></script>
-<script src="https://cdn.datatables.net/buttons/1.6.5/js/buttons.print.min.js"></script>
-<script src="https://cdn.datatables.net/buttons/1.6.0/js/buttons.colVis.min.js"></script>
-
+        <!-- Bootstrap -->
+         <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.1/js/bootstrap.min.js"></script> 
+ 
+        <!-- Bootstrap Date Picker-->
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.20.1/moment.min.js"></script>   
+         <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.8.0/js/bootstrap-datepicker.min.js"></script> 
+ 
+        <!-- DataTables -->
+        <script src="https://cdn.datatables.net/1.10.16/js/jquery.dataTables.min.js"></script>
 <?php
 require_once("./connection_sql.php");
 ?>
@@ -64,7 +67,7 @@ require_once("./connection_sql.php");
                     $i=1;
                     include './connection_sql.php';
 
-                    $sql = "select * from dag_item WHERE (flag='1' or flag='2' ) and cancel='1' ";
+                    $sql = "select * from dag_item WHERE   reject='1' ";
 
 
                     foreach ($conn->query($sql) as $row) {
@@ -98,6 +101,23 @@ require_once("./connection_sql.php");
                     $i= $i+1;
                 }
                 ?>
+                 <tr>
+                                                <td>100</td>
+                                                <td>100</td>
+                                                <td>100</td>
+                                                <td>100</td>
+                                                <td>30</td>
+                                                <td>100</td>
+                                                <td>100</td>
+                                                <th   style="text-align:right">Page Total: </th>
+                                                <td>100</td> 
+                                                 <td>100</td> 
+                                                  <td>100</td> 
+                                                   <td>100</td> 
+                                                    <td>100</td> 
+                                                     <td>100</td> 
+                                                      <td>100</td> 
+                                            </tr>
             </tbody>
         </table>
 
@@ -279,7 +299,7 @@ require_once("./connection_sql.php");
 
 </div>
 </form>
-</div>
+</div> <div id="ajaxGetUserServletResponse"></div>
 </section>
 
 <script src="js/reject_list.js"></script>
@@ -323,27 +343,61 @@ require_once("./connection_sql.php");
 
 
 </script>
+ <script src="resources/bootstrap-3.3.7-dist/js/bootstrap-tooltip.js"></script>
+    <script src="resources/bootstrap-3.3.7-dist/js/bootstrap-popover.js"></script>
+    <script src="https://cdn.datatables.net/buttons/1.5.1/js/dataTables.buttons.min.js"></script>
+    <script src="https://cdn.datatables.net/buttons/1.5.1/js/buttons.flash.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.1.3/jszip.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.32/pdfmake.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.32/vfs_fonts.js"></script>
+    <script src="https://cdn.datatables.net/buttons/1.5.1/js/buttons.html5.min.js"></script>
+    <script src="https://cdn.datatables.net/buttons/1.5.1/js/buttons.print.min.js"></script>
+    
 <script type="text/javascript">
-                $(document).ready(function() {
-          var table = $('#dataTables-example').DataTable( {
-             lengthChange: true,
+     $(document).ready(function() {
+    $('#dataTables-example').DataTable( {
+        
+              lengthChange: true,
             fixedHeader: true,
             responsive: true,
             "deferRender": true, 
              "order": [[ 0, 'asc' ]], 
                dom: 'Bfrtip',
-        lengthMenu: [[ 25, 50,100, -1 ],[ '25 rows', '50 rows', '100 rows', 'Show all' ]],
          "pageLength": -1,
-        buttons: [
-            'pageLength','print','colvis'
-        ]
-              
-
-        } );
-
-$('div.dataTables_filter input', table.table().container()).focus();
-          table.buttons().container()
-          .appendTo( '#example_wrapper .col-md-6:eq(0)' );
-           
-      } );
-        </script>
+         
+        "footerCallback": function ( row, data, start, end, display ) {
+            
+            var api = this.api(), data;
+ 
+            // Remove the formatting to get integer data for summation
+            var intVal = function ( i ) {
+                return typeof i === 'string' ?
+                    i.replace(/[\$,]/g, '')*1 :
+                    typeof i === 'number' ?
+                        i : 0;
+            };
+ 
+            // Total over all pages
+            total = api
+                .column( 10 )
+                .data()
+                .reduce( function (a, b) {
+                    return intVal(a) + intVal(b);
+                }, 0 );
+ 
+            // Total over this page
+            pageTotal = api
+                .column( 10, { page: 'current'} )
+                .data()
+                .reduce( function (a, b) {
+                    return intVal(a) + intVal(b);
+                }, 0 );
+ 
+            // Update footer
+            $( api.column( 4 ).footer() ).html(
+                pageTotal +'' 
+            );
+        }
+    } );
+} );
+ </script>     

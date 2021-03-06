@@ -23,7 +23,7 @@ if ($_POST["Command"] == "getdt") {
 
     $tmpinvno = "0000" . $no;
     $lenth = strlen($tmpinvno);
-    $no = trim("I/") . substr($tmpinvno, $lenth - 5);
+    $no = trim("P/") . substr($tmpinvno, $lenth - 5);
 
     $ResponseXML .= "<code><![CDATA[$no]]></code>";
     $ResponseXML .= "<uniq><![CDATA[$uniq]]></uniq>"; 

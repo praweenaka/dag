@@ -1,5 +1,5 @@
  <!-- Main content -->
- 
+    
     <link rel="stylesheet" href="css/bootstrap.min.css"> 
     <link rel="stylesheet" href="https://cdn.datatables.net/1.10.19/css/dataTables.bootstrap4.min.css"> 
     <script language="JavaScript" src="https://code.jquery.com/jquery-3.3.1.js"></script>
@@ -24,6 +24,19 @@ require_once("./connection_sql.php");
     .table-hover tbody tr:hover td {
         background: aqua;
     }
+    .printer table{
+    counter-reset: rowNumber;
+}
+ 
+.printer tr {
+    counter-increment: rowNumber;
+}
+ 
+.printer tr td:first-child::before {
+    content: counter(rowNumber);
+    min-width: 1em;
+    margin-right: 0.5em;
+}
 </style>
  <section class="content" onload="search1();">
 
@@ -71,7 +84,7 @@ require_once("./connection_sql.php");
 
                         ?>
                         <tr>
-                            <td><?php echo $i; ?></td>  
+                            <td></td>  
                             <td><?php echo $row['jobno']; ?></td>   
                             <td><?php echo $row['refno']; ?></td> 
                             <td><?php echo $row['sdate']; ?></td>   
@@ -167,28 +180,113 @@ function item_del() {
 </script>
 
 <script type="text/javascript">
-                $(document).ready(function() {
-          var table = $('#dataTables-example').DataTable( {
-             lengthChange: true,
-            fixedHeader: true,
-            responsive: true,
-            "deferRender": true, 
-             "order": [[ 0, 'asc' ]], 
-               dom: 'Bfrtip',
-        lengthMenu: [[ 25, 50,100, -1 ],[ '25 rows', '50 rows', '100 rows', 'Show all' ]],
-         "pageLength": -1,
-        buttons: [
-            'pageLength','print','colvis'
-        ]
+//                 $(document).ready(function() {
+//           var table = $('#dataTables-example').DataTable( {
+//              lengthChange: true,
+//             fixedHeader: true,
+//             responsive: true,
+            
+            
+            
+//             "columnDefs": [ {
+//             "searchable": false,
+//             "orderable": false,
+//             "targets": 0
+//         } ],
+        
+        
+        
+//             "deferRender": true, 
+//              "order": [[ 0, 'asc' ]], 
+//               dom: 'Bfrtip',
+//         lengthMenu: [[ 25, 50,100, -1 ],[ '25 rows', '50 rows', '100 rows', 'Show all' ]],
+//          "pageLength": -1,
+//         buttons: [
+//             'pageLength','print','colvis'
+//         ]
              
         
             
 
+//         } );
+// table.on( 'order.dt search.dt', function () {
+//         table.column(0, {search:'applied', order:'applied'}).nodes().each( function (cell, i) {
+//             cell.innerHTML = i+1;
+//         } );
+//     } ).draw();
+// $('div.dataTables_filter input', table.table().container()).focus();
+//           table.buttons().container()
+//           .appendTo( '#example_wrapper .col-md-6:eq(0)' );
+           
+//       } );
+      
+    //   ============
+     $(document).ready(function() {
+      var table =  $('#dataTables-example').DataTable( {
+            dom: 'Bfrtip',
+            lengthChange: true,
+            fixedHeader: true,
+            responsive: true,
+            "deferRender": true,
+            "pageLength": -1,
+            
+            buttons: ['pageLength','colvis',
+                {
+                    extend: 'print',
+                    customize: function ( win ) {
+                         $(win.document.body).find('table').addClass('printer');
+     
+                        
+                    }
+                }
+            ]
         } );
-
-$('div.dataTables_filter input', table.table().container()).focus();
+        
+            table.on( 'order.dt search.dt', function () {
+            table.column(0, {search:'applied', order:'applied'}).nodes().each( function (cell, i) {
+                cell.innerHTML = i+1;
+            } );
+             } ) 
+              $('div.dataTables_filter input', table.table().container()).focus();
           table.buttons().container()
           .appendTo( '#example_wrapper .col-md-6:eq(0)' );
+    } );
+   
            
-      } );
+     
+    // ====================
+    
+//   "columnDefs": [ {
+//         "searchable": false,
+//         "orderable": false,
+//         "targets": 0
+//   } ],
+    //   ===================
+    
+//     $(document).ready(function() {
+//     var t = $('#dataTables-example').DataTable( {
+//         "columnDefs": [ {
+//             "searchable": false,
+//             "orderable": false,
+//             "targets": 0
+//         } ],
+//         "order": [[ 1, 'asc' ]],
+//          buttons: [
+//                 {
+//                     extend: 'print',
+//                     customize: function ( win ) {
+//                          $(win.document.body).find('table').addClass('printer');
+     
+                        
+//                     }
+//                 }
+//             ]
+//     } );
+ 
+//     t.on( 'order.dt search.dt', function () {
+//         t.column(0, {search:'applied', order:'applied'}).nodes().each( function (cell, i) {
+//             cell.innerHTML = i+1;
+//         } );
+//     } );
+// } );
         </script>

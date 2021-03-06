@@ -116,7 +116,8 @@ include './connection_sql.php';
             <th style="width: 10px;"></th>
             <th style="width: 120px;">Qty</th>
             <th style="width: 120px;">Cost</th>
-            <th style="width: 120px;">Selling</th>
+            <th style="width: 120px;">RETAIL</th>
+            <th style="width: 120px;">WHOLESALE</th>
             <th style="width: 120px;">Sub Total</th>
 
             <th style="width: 100px;">Add/Remove</th>
@@ -143,6 +144,9 @@ include './connection_sql.php';
         </td>
         <td>
             <input type="number" placeholder="Selling" id="selling" onblur="subtotup();" class="form-control input-sm">
+        </td>
+         <td>
+            <input type="number" placeholder="WHOLESALE" id="whprice" onblur="subtotup();" class="form-control input-sm">
         </td>
         <td>
             <input type="number" placeholder="Sub Total" disabled="" id="subtot" class="form-control input-sm">

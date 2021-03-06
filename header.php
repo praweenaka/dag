@@ -208,7 +208,7 @@ if ($_SESSION['UserName'] == "") {
                     $mgroup = "";
                     session_start();
                     include './connection_sql.php';
-                    $sql = "select * from view_menu where username ='" . $_SESSION["CURRENT_USER"] . "' and doc_view='1'       order by grp desc";
+                    $sql = "select * from view_menu where username ='" . $_SESSION["CURRENT_USER"] . "' and doc_view='1'       order by odr,docid asc ";
  
                     foreach ($conn->query($sql) as $row1) {
                         if ($mgroup != $row1['grp']) {

@@ -1,0 +1,14 @@
+[01-Jun-2020 09:54:15 Asia/Colombo] PHP Warning:  mysqli_connect(): (28000/1045): Access denied for user 'root'@'localhost' (using password: NO) in /home/coolmans/mjr.coolmansl.com/erp/stores/connectioni.php on line 7
+[01-Jun-2020 09:54:15 Asia/Colombo] PHP Warning:  mysqli_query() expects parameter 1 to be mysqli, boolean given in /home/coolmans/mjr.coolmansl.com/erp/stores/arn_details.php on line 24
+[01-Jun-2020 09:54:15 Asia/Colombo] PHP Warning:  mysqli_query() expects parameter 1 to be mysqli, boolean given in /home/coolmans/mjr.coolmansl.com/erp/stores/arn_details.php on line 28
+[01-Jun-2020 09:54:15 Asia/Colombo] PHP Warning:  mysqli_query() expects parameter 1 to be mysqli, boolean given in /home/coolmans/mjr.coolmansl.com/erp/stores/arn_details.php on line 128
+[01-Jun-2020 09:54:15 Asia/Colombo] PHP Warning:  mysqli_fetch_array() expects parameter 1 to be mysqli_result, null given in /home/coolmans/mjr.coolmansl.com/erp/stores/arn_details.php on line 129
+[01-Jun-2020 09:54:15 Asia/Colombo] PHP Warning:  mysqli_query() expects parameter 1 to be mysqli, boolean given in /home/coolmans/mjr.coolmansl.com/erp/stores/arn_details.php on line 158
+[01-Jun-2020 09:54:15 Asia/Colombo] PHP Warning:  mysqli_fetch_array() expects parameter 1 to be mysqli_result, null given in /home/coolmans/mjr.coolmansl.com/erp/stores/arn_details.php on line 159
+[01-Jun-2020 09:54:30 Asia/Colombo] PHP Warning:  mysqli_connect(): (28000/1045): Access denied for user 'root'@'localhost' (using password: NO) in /home/coolmans/mjr.coolmansl.com/erp/stores/connectioni.php on line 7
+[01-Jun-2020 09:54:30 Asia/Colombo] PHP Warning:  mysqli_query() expects parameter 1 to be mysqli, boolean given in /home/coolmans/mjr.coolmansl.com/erp/stores/grn_details.php on line 24
+[01-Jun-2020 09:54:30 Asia/Colombo] PHP Warning:  mysqli_query() expects parameter 1 to be mysqli, boolean given in /home/coolmans/mjr.coolmansl.com/erp/stores/grn_details.php on line 28
+[01-Jun-2020 09:54:30 Asia/Colombo] PHP Warning:  mysqli_query() expects parameter 1 to be mysqli, boolean given in /home/coolmans/mjr.coolmansl.com/erp/stores/grn_details.php on line 121
+[01-Jun-2020 09:54:30 Asia/Colombo] PHP Warning:  mysqli_fetch_array() expects parameter 1 to be mysqli_result, null given in /home/coolmans/mjr.coolmansl.com/erp/stores/grn_details.php on line 122
+[01-Jun-2020 09:54:30 Asia/Colombo] PHP Warning:  mysqli_query() expects parameter 1 to be mysqli, boolean given in /home/coolmans/mjr.coolmansl.com/erp/stores/grn_details.php on line 140
+[01-Jun-2020 09:54:30 Asia/Colombo] PHP Warning:  mysqli_fetch_array() expects parameter 1 to be mysqli_result, null given in /home/coolmans/mjr.coolmansl.com/erp/stores/grn_details.php on line 141

@@ -66,8 +66,8 @@ if ($_GET["Command"] == "setitem") {
         $discount = 0;
         $subtotal = $rate * $qty;
 
-        $sql = "Insert into tmp_po_data (stk_no, descript, qty, rate,subtot, tmp_no,selling)values 
-        ('" . $_GET['itemCode'] . "', '" . $_GET['itemDesc'] . "'," . $_GET['qty'] . ", " . $_GET['rate'] . ",'" . $subtotal . "','" . $_GET['tmpno'] . "','" . $_GET['selling'] . "') ";
+        $sql = "Insert into tmp_po_data (stk_no, descript, qty, rate,subtot, tmp_no,selling,whprice)values 
+        ('" . $_GET['itemCode'] . "', '" . $_GET['itemDesc'] . "'," . $_GET['qty'] . ", " . $_GET['rate'] . ",'" . $subtotal . "','" . $_GET['tmpno'] . "','" . $_GET['selling'] . "','" . $_GET['whprice'] . "') ";
         $result = $conn->query($sql);
     }
 
@@ -85,6 +85,7 @@ if ($_GET["Command"] == "setitem") {
         <td style=\"width: 120px;\">" . $row['qty'] . "</td>
         <td style=\"width: 120px;\">" . $row['rate'] . "</td>
         <td style=\"width: 120px;\">" . $row['selling'] . "</td>
+        <td style=\"width: 120px;\">" . $row['whprice'] . "</td>
         <td style=\"width: 120px;\">" . $row['subtot']  . "</td>
         <td style=\"width: 100px;\"><button   onClick=\"del_item('" . $row['stk_no'] . "')\" type=\"button\" class=\"btn btn-danger btnDelete btn-sm\">Remove</button> </td>
         
@@ -134,8 +135,8 @@ if ($_POST["Command"] == "save_item") {
             $sql = "select * from tmp_po_data where tmp_no='" . $_POST["tmpno"] . "'"; 
             foreach ($conn->query($sql) as $row) {
 
-                $sql121 = "insert into s_purtrn(REFNO, SDATE, STK_NO, DESCRIPT,acc_cost, COST, REC_QTY, O_QTY, vatrate, CANCEL,DEPARTMENT,SELLING) values"
-                . " ('" . $_POST["invno"] . "', '" . $_POST["invdate"] . "', '" . $row['stk_no'] . "', '" . $row['descript'] . "'," . $row['rate'] . ", " . $row['rate'] . ", " . $row['qty'] . "," . $row['qty'] . ",'" . $vatrate . "','0','" . $_POST['department'] .  "','" . $row['selling'] .  "')";
+                $sql121 = "insert into s_purtrn(REFNO, SDATE, STK_NO, DESCRIPT,acc_cost, COST, REC_QTY, O_QTY, vatrate, CANCEL,DEPARTMENT,SELLING,whprice) values"
+                . " ('" . $_POST["invno"] . "', '" . $_POST["invdate"] . "', '" . $row['stk_no'] . "', '" . $row['descript'] . "'," . $row['rate'] . ", " . $row['rate'] . ", " . $row['qty'] . "," . $row['qty'] . ",'" . $vatrate . "','0','" . $_POST['department'] .  "','" . $row['selling'] .  "','" . $row['whprice'] .  "')";
 
                 $conn->exec($sql121);
 
@@ -152,7 +153,7 @@ if ($_POST["Command"] == "save_item") {
                     $conn->exec($sql1);
                 }
 
-                $sql1 = "update s_mas set  QTYINHAND=QTYINHAND+" . $row['qty'] . ",COST=" . $row['rate'] . ",SELLING=" . $row['selling'] . ",AR_selling=" . $row['rate'] . " where  STK_NO='" . $row['stk_no'] . "'";
+                $sql1 = "update s_mas set  QTYINHAND=QTYINHAND+" . $row['qty'] . ",COST=" . $row['rate'] . ",SELLING=" . $row['selling'] . ",whprice=" . $row['whprice'] . ",AR_selling=" . $row['rate'] . " where  STK_NO='" . $row['stk_no'] . "'";
                 $conn->exec($sql1);
 
 
@@ -202,7 +203,7 @@ if ($_GET["Command"] == "pass_rec") {
         
         
         $ResponseXML .= "<lc_no><![CDATA[" . $row["LC_No"] . "]]></lc_no>";
-        $ResponseXML .= "<department><![CDATA[" . $row["DEP_CODE"] . "]]></department>";
+        $ResponseXML .= "<department><![CDATA[" . $row["DEPARTMENT"] . "]]></department>";
         
         $ResponseXML .= "<tmp_no><![CDATA[" . $row["tmp_no"] . "]]></tmp_no>";
         $msg = "";
@@ -223,7 +224,8 @@ if ($_GET["Command"] == "pass_rec") {
         <td style=\"width: 380px;\">Description</td>
         <td style=\"width: 120px;\">Qty</td>
         <td style=\"width: 120px;\">Cost</td>
-        <td style=\"width: 120px;\">Selling</td>
+        <td style=\"width: 120px;\">RETAIL</td>
+        <td style=\"width: 120px;\">Wholesale</td>
         <td style=\"width: 120px;\">Sub Total</td>
 
         <td style=\"width: 100px;\"></td>
@@ -240,6 +242,7 @@ if ($_GET["Command"] == "pass_rec") {
            <td>" . number_format($row1['REC_QTY'], 2, ".", ",") . "</td>
            <td>" . number_format($row1['COST'], 2, ".", ",") . "</td>  
            <td>" . number_format($row1['SELLING'], 2, ".", ",") . "</td>  
+            <td>" . number_format($row1['whprice'], 2, ".", ",") . "</td>  
            <td>" . number_format($row1['COST']*$row1['REC_QTY'], 2, ".", ",") . "</td>  
            </tr>";
        }
@@ -343,6 +346,7 @@ if ($_GET["Command"] == "pass_itno") {
     $ResponseXML .= "<str_description><![CDATA[" . $row['DESCRIPT'] . "]]></str_description>";
     $ResponseXML .= "<cost><![CDATA[" . $row['COST'] . "]]></cost>";
     $ResponseXML .= "<actual_selling><![CDATA[" . $row['SELLING'] . "]]></actual_selling>";
+     $ResponseXML .= "<wholesale><![CDATA[" . $row['whprice'] . "]]></wholesale>";
 
 
     $sql_s = "select * from s_submas where STK_NO ='" . $_GET['itno'] . "' and STO_CODE = '" . $_GET['from_dep'] . "'"; 

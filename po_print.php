@@ -49,27 +49,28 @@
 
 </head>
 <?php
+
 require_once ("connection_sql.php");
-$sql = "Select * from s_purmas where REFNO='" . $_GET['invno'] . "'"; 
+$sql = "Select * from s_purmas where REFNO='" . $_GET['invno'] . "'";   
 $result = $conn->query($sql);
 
 if (!$row = $result->fetch()) {
     exit();
 }
 
-$sql = "Select * from s_ordmas where refno='" . $row['ORDNO'] . "'";
-$result_ord = $conn->query($sql);
+// $sql = "Select * from s_ordmas where refno='" . $row['ORDNO'] . "'";
+// $result_ord = $conn->query($sql);
 
-if (!$row_ord = $result_ord->fetch()) {
+// if (!$row_ord = $result_ord->fetch()) {
     
-}
+// }
 
 $sql_invpara = "SELECT * from invpara";
 $result_invpara = $conn->query($sql_invpara);
 $row_invpara = $result_invpara->fetch(); 
 
 
-
+ 
 ?>
 <body>
     <table width="800px;" cellspacing="0" border="0">
@@ -154,9 +155,11 @@ $row_invpara = $result_invpara->fetch();
         <tr >
 
             <th width="30px;">No</th> 
+            <th width="30px;">ITEM CODE</th> 
             <th width="200px;">Description</th>
             <th width="80px;">Qty</th>
-            <th width="120px;">Rate</th>  
+            <th width="120px;">Retail</th>  
+            <th width="120px;">Wholesale</th>  
             <th width="120px;">Sub Total</th>
         </tr>
         <?php
@@ -164,31 +167,26 @@ $row_invpara = $result_invpara->fetch();
 $mnet = 0;
 $qty=0;
  $part="";
-        $sql = "Select * from s_purtrn where REFNO='" . $row["REFNO"] . "' order by ldate,id";
+        $sql = "Select * from s_purtrn where REFNO='" . $row["REFNO"] . "' order by  id";  
 foreach ($conn->query($sql) as $row1) {
-             $sql_smas = "SELECT * from s_mas where STK_NO='".$row1['STK_NO']."'";
+             $sql_smas = "SELECT * from s_mas where STK_NO='".$row1['STK_NO']."'"; 
     $result_smas = $conn->query($sql_smas);
     $row_smas= $result_smas->fetch(); 
     
     $subtotal = $row1['REC_QTY'] * $row1['COST'];
     $mnet = $mnet + $subtotal; 
+    
             ?>
             <tr>
  
 
                 <td class="center"><?php echo $i ?></td>
-                  <tr>
-
-            <td></td>
-            <td></td>
-            <td></td>
-            <td></td>
-            <td></td>
-        </tr>
-                
+             
+                <td class="left" ><?php echo $row1['STK_NO']; ?> </td>
                 <td class="left" ><?php echo $row_smas['DESCRIPT']; ?> </td>
                 <td class="right"><?php echo number_format($row1['REC_QTY'], 0, ".", ","); ?></td>
                 <td class="right"><?php echo number_format($row1['COST'], 2, ".", ","); ?></td> 
+                <td class="right"><?php echo number_format($row1['whprice'], 2, ".", ","); ?></td> 
                 <td class="right"><?php echo number_format($subtotal, 2, ".", ","); ?></td> 
             </tr>
             <?php
@@ -208,7 +206,7 @@ foreach ($conn->query($sql) as $row1) {
         <td  class="right"><b><?php 
         echo  $qty ;
 
-        ?></b></td>
+        ?></b></td><td></td> 
         <td class="right"><b>SUB TOTAL</b></td>
         <td class="right"><b><?php echo number_format($mnet, 2, ".", ",")   ;?></b> </td>
     </tr>
@@ -221,7 +219,7 @@ foreach ($conn->query($sql) as $row1) {
 
 
 </table>
-<div style='height:150px;'></div>
+<div style='height:120px;'></div>
 <table width="800px;">
     <tr>
         <td> </td>
