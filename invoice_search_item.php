@@ -56,18 +56,8 @@ include_once './connection_sql.php';
             $resultven = $conn->query($sqlven);
             $rowven = $resultven->fetch(); 
             
-            if($_SESSION['rejectdag']=="true"){
-                $sql2 = "SELECT * from dag_item where flag!='0' and cancel='0' and reject='1'"; 
-            }else{
-                $sql2 = "SELECT * from dag_item where flag='2' and cancel='0' and reject='0' "; 
-            }
-             
-             if($_SESSION['customer']!=""){
-                $sql2 .= " and (cuscode='".$_SESSION['customer']."' or cuscode='C/00021')";
-             }
-             
-              $sql2 .= " order by  cuscode";
-           echo $sql2;
+            
+           
  
             echo "<table id='example'  class='table table-bordered' style='font-size: 14px;'>";
 
@@ -84,7 +74,46 @@ include_once './connection_sql.php';
             echo "<th>SELLING</th>";  
 
             echo "</tr></thead><tbody>";
- $i=1;
+            $i=1;
+            if($_SESSION['rejectdag']=="true"){
+                $sql1 = "SELECT * from dag_item where flag!='0' and cancel='0' and reject='1'"; 
+            }else{
+                $sql1 = "SELECT * from dag_item where flag='2' and cancel='0' and reject='0' "; 
+            }
+             
+             if($_SESSION['customer']!=""){
+                $sql1 .= " and  cuscode='".$_SESSION['customer']."' ";
+             }
+             
+              $sql1 .= " order by  cuscode";
+              foreach ($conn->query($sql1) as $row) { 
+                $cuscode = $row['id']; 
+                echo "<tr>               
+                <td onclick=\"custno1('$cuscode', '". $row['jobno'] ."', '". $row['serialno'] ."');\">" . $i . "</a></td>
+                <td onclick=\"custno1('$cuscode', '". $row['jobno'] ."', '". $row['serialno'] ."');\">" . $row['jobno'] . "</a></td>
+                <td onclick=\"custno1('$cuscode', '". $row['jobno'] ."', '". $row['serialno'] ."');\">" . $row['cusname'] . "</a></td>
+                <td onclick=\"custno1('$cuscode', '". $row['jobno'] ."', '". $row['serialno'] ."');\">" . $row['marker'] . "</a></td>
+                <td onclick=\"custno1('$cuscode', '". $row['jobno'] ."', '". $row['serialno'] ."');\">" . $row['size'] . "</a></td>
+                <td onclick=\"custno1('$cuscode', '". $row['jobno'] ."', '". $row['serialno'] ."');\">" . $row['warrenty'] . "</a></td>
+                <td onclick=\"custno1('$cuscode', '". $row['jobno'] ."', '". $row['serialno'] ."');\">" . $row['serialno'] . "</a></td> 
+                <td onclick=\"custno1('$cuscode', '". $row['jobno'] ."', '". $row['serialno'] ."');\">" . $row['adpayment'] . "</a></td> 
+                <td onclick=\"custno1('$cuscode', '". $row['jobno'] ."', '". $row['serialno'] ."');\">" . $row['cost'] . "</a></td> 
+                <td onclick=\"custno1('$cuscode', '". $row['jobno'] ."', '". $row['serialno'] ."');\">" . $row['total'] . "</a></td>  
+                </tr>";
+                $i =$i +1;
+            }
+            
+             if($_SESSION['rejectdag']=="true"){
+                $sql2 = "SELECT * from dag_item where flag!='0' and cancel='0' and reject='1'"; 
+            }else{
+                $sql2 = "SELECT * from dag_item where flag='2' and cancel='0' and reject='0' "; 
+            }
+             
+             if($_SESSION['customer']!=""){
+                $sql2 .= " and  cuscode='C/00021' ";
+             }
+             
+              $sql2 .= " order by  cuscode";
             foreach ($conn->query($sql2) as $row) { 
                 $cuscode = $row['id']; 
                 echo "<tr>               
