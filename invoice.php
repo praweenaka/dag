@@ -271,7 +271,7 @@ if ($_SESSION["CURRENT_USER"] == "") {
                             <input type="number" placeholder="SELLING" id="selling1" onkeyup="calc1();" class="form-control input-sm">
                         </td> 
                         <td>
-                            <input type="number" placeholder="Dis" id="dis1" disabled  onkeyup="calc1();" class="form-control input-sm">
+                            <input type="number" placeholder="Dis" id="dis1"    onkeyup="calc1();" class="form-control input-sm">
                         </td>
                         <td>
                             <input type="number" placeholder="Subtotal" id="subtotal1" disabled="" class="form-control input-sm">
