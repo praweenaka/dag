@@ -211,7 +211,7 @@ if ($_SESSION["CURRENT_USER"] == "") {
                             <input type="number" placeholder="REPAIR" id="repair" onkeyup="calc();" class="form-control input-sm">
                         </td>
                         <td>
-                            <input type="number" placeholder="Dis" id="dis" disabled  onkeyup="calc();" class="form-control input-sm">
+                            <input type="number" placeholder="Dis" id="dis"    onkeyup="calc();" class="form-control input-sm">
                         </td>
                         <td>
                             <input type="number" placeholder="Subtotal" id="subtotal" disabled="" class="form-control input-sm">
@@ -265,7 +265,7 @@ if ($_SESSION["CURRENT_USER"] == "") {
                            
                         
                         <td>
-                            <input type="number" placeholder="COST" id="cost1" disabled onkeyup="calc1();"  class="form-control input-sm">
+                            <input type="number" placeholder="COST" id="cost1"   onkeyup="calc1();"  class="form-control input-sm">
                         </td>
                         <td>
                             <input type="number" placeholder="SELLING" id="selling1" onkeyup="calc1();" class="form-control input-sm">

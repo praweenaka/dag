@@ -1540,8 +1540,8 @@ if (isset($_POST["Command"])) {
                             $sql_status = 23;
                         }
 
-                        $sql2 = "Insert into bankdeptrn(refno, bdate, code, amount, flag, nara, comcode, tmp_no) Values ('" . trim($recno) . "', '" . $_POST["dt"] . "', '" . trim($_POST["accno"]) . "', " . $chqamt . ", 'DEB', '" . trim($l_lmem) . ", 'THT', '" . trim($_POST["recno"]) . "' )";
-                        $result2 = mysqli_query($GLOBALS['dbinv'], $sql2);
+                        $sql2 = "Insert into bankdeptrn(refno, bdate, code, amount, flag, nara, comcode, tmp_no) Values ('" . trim($recno) . "', '" . $_POST["dt"] . "', '" . trim($_POST["accno"]) . "', " . $chqamt . ", 'DEB', '" . trim($l_lmem) . "', 'THT', '" . trim($_POST["recno"]) . "' )";
+                      $result2 = mysqli_query($GLOBALS['dbinv'], $sql2);
                         if ($result2 != 1) {
                             $sql_status = 24;
                         }

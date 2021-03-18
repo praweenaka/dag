@@ -1,8 +1,13 @@
 <!-- Main content -->
+ <style>
+    .opt {font-weight:bold;
+        font-size:20px;
+    }
+   </style>
 <section class="content">
     <div class="box box-primary">
         <div class="box-header with-border">
-            <h3 class="box-title">SALES REGISTER</h3>
+            <h3 class="box-title">ALL REPORT</h3>
             <h4 style="float: right;height: 3px;"><b id="time"></b></h4>
         </div>
         <form role="form" name ="form1" class="form-horizontal" target="_blank" action="sales_register_print.php">
@@ -12,7 +17,7 @@
                         <span class="fa fa-user-plus"></span> &nbsp; New
                     </a>  
                     <button><a onclick="print_inv();" class="btn btn-primary btn-sm">
-                        <span class="fa fa-print"></span> &nbsp; Print
+                        <span class="fa fa-print"></span> &nbsp; VIEW
                     </a></button>
                     
                    
@@ -60,17 +65,22 @@
                     <label class="col-sm-1 control-label" for="txt_usernm">TYPE</label>
                     <div class="col-sm-2">
                        <select id="type" name="type" class="form-control input-sm"> 
-                            <option value="SETTLEMENT">SETTLEMENT</option>
-                            <option value="INVOICE">INVOICE</option>
-                            <option value="RECEIPT">RECEIPT</option>      
-                            <option value="OUTSTANDING">OUTSTANDING</option>    
-                            <option value="ONHANDLIST">ONHAND LIST</option>    
-                            <option value="PRODUCTIONLIST">PRODUCTION LIST</option> 
-                            <option value="COMPLETELIST">COMPLETE LIST</option> 
-                            <option value="ALLLIST">ALL LIST</option>   
-                            <option value="PROFIT">PROFIT REPORT</option> 
-                            <option value="SERVICES">SERVICES REPORT</option> 
-                            <option value="SALARY">SALARY REPORT</option> 
+                            <option value="SETTLEMENT" class="opt">SETTLEMENT</option>
+                            <option value="INVOICE" class="opt">INVOICE</option>
+                            <option value="RECEIPT" class="opt">RECEIPT</option>      
+                            <option value="OUTSTANDING" class="opt">OUTSTANDING</option>    
+                            <option value="ONHANDLIST" class="opt">ONHAND LIST</option>    
+                            <option value="PRODUCTIONLIST" class="opt">PRODUCTION LIST</option> 
+                            <option value="COMPLETELIST" class="opt">COMPLETE LIST</option> 
+                            <option value="ALLLIST" class="opt">ALL LIST</option>   
+                            <option value="PROFIT" class="opt">PROFIT REPORT</option> 
+                            <option value="SERVICES" class="opt">SERVICES REPORT</option> 
+                            <option value="SALARY PAYMENT" class="opt">SALARY PAYMENT REPORT</option> 
+                            <option value="ADVANCE PAYMENT" class="opt">ADVANCE PAYMENT REPORT</option> 
+                            <option value="OT" class="opt">OT REPORT</option> 
+                            <option value="EXPENSE" class="opt">EXPENSE REPORT</option> 
+                            <option value="OTHER PAYMENT" class="opt">OTHER PAYMENT REPORT</option> 
+                            <option value="SERVICES & SALARY PROFIT" class="opt">SERVICES & SALARY PROFIT REPORT</option> 
                         </select>
                     </div>
                      <label class="col-sm-1 control-label" for="txt_usernm">JOB NO</label>
@@ -86,7 +96,7 @@
                                 <?php 
                                 $sql = "select * from workers where cancel ='0' and type='WORKER' order by name";
                                   foreach ($conn->query($sql) as $row) {
-                                    echo "<option value='" . $row["name"] . "'>" . $row["name"] . "</option>";
+                                    echo "<option value='" . $row["name"] . "' class=\"opt\">" . $row["name"] . "</option>";
                                 }
                                 ?>
                             </select>
@@ -99,7 +109,7 @@
                                 <?php 
                                 $sql = "select * from services where cancel ='0'     order by name";
                                   foreach ($conn->query($sql) as $row) {
-                                    echo "<option value='" . $row["name"] . "'>" . $row["name"] . "</option>";
+                                    echo "<option value='" . $row["name"] . "' class=\"opt\">" . $row["name"] . "</option>";
                                 }
                                 ?>
                             </select>
@@ -109,9 +119,9 @@
                     <label class="col-sm-1 control-label" for="txt_usernm">CUSTOMER TYPE</label>
                     <div class="col-sm-2">
                        <select id="cus_type" name="cus_type" class="form-control input-sm"> 
-                            <option value="ALL">ALL</option>    
-                            <option value="WHOLESALE">WHOLESALE</option>
-                            <option value="RETAIL">RETAIL</option>   
+                            <option value="ALL" class="opt">ALL</option>    
+                            <option value="WHOLESALE" class="opt">WHOLESALE</option>
+                            <option value="RETAIL" class="opt">RETAIL</option>   
                         </select>
                     </div> 
                 </div>

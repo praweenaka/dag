@@ -11,7 +11,7 @@ include_once './connection_sql.php';
     <link href="style.css" rel="stylesheet" type="text/css" media="screen" />
 
 
-    <title>Search Advance</title>
+    <title>Search Customer</title>
     <link rel="stylesheet" href="css/bootstrap.min.css">
 
 
@@ -52,31 +52,25 @@ include_once './connection_sql.php';
         <table id="testTable"  class="table table-bordered">
             <?php
 
-            $sql2 = "select *  from s_adva where cancel='0' ORDER BY C_REFNO";
+            $sql2 = "SELECT * from vendor  ";
 
             echo "<table id='example'  class='table table-bordered' style='font-size: 14px;'>";
 
             echo "<thead><tr>";
-            echo "<th>REF NO</th>"; 
-            echo "<th>DATE</th>"; 
             echo "<th>CUS CODE</th>";
             echo "<th>CUS NAME</th>";
-            echo "<th>AMOUNT</th>";
-             echo "<th>TYPE</th>";
+            echo "<th>ADDRESS</th>"; 
+            echo "<th>TYPE</th>"; 
 
             echo "</tr></thead><tbody>";
 
             foreach ($conn->query($sql2) as $row) { 
-                $sql1 = "select * from vendor where CODE='".$row["C_CODE"]."'";
-                $result1 = $conn->query($sql1); 
-                $row1 = $result1->fetch();
-               	echo "<tr>               
-                              <td onclick=\"custno('".$row['C_REFNO']."');\">".$row['C_REFNO']."</td>
-							  <td onclick=\"custno('".$row['C_REFNO']."');\">".$row['C_DATE']."</td>
-                              <td onclick=\"custno('".$row['C_REFNO']."');\">".$row["C_CODE"]."</td>
-                              <td onclick=\"custno('".$row['C_REFNO']."');\">".$row1["NAME"]."</td>
-                              <td onclick=\"custno('".$row['C_REFNO']."');\">".$row['C_PAYMENT']."</td>
-                              <td onclick=\"custno('".$row['C_REFNO']."');\">".$row['paytype']."</td>
+                $cuscode = $row['CODE']; 
+                echo "<tr>               
+                <td onclick=\"custno1('$cuscode', '$stname');\">" . $row['CODE'] . "</a></td>
+                <td onclick=\"custno1('$cuscode', '$stname');\">" . $row['NAME'] . "</a></td>
+                <td onclick=\"custno1('$cuscode', '$stname');\">" . $row['ADD1'] . "</a></td>  
+                <td onclick=\"custno1('$cuscode', '$stname');\">" . $row['cus_type'] . "</a></td>  
                 </tr>";
             }
             ?>

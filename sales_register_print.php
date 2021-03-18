@@ -962,7 +962,7 @@ $row_invpara = $result_invpara->fetch();
     <!--===================================================================================-->
     
       <?php 
-    if($_GET['type']=="SALARY"){
+    if($_GET['type']=="SALARY PAYMENT"){
         ?>
         <table class="tb" width="1050px;" >
                 <tr>
@@ -978,7 +978,7 @@ $row_invpara = $result_invpara->fetch();
                     $tot=0; 
                     include './connection_sql.php';
  
-                    $sql = "select * from salary  where cancel='0'   ";
+                    $sql = "select * from payment  where cancel='0' and type='SALARY'  ";
                    
                      if($_GET['check'] =="on"){
                          $sql.=" and   sdate>='" . $_GET["dtfrom"] . "' and sdate<='" . $_GET["dtto"] . "'"; 
@@ -1017,6 +1017,455 @@ $row_invpara = $result_invpara->fetch();
                 <td  align="right" colspan='5' style='font-size:20px;'><b>Total</b></td> 
                 <td align="right" style='font-size:20px;'><b><?php 
                 echo number_format($tot, 2, ".", ",");
+        
+                ?><b/></td> 
+            </tr>
+        </table>
+   <?php  }
+    
+    ?>
+    
+    
+    <!--===================================================================================-->
+    
+      <?php 
+    if($_GET['type']=="ADVANCE PAYMENT"){
+        ?>
+        <table class="tb" width="1050px;" >
+                <tr>
+                        <th>#</th> 
+                        <th>REF NO</th>
+                        <th>DATE</th>   
+                        <th>NAME</th> 
+                        <th>REMARK</th> 
+                        <th>AMOUNT</th>  
+                    </tr>
+                <?php
+                    $i=1;
+                    $tot=0; 
+                    include './connection_sql.php';
+ 
+                     $sql = "select * from payment  where cancel='0' and type='ADVANCE'  ";
+                   
+                     if($_GET['check'] =="on"){
+                         $sql.=" and   sdate>='" . $_GET["dtfrom"] . "' and sdate<='" . $_GET["dtto"] . "'"; 
+                    }
+                     
+                    if($_GET['employee']!=""){
+                         $sql.=" and name='".$_GET['employee']."'"; 
+                    } 
+                    
+                 
+                    foreach ($conn->query($sql) as $row) {
+ 
+                        ?>
+                        <tr>
+                            <td><?php echo $i; ?></td>     
+                            <td><?php echo $row['refno']; ?></td> 
+                            <td><?php echo $row['sdate']; ?></td>   
+                            <td><?php echo $row['name']; ?></td>     
+                            <td><?php echo $row['remark']; ?></td>   
+                            <td align="right"><?php echo $row['amount']; ?></td>  
+                             
+                        </td>   
+
+
+                    </tr>
+
+                    <?php
+                    $i= $i+1; 
+                     $tot= $tot+$row['amount']; 
+                }
+                ?>
+          
+           
+            <tr>
+         
+                <td  align="right" colspan='5' style='font-size:20px;'><b>Total</b></td> 
+                <td align="right" style='font-size:20px;'><b><?php 
+                echo number_format($tot, 2, ".", ",");
+        
+                ?><b/></td> 
+            </tr>
+        </table>
+   <?php  }
+    
+    ?>
+    
+    <!--===================================================================================-->
+    
+       <?php 
+    if($_GET['type']=="OT"){
+        ?>
+        <table class="tb" width="1050px;" >
+                <tr>
+                        <th>#</th> 
+                        <th>REF NO</th>
+                        <th>DATE</th>   
+                        <th>NAME</th> 
+                        <th>REMARK</th> 
+                        <th>AMOUNT</th>  
+                    </tr>
+                <?php
+                    $i=1;
+                    $tot=0; 
+                    include './connection_sql.php';
+ 
+                     $sql = "select * from payment  where cancel='0' and type='OT'  ";
+                   
+                     if($_GET['check'] =="on"){
+                         $sql.=" and   sdate>='" . $_GET["dtfrom"] . "' and sdate<='" . $_GET["dtto"] . "'"; 
+                    }
+                     
+                    if($_GET['employee']!=""){
+                         $sql.=" and name='".$_GET['employee']."'"; 
+                    } 
+                    
+                 
+                    foreach ($conn->query($sql) as $row) {
+ 
+                        ?>
+                        <tr>
+                            <td><?php echo $i; ?></td>     
+                            <td><?php echo $row['refno']; ?></td> 
+                            <td><?php echo $row['sdate']; ?></td>   
+                            <td><?php echo $row['name']; ?></td>     
+                            <td><?php echo $row['remark']; ?></td>   
+                            <td align="right"><?php echo $row['amount']; ?></td>  
+                             
+                        </td>   
+
+
+                    </tr>
+
+                    <?php
+                    $i= $i+1; 
+                     $tot= $tot+$row['amount']; 
+                }
+                ?>
+          
+           
+            <tr>
+         
+                <td  align="right" colspan='5' style='font-size:20px;'><b>Total</b></td> 
+                <td align="right" style='font-size:20px;'><b><?php 
+                echo number_format($tot, 2, ".", ",");
+        
+                ?><b/></td> 
+            </tr>
+        </table>
+   <?php  }
+    
+    ?>
+    
+    
+    
+    <!--===================================================================================-->
+    
+    
+       <?php 
+    if($_GET['type']=="EXPENSE"){
+        ?>
+        <table class="tb" width="1050px;" >
+                <tr>
+                        <th>#</th> 
+                        <th>REF NO</th>
+                        <th>DATE</th>   
+                        <th>NAME</th> 
+                        <th>REMARK</th> 
+                        <th>AMOUNT</th>  
+                    </tr>
+                <?php
+                    $i=1;
+                    $tot=0; 
+                    include './connection_sql.php';
+ 
+                     $sql = "select * from payment  where cancel='0' and type='EXPENSE'  ";
+                   
+                     if($_GET['check'] =="on"){
+                         $sql.=" and   sdate>='" . $_GET["dtfrom"] . "' and sdate<='" . $_GET["dtto"] . "'"; 
+                    }
+                     
+                    if($_GET['employee']!=""){
+                         $sql.=" and name='".$_GET['employee']."'"; 
+                    } 
+                    
+                 
+                    foreach ($conn->query($sql) as $row) {
+ 
+                        ?>
+                        <tr>
+                            <td><?php echo $i; ?></td>     
+                            <td><?php echo $row['refno']; ?></td> 
+                            <td><?php echo $row['sdate']; ?></td>   
+                            <td><?php echo $row['name']; ?></td>     
+                            <td><?php echo $row['remark']; ?></td>   
+                            <td align="right"><?php echo $row['amount']; ?></td>  
+                             
+                        </td>   
+
+
+                    </tr>
+
+                    <?php
+                    $i= $i+1; 
+                     $tot= $tot+$row['amount']; 
+                }
+                ?>
+          
+           
+            <tr>
+         
+                <td  align="right" colspan='5' style='font-size:20px;'><b>Total</b></td> 
+                <td align="right" style='font-size:20px;'><b><?php 
+                echo number_format($tot, 2, ".", ",");
+        
+                ?><b/></td> 
+            </tr>
+        </table>
+   <?php  }
+    
+    ?>
+    
+    <!--===================================================================================-->
+    
+       <?php 
+    if($_GET['type']=="OTHER PAYMENT"){
+        ?>
+        <table class="tb" width="1050px;" >
+                <tr>
+                        <th>#</th> 
+                        <th>REF NO</th>
+                        <th>DATE</th>   
+                        <th>NAME</th> 
+                        <th>REMARK</th> 
+                        <th>AMOUNT</th>  
+                    </tr>
+                <?php
+                    $i=1;
+                    $tot=0; 
+                    include './connection_sql.php';
+ 
+                     $sql = "select * from payment  where cancel='0' and type='OTHER'  ";
+                   
+                     if($_GET['check'] =="on"){
+                         $sql.=" and   sdate>='" . $_GET["dtfrom"] . "' and sdate<='" . $_GET["dtto"] . "'"; 
+                    }
+                     
+                    if($_GET['employee']!=""){
+                         $sql.=" and name='".$_GET['employee']."'"; 
+                    } 
+                    
+                 
+                    foreach ($conn->query($sql) as $row) {
+ 
+                        ?>
+                        <tr>
+                            <td><?php echo $i; ?></td>     
+                            <td><?php echo $row['refno']; ?></td> 
+                            <td><?php echo $row['sdate']; ?></td>   
+                            <td><?php echo $row['name']; ?></td>     
+                            <td><?php echo $row['remark']; ?></td>   
+                            <td align="right"><?php echo $row['amount']; ?></td>  
+                             
+                        </td>   
+
+
+                    </tr>
+
+                    <?php
+                    $i= $i+1; 
+                     $tot= $tot+$row['amount']; 
+                }
+                ?>
+          
+           
+            <tr>
+         
+                <td  align="right" colspan='5' style='font-size:20px;'><b>Total</b></td> 
+                <td align="right" style='font-size:20px;'><b><?php 
+                echo number_format($tot, 2, ".", ",");
+        
+                ?><b/></td> 
+            </tr>
+        </table>
+   <?php  }
+    
+    ?>
+    
+    <!--===================================================================================-->
+    
+    
+    
+      <?php 
+    if($_GET['type']=="SERVICES & SALARY PROFIT"){
+        ?>
+        <table class="tb" width="1050px;" >
+                <tr>
+                        <th>#</th> 
+                        <th>INVOICE NO</th>
+                        <th>DATE</th>   
+                        <th>CUSTOMER</th> 
+                        <th>SERVICE</th>  
+                        <th>VEHICLE</th>   
+                        <th>EMPLOYEE</th>   
+                        <th>AMOUNT</th>   
+                    </tr>
+                <?php
+                    $i=1;
+                    $tot=0;
+                    include './connection_sql.php';
+ 
+                    $sql = "select * from t_invo  where cancel='0' and type='service' ";
+                    if($_GET['cuscode']!=""){
+                         $sql.=" and cuscode='".$_GET['cuscode']."'"; 
+                    }
+                     if($_GET['check'] =="on"){
+                         $sql.=" and   sdate>='" . $_GET["dtfrom"] . "' and sdate<='" . $_GET["dtto"] . "'"; 
+                    } 
+                    
+                    if($_GET['services']!=""){
+                         $sql.=" and service='".$_GET['services']."'"; 
+                    } 
+                    if($_GET['employee']!=""){
+                         $sql.=" and employee='".$_GET['employee']."'"; 
+                    } 
+                    
+                 
+                    foreach ($conn->query($sql) as $row) {
+
+                        $sqlR = "SELECT * FROM s_salma where REF_NO='" . $row['refno'] . "' ";  
+                        $resultR = $conn->query($sqlR); 
+                        $rowR = $resultR->fetch();
+                        ?>
+                        <tr>
+                            <td><?php echo $i; ?></td>     
+                            <td><?php echo $row['refno']; ?></td> 
+                            <td><?php echo $row['sdate']; ?></td>   
+                            <td><?php echo $rowR['CUS_NAME']; ?></td>     
+                            <td><?php echo $row['service']; ?></td>  
+                            <td><?php echo $row['vehicleno']; ?></td>  
+                            <td><?php echo $row['employee']; ?></td>
+                            <td align="right"><?php echo $row['selling']; ?></td>
+                             
+                        </td>   
+
+
+                    </tr>
+
+                    <?php
+                    $i= $i+1;
+                    $tot= $tot+$row['selling'];
+                }
+                ?>
+                 <tr>
+         
+                <td  align="right" colspan='7' style='font-size:20px;'><b>Service</b></td> 
+                <td align="right" style='font-size:20px;'><b><?php 
+                echo number_format($tot, 2, ".", ",");
+        
+                ?><b/></td> 
+            </tr>
+                <!--============-->
+                
+                 <?php
+                    $i=1;
+                    $tot1=0; 
+                    include './connection_sql.php';
+ 
+                    $sql = "select * from payment  where cancel='0'  and type='SALARY' ";
+                   
+                     if($_GET['check'] =="on"){
+                         $sql.=" and   sdate>='" . $_GET["dtfrom"] . "' and sdate<='" . $_GET["dtto"] . "'"; 
+                    }
+                     
+                    if($_GET['employee']!=""){
+                         $sql.=" and name='".$_GET['employee']."'"; 
+                    } 
+                    
+                 
+                    foreach ($conn->query($sql) as $row) {
+ 
+                        ?>
+                        <tr>
+                            <td><?php echo $i; ?></td>     
+                            <td><?php echo $row['refno']; ?></td> 
+                            <td><?php echo $row['sdate']; ?></td>   
+                            <td colspan='4'><?php echo 'SALARY PAYMENT'.'&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;-&nbsp;&nbsp;&nbsp;&nbsp;'.$row['name']; ?></td>  
+                            <td align="right"><?php echo $row['amount']; ?></td>  
+                             
+                        </td>   
+
+
+                    </tr>
+
+                    <?php
+                    $i= $i+1; 
+                     $tot1= $tot1+$row['amount']; 
+                }
+                ?>
+           
+            <tr>
+         
+                <td  align="right" colspan='7' style='font-size:20px;'><b>Salary</b></td> 
+                <td align="right" style='font-size:20px;'><b><?php 
+                echo number_format($tot1, 2, ".", ",");
+        
+                ?><b/></td> 
+            </tr>
+           <!--============-->
+                
+                 <?php
+                    $i=1;
+                    $tot2=0; 
+                    include './connection_sql.php';
+ 
+                    $sql = "select * from payment  where cancel='0' and type='ADVANCE'  ";
+                   
+                     if($_GET['check'] =="on"){
+                         $sql.=" and   sdate>='" . $_GET["dtfrom"] . "' and sdate<='" . $_GET["dtto"] . "'"; 
+                    }
+                     
+                    if($_GET['employee']!=""){
+                         $sql.=" and name='".$_GET['employee']."'"; 
+                    } 
+                    
+                 
+                    foreach ($conn->query($sql) as $row) {
+ 
+                        ?>
+                        <tr>
+                            <td><?php echo $i; ?></td>     
+                            <td><?php echo $row['refno']; ?></td> 
+                            <td><?php echo $row['sdate']; ?></td>   
+                            <td colspan='4'><?php echo 'ADVANCE PAYMENT'.'&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;-&nbsp;&nbsp;&nbsp;&nbsp;'.$row['name']; ?></td>  
+                            <td align="right"><?php echo $row['amount']; ?></td>  
+                             
+                        </td>   
+
+
+                    </tr>
+
+                    <?php
+                    $i= $i+1; 
+                     $tot2= $tot2+$row['amount']; 
+                }
+                ?>
+           
+            <tr>
+         
+                <td  align="right" colspan='7' style='font-size:20px;'><b>Advance</b></td> 
+                <td align="right" style='font-size:20px;'><b><?php 
+                echo number_format($tot2, 2, ".", ",");
+        
+                ?><b/></td> 
+            </tr>
+            
+            <tr>
+         
+                <td  align="right" colspan='7' style='font-size:20px;'><b>Profit Total</b></td> 
+                <td align="right" style='font-size:20px;'><b><?php 
+                echo number_format($tot-$tot1-$tot2, 2, ".", ",");
         
                 ?><b/></td> 
             </tr>

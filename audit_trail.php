@@ -42,7 +42,7 @@ require_once("./connection_sql.php");
 
     <div class="box box-primary">
         <div class="box-header with-border">
-            <h3 class="box-title">AUDIT TRAIL LIST</h3>
+            <h3 class="box-title">AUDIT TRAIL</h3>
         </div>
         <form role="form" class="form-horizontal">
             <div class="box-body"> 
@@ -67,7 +67,7 @@ require_once("./connection_sql.php");
                     $i=1;
                     include './connection_sql.php';
 
-                    $sql = "select * from entry_log  ";
+                    $sql = "select * from entry_log order by stime desc";
 
 
                     foreach ($conn->query($sql) as $row) {

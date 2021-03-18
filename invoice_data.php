@@ -464,18 +464,16 @@ if ($_GET["Command"] == "save_item") {
 
         // $sql = "select RECNO from invpara where COMCODE='" . $_SESSION['company'] . "'";
         
-        if($_GET["recv_details"] !="0.00"){
-            if($_GET["recv_details"] !="0"){
-                if($_GET["recv_details"] !=""){
-                    $mgrand_tot =$_GET["cpay"];
-                }else{
-                    $mgrand_tot =$mgrand_tot;
-                }
-            }else{
+        if($_GET["cpay"] !=""){
+            if($_GET["cpay"] =="0"){
                 $mgrand_tot =$mgrand_tot;
+            }else if($_GET["cpay"] =="0.00"){
+                $mgrand_tot =$mgrand_tot;
+            }else{ 
+                $mgrand_tot =$_GET["cpay"]; 
             }
         }else{
-              $mgrand_tot =$mgrand_tot;
+                $mgrand_tot =$mgrand_tot;
         }
         $sql = "select RECNO from invpara";
         $result = $conn->query($sql);

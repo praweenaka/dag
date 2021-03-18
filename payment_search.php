@@ -11,7 +11,7 @@ include_once './connection_sql.php';
     <link href="style.css" rel="stylesheet" type="text/css" media="screen" />
 
 
-    <title>Search Advance</title>
+    <title>SEARCH PAYMENT</title>
     <link rel="stylesheet" href="css/bootstrap.min.css">
 
 
@@ -23,14 +23,16 @@ include_once './connection_sql.php';
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.1.3/css/bootstrap.css">
     <link rel="stylesheet" href="https://cdn.datatables.net/1.10.19/css/dataTables.bootstrap4.min.css">
 
- 
+
+
+    <!-- <script language="JavaScript" src="js/search_joborder.js"></script> -->
 
     <script language="JavaScript" src="https://code.jquery.com/jquery-3.3.1.js"></script>
     <script language="JavaScript" src="https://cdn.datatables.net/1.10.19/js/jquery.dataTables.min.js"></script>
     <script language="JavaScript" src="https://cdn.datatables.net/1.10.19/js/dataTables.bootstrap4.min.js"></script>
 
 
-    <script language="JavaScript" src="js/advance.js"></script> 
+    <script language="JavaScript" src="js/payment.js"></script> 
 
 
 
@@ -52,44 +54,41 @@ include_once './connection_sql.php';
         <table id="testTable"  class="table table-bordered">
             <?php
 
-            $sql2 = "select *  from s_adva where cancel='0' ORDER BY C_REFNO";
+            $sql2 = "SELECT * from payment where cancel='0'  ";
 
             echo "<table id='example'  class='table table-bordered' style='font-size: 14px;'>";
 
             echo "<thead><tr>";
             echo "<th>REF NO</th>"; 
-            echo "<th>DATE</th>"; 
-            echo "<th>CUS CODE</th>";
-            echo "<th>CUS NAME</th>";
+            echo "<th>NAME</th>"; 
+            echo "<th>Date</th>";
             echo "<th>AMOUNT</th>";
-             echo "<th>TYPE</th>";
+             echo "<th>PAYMENT TYPE</th>";
+
 
             echo "</tr></thead><tbody>";
 
             foreach ($conn->query($sql2) as $row) { 
-                $sql1 = "select * from vendor where CODE='".$row["C_CODE"]."'";
-                $result1 = $conn->query($sql1); 
-                $row1 = $result1->fetch();
-               	echo "<tr>               
-                              <td onclick=\"custno('".$row['C_REFNO']."');\">".$row['C_REFNO']."</td>
-							  <td onclick=\"custno('".$row['C_REFNO']."');\">".$row['C_DATE']."</td>
-                              <td onclick=\"custno('".$row['C_REFNO']."');\">".$row["C_CODE"]."</td>
-                              <td onclick=\"custno('".$row['C_REFNO']."');\">".$row1["NAME"]."</td>
-                              <td onclick=\"custno('".$row['C_REFNO']."');\">".$row['C_PAYMENT']."</td>
-                              <td onclick=\"custno('".$row['C_REFNO']."');\">".$row['paytype']."</td>
+                $cuscode = $row['refno']; 
+                echo "<tr>               
+                <td onclick=\"custno('$cuscode', '$stname');\">" . $row['refno'] . "</a></td>
+                <td onclick=\"custno('$cuscode', '$stname');\">" . $row['name'] . "</a></td>
+                <td onclick=\"custno('$cuscode', '$stname');\">" . $row['sdate'] . "</a></td> 
+                <td onclick=\"custno('$cuscode', '$stname');\">" . $row['amount'] . "</a></td> 
+                <td onclick=\"custno('$cuscode', '$stname');\">" . $row['type'] . "</a></td> 
                 </tr>";
             }
             ?>
         </table> </div>
 
-        <script type="text/javascript">
+      <script type="text/javascript">
                 $(document).ready(function() {
            var table = $('#example').DataTable( {
             lengthChange: true,
             fixedHeader: true,
             responsive: true,
             "deferRender": true, 
-             "order": [[ 0, 'asc' ]], 
+             "order": [[ 0, 'desc' ]], 
             lengthMenu: [[ 25, 50,100, -1 ],[ '25 rows', '50 rows', '100 rows', 'Show all' ]],
 
         } );

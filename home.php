@@ -119,9 +119,19 @@ if (isset($_GET['url'])) {
     if ($_GET['url'] == "audit_trail") {
         include_once './audit_trail.php';
     }
-    if ($_GET['url'] == "salary") {
-        include_once './salary.php';
+    if ($_GET['url'] == "payment") {
+        include_once './payment.php';
     }
+     if ($_GET['url'] == "utilization") {
+        include_once './utilization.php';
+    }
+     if ($_GET['url'] == "creditnote") {
+        include_once './creditnote.php';
+    }
+    if ($_GET['url'] == "advance") {
+        include_once './advance.php';
+    }
+      
 //////////////////////////////////
 
 
