@@ -137,6 +137,7 @@ $row_invpara = $result_invpara->fetch();
                     <th width="100px;">INVOICE NO</th>
                     <th width="100px;">INVOICE DATE</th>
                     <th width="400px;">CUSTOMER</th>
+                    <th width="100px;">TYPE</th>
                     <th width="120px;">GRAND TOTAL</th>
                     <th width="100px;">PAID</th>  
                     <th width="100px;">BALANCE</th>
@@ -181,6 +182,7 @@ $row_invpara = $result_invpara->fetch();
                         <td class="left" ><?php echo $row1['REF_NO']; ?> </td>
                         <td class="left" ><?php echo $row1['SDATE']; ?> </td>
                          <td class="left" ><?php echo $row1['CUS_NAME']; ?> </td>
+                         <td class="left" ><?php echo $row1['cus_type']; ?> </td>
                         <td align="right"><?php echo number_format($row1['GRAND_TOT'], 0, ".", ","); ?></td>
                         <td align="right"><?php echo number_format($row1['TOTPAY'], 2, ".", ","); ?></td> 
                         <td align="right"><?php echo number_format($row1['GRAND_TOT']-$row1['TOTPAY'], 2, ".", ","); ?></td> 
@@ -200,7 +202,7 @@ $row_invpara = $result_invpara->fetch();
         
                 <td></td>
                 <td></td> 
-                <td  align="right" colspan='4' style='font-size:20px;'><b>Total Balance</b></td> 
+                <td  align="right" colspan='5' style='font-size:20px;'><b>Total Balance</b></td> 
                 <td align="right" style='font-size:20px;'><b><?php 
                 echo number_format($BAL, 2, ".", ",");
         
@@ -306,6 +308,14 @@ $row_invpara = $result_invpara->fetch();
                      $sql1.=" and C_CODE='".$_GET['cuscode']."'"; 
                 }
                 
+                if($_GET['cus_type'] !="ALL"){
+                     if($_GET['cus_type'] =="WHOLESALE"){
+                         $sql1.=" and (cus_type='".$_GET['cus_type']."' or cus_type='BOTH' )";
+                     }else{
+                         $sql1.=" and cus_type='".$_GET['cus_type']."'";
+                     }
+                }
+                
               
                 $sql1.=" order by  C_CODE,SDATE asc";
                 
@@ -374,6 +384,13 @@ $row_invpara = $result_invpara->fetch();
                      $sql1.=" and C_CODE='".$_GET['cuscode']."'"; 
                 }
                 
+                 if($_GET['cus_type'] !="ALL"){
+                     if($_GET['cus_type'] =="WHOLESALE"){
+                         $sql1.=" and (cus_type='".$_GET['cus_type']."' or cus_type='BOTH' )";
+                     }else{
+                         $sql1.=" and cus_type='".$_GET['cus_type']."'";
+                     }
+                }
               
                 $sql1.=" order by  C_CODE,SDATE asc";
                 
@@ -448,11 +465,18 @@ $row_invpara = $result_invpara->fetch();
                          $sql.=" and cuscode='".$_GET['cuscode']."'"; 
                     }
                      if($_GET['check'] =="on"){
-                         $sql.=" and   sdate>='" . $_GET["dtfrom"] . "' and sdate<='" . $_GET["dtto"] . "'"; 
+                         $sql.=" and   onhand_date>='" . $_GET["dtfrom"] . "' and onhand_date<='" . $_GET["dtto"] . "'"; 
                     }
                     if($_GET['jobno']!=""){
                          $sql.=" and jobno='".$_GET['jobno']."'"; 
                     } 
+                     if($_GET['cus_type'] !="ALL"){
+                         if($_GET['cus_type'] =="WHOLESALE"){
+                             $sql.=" and (cus_type='".$_GET['cus_type']."' or cus_type='BOTH' )";
+                         }else{
+                             $sql.=" and cus_type='".$_GET['cus_type']."'";
+                         }
+                    }
                     $sql.=" order by jobno asc"; 
                     foreach ($conn->query($sql) as $row) {
 
@@ -531,11 +555,18 @@ $row_invpara = $result_invpara->fetch();
                          $sql.=" and cuscode='".$_GET['cuscode']."'"; 
                     }
                      if($_GET['check'] =="on"){
-                         $sql.=" and   sdate>='" . $_GET["dtfrom"] . "' and sdate<='" . $_GET["dtto"] . "'"; 
+                         $sql.=" and   pro_date>='" . $_GET["dtfrom"] . "' and pro_date<='" . $_GET["dtto"] . "'"; 
                     }
                     if($_GET['jobno']!=""){
                          $sql.=" and jobno='".$_GET['jobno']."'"; 
                     } 
+                     if($_GET['cus_type'] !="ALL"){
+                         if($_GET['cus_type'] =="WHOLESALE"){
+                             $sql.=" and (cus_type='".$_GET['cus_type']."' or cus_type='BOTH' )";
+                         }else{
+                             $sql.=" and cus_type='".$_GET['cus_type']."'";
+                         }
+                    }
                     foreach ($conn->query($sql) as $row) {
 
 
@@ -618,11 +649,18 @@ $row_invpara = $result_invpara->fetch();
                          $sql.=" and cuscode='".$_GET['cuscode']."'"; 
                     }
                      if($_GET['check'] =="on"){
-                         $sql.=" and   sdate>='" . $_GET["dtfrom"] . "' and sdate<='" . $_GET["dtto"] . "'"; 
+                         $sql.=" and   com_date>='" . $_GET["dtfrom"] . "' and com_date<='" . $_GET["dtto"] . "'"; 
                     }
                     if($_GET['jobno']!=""){
                          $sql.=" and jobno='".$_GET['jobno']."'"; 
                     } 
+                     if($_GET['cus_type'] !="ALL"){
+                         if($_GET['cus_type'] =="WHOLESALE"){
+                             $sql1.=" and (cus_type='".$_GET['cus_type']."' or cus_type='BOTH' )";
+                         }else{
+                             $sql1.=" and cus_type='".$_GET['cus_type']."'";
+                         }
+                    }
                     foreach ($conn->query($sql) as $row) {
 
 
@@ -713,6 +751,13 @@ $row_invpara = $result_invpara->fetch();
                     if($_GET['jobno']!=""){
                          $sql.=" and jobno='".$_GET['jobno']."'"; 
                     } 
+                     if($_GET['cus_type'] !="ALL"){
+                         if($_GET['cus_type'] =="WHOLESALE"){
+                             $sql.=" and (cus_type='".$_GET['cus_type']."' or cus_type='BOTH' )";
+                         }else{
+                             $sql.=" and cus_type='".$_GET['cus_type']."'";
+                         }
+                    }
                     foreach ($conn->query($sql) as $row) {
 
 
@@ -817,7 +862,7 @@ $row_invpara = $result_invpara->fetch();
                       $cost=0;
                     include './connection_sql.php';
  
-                    $sql = "select sum(subtot)as subtot,sum(cost*qty)as cost ,refno,sdate from t_invo  where cancel='0' and type !='service' ";
+                    $sql = "select sum(subtot)as subtot,sum(cost*qty)as cost ,refno,sdate,cuscode from t_invo  where cancel='0' and type !='service' ";
                     if($_GET['cuscode']!=""){
                          $sql.=" and cuscode='".$_GET['cuscode']."'"; 
                     }
@@ -827,8 +872,15 @@ $row_invpara = $result_invpara->fetch();
                     if($_GET['jobno']!=""){
                          $sql.=" and jobno='".$_GET['jobno']."'"; 
                     } 
+                     if($_GET['cus_type'] !="ALL"){
+                         if($_GET['cus_type'] =="WHOLESALE"){
+                             $sql.=" and (cus_type='".$_GET['cus_type']."' or cus_type='BOTH' )";
+                         }else{
+                             $sql.=" and cus_type='".$_GET['cus_type']."'";
+                         }
+                    }
                      $sql.=" group by refno "; 
-                   
+                  
                     foreach ($conn->query($sql) as $row) {
 
                         $sqlR = "SELECT * FROM s_salma where REF_NO='" . $row['refno'] . "' ";  
@@ -1373,7 +1425,7 @@ $row_invpara = $result_invpara->fetch();
                     $tot1=0; 
                     include './connection_sql.php';
  
-                    $sql = "select * from payment  where cancel='0'  and type='SALARY' ";
+                    $sql = "select * from payment  where cancel='0'  and type='SALARY'  and workertype='WORKER'";
                    
                      if($_GET['check'] =="on"){
                          $sql.=" and   sdate>='" . $_GET["dtfrom"] . "' and sdate<='" . $_GET["dtto"] . "'"; 
@@ -1385,7 +1437,8 @@ $row_invpara = $result_invpara->fetch();
                     
                  
                     foreach ($conn->query($sql) as $row) {
- 
+                        
+                   
                         ?>
                         <tr>
                             <td><?php echo $i; ?></td>     
@@ -1420,7 +1473,7 @@ $row_invpara = $result_invpara->fetch();
                     $tot2=0; 
                     include './connection_sql.php';
  
-                    $sql = "select * from payment  where cancel='0' and type='ADVANCE'  ";
+                    $sql = "select * from payment  where cancel='0' and type='ADVANCE'   and workertype='WORKER'";
                    
                      if($_GET['check'] =="on"){
                          $sql.=" and   sdate>='" . $_GET["dtfrom"] . "' and sdate<='" . $_GET["dtto"] . "'"; 
@@ -1452,8 +1505,7 @@ $row_invpara = $result_invpara->fetch();
                 }
                 ?>
            
-            <tr>
-         
+            <tr> 
                 <td  align="right" colspan='7' style='font-size:20px;'><b>Advance</b></td> 
                 <td align="right" style='font-size:20px;'><b><?php 
                 echo number_format($tot2, 2, ".", ",");
