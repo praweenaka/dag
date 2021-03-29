@@ -11,7 +11,7 @@ include_once './connection_sql.php';
     <link href="style.css" rel="stylesheet" type="text/css" media="screen" />
 
 
-    <title>Search Customer Creditnote</title>
+    <title>Search Customer Credit Note</title>
     <link rel="stylesheet" href="css/bootstrap.min.css">
 
 
