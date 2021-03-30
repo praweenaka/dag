@@ -73,7 +73,10 @@
                             <option value="PRODUCTIONLIST" class="opt">PRODUCTION LIST</option> 
                             <option value="COMPLETELIST" class="opt">COMPLETE LIST</option> 
                             <option value="ALLLIST" class="opt">ALL LIST</option>   
+                        <?php    if($_SESSION['user_type']=="ADMIN"){?>
                             <option value="PROFIT" class="opt">PROFIT REPORT</option> 
+                          <?php   }?>
+                            
                             <option value="SERVICES" class="opt">SERVICES REPORT</option> 
                             <option value="SALARY PAYMENT" class="opt">SALARY PAYMENT REPORT</option> 
                             <option value="ADVANCE PAYMENT" class="opt">ADVANCE PAYMENT REPORT</option> 
@@ -94,7 +97,7 @@
                        <select id="employee" name="employee"  class="form-control input-sm"  >
                                 <option value="">SELECT EMPLOYEE</option>
                                 <?php 
-                                $sql = "select * from workers where cancel ='0' and type='WORKER' order by name";
+                                $sql = "select * from workers where cancel ='0'   order by name";
                                   foreach ($conn->query($sql) as $row) {
                                     echo "<option value='" . $row["name"] . "' class=\"opt\">" . $row["name"] . "</option>";
                                 }
