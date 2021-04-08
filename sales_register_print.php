@@ -534,7 +534,7 @@ $row_invpara = $result_invpara->fetch();
                         <th>JOB NO</th>
                         <th>INVOICE NO</th>
                         <th>REG DATE</th>   
-                        <th>ONHAND DATE</th>   
+                        <th>PRODUCTION DATE</th>   
                         <th>CUSTOMER</th>
                         <th>DESIGN</th> 
                         <th>MAKE</th> 
@@ -555,7 +555,7 @@ $row_invpara = $result_invpara->fetch();
                          $sql.=" and cuscode='".$_GET['cuscode']."'"; 
                     }
                      if($_GET['check'] =="on"){
-                         $sql.=" and   pro_date>='" . $_GET["dtfrom"] . "' and pro_date<='" . $_GET["dtto"] . "'"; 
+                         $sql.=" and   onhand_date>='" . $_GET["dtfrom"] . "' and onhand_date<='" . $_GET["dtto"] . "'"; 
                     }
                     if($_GET['jobno']!=""){
                          $sql.=" and jobno='".$_GET['jobno']."'"; 
@@ -565,8 +565,8 @@ $row_invpara = $result_invpara->fetch();
                              $sql.=" and (cus_type='".$_GET['cus_type']."' or cus_type='BOTH' )";
                          }else{
                              $sql.=" and cus_type='".$_GET['cus_type']."'";
-                         }
-                    }
+                         } 
+                    } 
                     foreach ($conn->query($sql) as $row) {
 
 
@@ -625,9 +625,9 @@ $row_invpara = $result_invpara->fetch();
                 <tr>
                         <th>#</th>
                         <th>JOB NO</th> 
-                        <th>INV NO</th>   
-                        <th>DATE</th>   
-                        <th>CUSTOMER</th>
+                        <th>DAG NO</th>
+                        <th>DAG DATE</th>   
+                        <th>DAG CUSTOMER</th>
                         <th>DESIGN</th>
                         <th>MAKE</th> 
                         <th>SIZE</th>  
@@ -637,14 +637,17 @@ $row_invpara = $result_invpara->fetch();
                         <th>AMOUNT</th>    
                         <th>REPAIR</th>  
                         <th>TOTAL</th>  
-                        <th>PRO DATE</th> 
+                        <th>COM DATE</th> 
+                        <th>INVOICE NO</th>  
+                        <th>INVOICE DATE</th>  
+                        <th>INVOICE CUSTOMER</th>  
                     </tr>
                 <?php
                     $i=1;
                     $tot=0;
                     include './connection_sql.php';
  
-                    $sql = "select * from dag_item WHERE flag='2' and cancel='0'   ";  
+                    $sql = "select * from dag_item WHERE (flag='2' or flag='7') and cancel='0'   ";  
                     if($_GET['cuscode']!=""){
                          $sql.=" and cuscode='".$_GET['cuscode']."'"; 
                     }
@@ -662,7 +665,10 @@ $row_invpara = $result_invpara->fetch();
                          }
                     }
                     foreach ($conn->query($sql) as $row) {
-
+                     $sqlsal = "SELECT CUS_NAME,SDATE FROM s_salma where REF_NO='".$row['invno']."'";
+                        $resultsal = $conn->query($sqlsal);
+                    
+                        $rowsal = $resultsal->fetch();
 
                         ?>
                         <tr>
@@ -681,6 +687,9 @@ $row_invpara = $result_invpara->fetch();
                             <td><?php echo $row['repair']; ?></td>  
                             <td><?php echo number_format($row['total'],2); ?></td>   
                             <td><?php echo $row['pro_date']; ?></td>  
+                            <td onclick="name(this)"><?php echo $row['invno']; ?></td>  
+                            <td onclick="name(this)"><?php echo $rowsal['SDATE']; ?></td>  
+                            <td onclick="name(this)"><?php echo $rowsal['CUS_NAME']; ?></td>
                              
                         </td>   
 
@@ -704,7 +713,7 @@ $row_invpara = $result_invpara->fetch();
                 echo number_format($tot, 2, ".", ",");
         
                 ?><b/></td>
-                <td></td> 
+                <td>&nbsp;</td>  <td>&nbsp;</td>  <td>&nbsp;</td>  <td>&nbsp;</td> 
             </tr>
         </table>
    <?php  }
@@ -854,6 +863,7 @@ $row_invpara = $result_invpara->fetch();
                         <th>COST</th>  
                         <th>SELLING</th>   
                         <th>PROFIT</th>   
+                         <th>NOTE</th>   
                     </tr>
                 <?php
                     $i=1;
@@ -895,6 +905,7 @@ $row_invpara = $result_invpara->fetch();
                             <td align="right"><?php echo $row['cost']; ?></td>   
                             <td align="right"><?php echo $row['subtot']; ?></td>   
                             <td align="right"><?php echo number_format($row['subtot']-$row['cost'],2); ?></td>   
+                            <td><?php echo $row['REMARK']; ?></td> 
                              
                         </td>   
 
@@ -925,6 +936,7 @@ $row_invpara = $result_invpara->fetch();
                 echo number_format($tot, 2, ".", ",");
         
                 ?><b/></td> 
+                <td> &nbsp;</td> 
             </tr>
         </table>
    <?php  }
@@ -1520,6 +1532,7 @@ $row_invpara = $result_invpara->fetch();
                 echo number_format($tot-$tot1-$tot2, 2, ".", ",");
         
                 ?><b/></td> 
+               
             </tr>
         </table>
    <?php  }
