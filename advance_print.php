@@ -8,26 +8,26 @@
 <style type="text/css">
  
 .companyname {
-	color: #0000FF;
-	font-weight: bold;
-	font-size: 24px;
+  color: #0000FF;
+  font-weight: bold;
+  font-size: 24px;
 }
 
 .com_address {
-	color: #000000;
-	font-weight: bold;
-	font-size: 18px;
+  color: #000000;
+  font-weight: bold;
+  font-size: 18px;
 }
 
 .heading {
-	color: #000000;
-	font-weight: bold;
-	font-size: 20px;
+  color: #000000;
+  font-weight: bold;
+  font-size: 20px;
 }
 
 body {
-	color: #000000;
-	font-size: 18px;
+  color: #000000;
+  font-size: 18px;
 }
  
 </style>
@@ -39,23 +39,23 @@ body {
  
     session_start();
 include_once './connection_sql.php';
-	
-	 date_default_timezone_set('Asia/Colombo'); 
-	 
-	$sql="select * from s_adva where C_REFNO='".$_GET["invno"]."'";
-	$result = $conn->query($sql); 
+  
+   date_default_timezone_set('Asia/Colombo'); 
+   
+  $sql="select * from s_adva where C_REFNO='".$_GET["invno"]."'";
+  $result = $conn->query($sql); 
         $row = $result->fetch();  
-	
-	$sql1="select * from vendor where CODE='".$row["C_CODE"]."'";
- 	$result1 = $conn->query($sql1); 
+  
+  $sql1="select * from vendor where CODE='".$row["C_CODE"]."'";
+  $result1 = $conn->query($sql1); 
         $row1 = $result1->fetch(); 
-	
-	$address=$row1["ADD1"]." ".$row1["ADD2"];
-	
-	$sql_para="select * from invpara ";
-	$result_para = $conn->query($sql_para); 
+  
+  $address=$row1["ADD1"]." ".$row1["ADD2"];
+  
+  $sql_para="select * from invpara ";
+  $result_para = $conn->query($sql_para); 
         $row_para = $result_para->fetch(); 
-	?>
+  ?>
     
     <table width="1000"   border="0">
         <tr>
@@ -100,7 +100,7 @@ include_once './connection_sql.php';
  
   <tr>
     <td>Cheque Details
-	</td>
+  </td>
     <td width="420">&nbsp;</td>
     <td>&nbsp;</td>
     <td>&nbsp;</td>
@@ -115,29 +115,29 @@ include_once './connection_sql.php';
         <th width="170" scope="col">Cheque. Amount</th>  
       </tr>
      <?php 
-	 $totpay=0;
-	$totcashtot=0;
-	  
-		
+   $totpay=0;
+  $totcashtot=0;
+    
+    
         $sql_inv="select * from s_invcheq where refno='".$_GET["invno"]."'"; 
         $result_inv = $conn->query($sql_inv); 
         $row_inv = $result_inv->fetch();
-	 	 
-	 
+     
+   
             if ($row["paytype"]!="Cash"){
-	    echo "<tr>
+      echo "<tr>
         <td align=center>".$row_inv["che_date"]."</td>
         <td align=center>".$row_inv["cheque_no"]."</td>
          <td align=center>".$row_inv["bank"]."</td>"; 
-		
+    
         echo "<td align=center>".number_format($row_inv["che_amount"], 2, ".", ",")."</td>";
             }
-		 
-		
-		 
-		echo " 
+     
+    
+     
+    echo " 
       </tr>";  
-	  ?>
+    ?>
      
     </table></td>
   </tr>
@@ -162,14 +162,28 @@ include_once './connection_sql.php';
        
       
       <tr>
-        <td><b><?php  
-            if ($row["paytype"]=="Cash"){
-                	echo "Cash Amount : ".number_format($row["C_PAYMENT"],2); 
+          <tr>
+        <td>&nbsp;</td>
+        <td>&nbsp;</td>
+        <td>&nbsp;</td>
+        <td>&nbsp;</td>
+        <td>
+        <b><?php  
+            if ($row["paytype"]=="CASH"){
+                  echo "Payment Cash Amount : ".number_format($row["C_PAYMENT"],2); 
             }else{
-                	echo "Cheque Amount : ".number_format($row["C_PAYMENT"],2); 
+                  echo "Payment Cheque Amount : ".number_format($row["C_PAYMENT"],2); 
             }
-		
-		  ?></b></td>
+    
+      ?></b></td>
+      </tr>
+      <tr>
+    <td>&nbsp;</td>
+    <td>&nbsp;</td>
+    <td>&nbsp;</td>
+    <td>&nbsp;</td>
+  </tr>
+       <td>&nbsp;</td>
         <td>&nbsp;</td>
         <td>_________________</td>
         <td>&nbsp;</td>
