@@ -1,9 +1,16 @@
 <!-- Main content -->
+<?php 
+session_start();
+ 
+ require_once ('connection_sql.php');
+
+?>
  <style>
     .opt {font-weight:bold;
         font-size:20px;
     }
    </style>
+ 
 <section class="content">
     <div class="box box-primary">
         <div class="box-header with-border">
@@ -14,10 +21,10 @@
             <div class="box-body">
                 <div class="form-group">
                     <a onclick="location.reload();" class="btn btn-default">
-                        <span class="fa fa-user-plus"></span> &nbsp; New
+                        <span class="fa fa-user-plus"></span> &nbsp; NEW
                     </a>  
                     <button><a onclick="print_inv();" class="btn btn-primary btn-sm">
-                        <span class="fa fa-print"></span> &nbsp; VIEW
+                        <span class="fa fa-print"></span> &nbsp; VIEW REPORT
                     </a></button>
                     
                    
@@ -62,9 +69,10 @@
                 </div>
                 
                 <div class="form-group">
-                    <label class="col-sm-1 control-label" for="txt_usernm">TYPE</label>
+                    <label class="col-sm-1 control-label" for="txt_usernm">REPORT TYPE</label>
                     <div class="col-sm-2">
                        <select id="type" name="type" class="form-control input-sm"> 
+                            <option value="DAGLIST" class="opt">DAG LIST</option>
                             <option value="SETTLEMENT" class="opt">SETTLEMENT</option>
                             <option value="INVOICE" class="opt">INVOICE</option>
                             <option value="RECEIPT" class="opt">RECEIPT</option>      
@@ -73,6 +81,8 @@
                             <option value="PRODUCTIONLIST" class="opt">PRODUCTION LIST</option> 
                             <option value="COMPLETELIST" class="opt">COMPLETE LIST</option> 
                             <option value="ALLLIST" class="opt">ALL LIST</option>   
+                            <option value="REJECTLIST" class="opt">REJECT LIST</option>   
+                            <option value="CANCELLLIST" class="opt">CANCELL LIST</option>   
                         <?php    if($_SESSION['user_type']=="ADMIN"){?>
                             <option value="PROFIT" class="opt">PROFIT REPORT</option> 
                           <?php   }?>
@@ -86,10 +96,14 @@
                             <option value="SERVICES & SALARY PROFIT" class="opt">SERVICES & SALARY PROFIT REPORT</option> 
                         </select>
                     </div>
-                     <label class="col-sm-1 control-label" for="txt_usernm">JOB NO</label>
+                    <label class="col-sm-1 control-label" for="txt_usernm">TYPE</label>
                     <div class="col-sm-2">
-                        <input type="text" id="jobno" name="jobno"  placeholder="JOB NO"  class="form-control">
+                       <select id="alltype" name="alltype" class="form-control input-sm"> 
+                            <option value="ALL" class="opt">ALL</option>    
+                            <option value="CURRENT" class="opt">CURRENT</option>  
+                        </select>
                     </div> 
+                    
                 </div>
                 <div class="form-group">
                     <label class="col-sm-1 control-label" for="txt_usernm">EMPLOYEE</label>
@@ -127,6 +141,10 @@
                             <option value="RETAIL" class="opt">RETAIL</option>   
                         </select>
                     </div> 
+                     <label class="col-sm-1 control-label" for="txt_usernm">JOB NO</label>
+                    <div class="col-sm-2">
+                        <input type="text" id="jobno" name="jobno"  placeholder="JOB NO"  class="form-control">
+                    </div> 
                 </div>
                 
                 
@@ -137,5 +155,5 @@
 </form>
 </div>
 
-</section>
+</section> 
   
