@@ -52,7 +52,7 @@ include_once './connection_sql.php';
         <table id="testTable"  class="table table-bordered">
             <?php
 
-            $sql2 = "select *  from s_adva where cancel='0' ORDER BY C_REFNO";
+            $sql2 = "select *  from s_adva   ORDER BY C_REFNO";
 
             echo "<table id='example'  class='table table-bordered' style='font-size: 14px;'>";
 
