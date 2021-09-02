@@ -60,7 +60,7 @@ if ($_POST["Command"] == "save_inv") {
             $sql = "update invpara set customer = $no2 where customer = $no";
             $result = $conn->query($sql);
             
-            $sqllog = "insert into entry_log(refno, username, docname, trnType, stime, sdate) values ('" . trim($_POST['code']) . "', '" . $_SESSION["CURRENT_USER"] . "', 'CUSTOMER', 'Save', '" . date("Y-m-d H:i:s") . "', '" . date("Y-m-d") . "')";
+            $sqllog = "insert into entry_log(refno, username, docname, trnType, stime, sdate) values ('" . trim($_POST['code']) . "', '" . $_SESSION["CURRENT_USER"] . "', 'CUSTOMER', 'Saved', '" . date("Y-m-d H:i:s") . "', '" . date("Y-m-d") . "')";
             $resultlog = $conn->query($sqllog);
             $conn->commit();
             echo "Saved";
