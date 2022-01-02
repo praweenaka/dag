@@ -184,7 +184,7 @@ if ($_POST["Command"] == "canceldag") {
               
               echo "Updated JOB NO";
          }else{
-             echo "Please First Cancel Invoice";
+             echo "Please First Canceled Invoice";
          }
             
        
