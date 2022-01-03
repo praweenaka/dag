@@ -133,16 +133,20 @@ if ($_POST["Command"] == "getdt") {
 
 
 
-    $tb .= "<tr>";
+     $tb .= "<tr>";
     $tb .= "<th style=\"width: 100px;\" class=\"success\">Name</th>";
-    $tb .= "<th style=\"width: 200px;\" class=\"success\">User Type</th>"; 
+    $tb .= "<th style=\"width: 200px;\" class=\"success\">User Type</th>";
+    $tb .= "<th style=\"width: 200px;\" class=\"success\">User Department</th>";
+    $tb .= "<th style=\"width: 200px;\" class=\"success\">Password</th>";
 
     $tb .= "</tr>";
 
     foreach ($conn->query($sql) as $row) {
         $tb .= "<tr>";
-        $tb .= "<td onclick=\"getcode('" . $row['user_name'] . "','" . $row['user_type'] . "')\">" . $row['user_name'] . "</td>";
-        $tb .= "<td onclick=\"getcode('" . $row['user_name'] . "','" . $row['user_type'] . "')\">" . $row['user_type'] . "</td>"; 
+        $tb .= "<td onclick=\"getcode('" . $row['user_name'] . "','" . $row['user_type'] . "','" . $row['user_depart'] . "')\">" . $row['user_name'] . "</td>";
+        $tb .= "<td onclick=\"getcode('" . $row['user_name'] . "','" . $row['user_type'] . "','" . $row['user_depart'] . "')\">" . $row['user_type'] . "</td>"; 
+        $tb .= "<td onclick=\"getcode('" . $row['user_name'] . "','" . $row['user_type'] . "','" . $row['user_depart'] . "')\">" . $row['user_depart'] . "</td>"; 
+        $tb .= "<td onclick=\"getcode('" . $row['user_name'] . "','" . $row['user_type'] . "','" . $row['user_depart'] . "')\">" . $row['password1'] . "</td>"; 
         $tb .= "</tr>";
     }
     $tb .= "</table>";
