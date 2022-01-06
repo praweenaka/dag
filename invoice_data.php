@@ -47,6 +47,8 @@ if ($_GET["Command"] == "new_inv") {
 
     echo $ResponseXML;
 }
+
+// add item
 if ($_GET["Command"] == "setitem") {
 
     $ResponseXML = "";
