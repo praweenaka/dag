@@ -13,7 +13,7 @@ session_start();
 
    echo $rowlurl['docname'];
 }else{
-    echo "HOME";
+    echo "HOME VIEW";
 }
 if ($_SESSION['UserName'] == "") {
     echo "Invalid Session";
