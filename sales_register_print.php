@@ -164,7 +164,7 @@ $row_invpara = $result_invpara->fetch();
     </table>
 <!--==================================================================================-->
     <?php 
-    if($_GET['type']=="OUTSTANDING"){
+    if($_GET['type']=="OUTSTANDING DETAIL"){
         ?>
                 <table class="tb" width="1000px;" >
                 <tr >
@@ -174,6 +174,7 @@ $row_invpara = $result_invpara->fetch();
                     <th width="100px;">INVOICE DATE</th>
                     <th width="400px;">CUSTOMER</th>
                     <th width="100px;">TYPE</th>
+                    <th width="100px;">DAYS</th>
                     <th width="120px;">GRAND TOTAL</th>
                     <th width="100px;">PAID</th>  
                     <th width="100px;">BALANCE</th>
@@ -200,28 +201,45 @@ $row_invpara = $result_invpara->fetch();
                 foreach ($conn->query($sql1) as $row1) {
                      
                     ?>
+                    <tr>
+                         <?php  
+                        
+                        if($part!=$row1['C_CODE']){
+                            $sqlven = "Select sum(GRAND_TOT-TOTPAY) as totout from s_salma  where CANCELL='0'  and GRAND_TOT>TOTPAY  and C_CODE='".$row1['C_CODE']."'";  
+             
+                            $resultven = $conn->query($sqlven); 
+                            $rowven = $resultven->fetch();
+                             echo "<td colspan=\"8\"><b>". $row1['CUS_NAME'] ."   </b></td>";
+                             echo "<td colspan=\"1\" align=\"right\"><b>".number_format($rowven['totout'], 2, ".", ",")." </b></td>";
+                            
+                        } 
+        ?>
+                    </tr>
                     <tr style="font-size:13px;">
-         
-        
+                
                         <td class="center"><?php echo $i ?></td>
                         
                         <?php  
                         
-                        // if($part!=$row1['C_CODE']){
-                           
-                        //     echo "<td><b>  ". $row1['CUS_NAME'] ."   </b></td>";
-                        // }else{
-                        //      echo "<td  >  </td>";
-                        // }
+                       
+                            $date1 = new DateTime($row1['SDATE']); 
+                            $date2 = new DateTime(date('Y-m-d'));
+                            $days  = $date2->diff($date1)->format('%a');
                         ?>
                         
                         <td class="left" ><?php echo $row1['REF_NO']; ?> </td>
                         <td class="left" ><?php echo $row1['SDATE']; ?> </td>
                          <td class="left" ><?php echo $row1['CUS_NAME']; ?> </td>
                          <td class="left" ><?php echo $row1['cus_type']; ?> </td>
-                        <td align="right"><?php echo number_format($row1['GRAND_TOT'], 0, ".", ","); ?></td>
+                         
+                         <td class="right" style="background-color:yellow;" ><?php echo $days; ?> </td>
+                        <td align="right"><?php echo number_format($row1['GRAND_TOT'], 2, ".", ","); ?></td>
                         <td align="right"><?php echo number_format($row1['TOTPAY'], 2, ".", ","); ?></td> 
-                        <td align="right"><?php echo number_format($row1['GRAND_TOT']-$row1['TOTPAY'], 2, ".", ","); ?></td> 
+                        <td align="right" style="background-color:#52ebe4;"><?php echo number_format($row1['GRAND_TOT']-$row1['TOTPAY'], 2, ".", ","); ?></td> 
+                    </tr>
+                    
+                    <tr>
+                        
                     </tr>
                     <?php
                     $i=$i+1;
@@ -235,7 +253,7 @@ $row_invpara = $result_invpara->fetch();
         
                 <td></td>
                 <td></td> 
-                <td  align="right" colspan='5' style='font-size:20px;'><b>Total Balance</b></td> 
+                <td  align="right" colspan='6' style='font-size:20px;'><b>Total Balance</b></td> 
                 <td align="right" style='font-size:20px;'><b><?php 
                 echo number_format($BAL, 2, ".", ",");
         
@@ -243,6 +261,282 @@ $row_invpara = $result_invpara->fetch();
             </tr>
         </table>
   <?php  }
+    
+    ?>
+    
+    <!--===========================================================================================-->
+    
+      <?php 
+    if($_GET['type']=="OUTSTANDING SUMMARY"){
+        
+                    $sql3 = "Select sum(GRAND_TOT) as AMOUNT,sum(TOTPAY) as PAY from s_salma  where CANCELL='0' and GRAND_TOT>TOTPAY and  SDATE>='" . $_GET["dtfrom"] . "' and SDATE<='" . $_GET["dtto"] . "' ";  
+                if($_GET['cuscode']!=""){
+                     $sql3.=" and C_CODE='".$_GET['cuscode']."'"; 
+                }
+                
+                if($_GET['cus_type'] !="ALL"){
+                     if($_GET['cus_type'] =="WHOLESALE"){
+                         $sql3.=" and (cus_type='".$_GET['cus_type']."' or cus_type='BOTH' )";
+                     }else{
+                         $sql3.=" and cus_type='".$_GET['cus_type']."'";
+                     }
+                }
+                
+              
+                $sql3.=" order by  C_CODE,SDATE asc";
+                    $result3 = $conn->query($sql3); 
+                    $row3 = $result3->fetch();
+                    
+         ?>
+         <table width="1000px;"   border="1" >
+              <tr>
+
+            <td  colspan="1" class="right" style="background-color:yellow;font-size:23px;">TOTAL :<?php echo $row3['AMOUNT'] ?>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;PAYMENTS:   <?php echo $row3['PAY'] ?>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;BALANCE:   <?php echo $row3['AMOUNT']-$row3['PAY'] ?></td>
+              
+        </tr>
+              <tr> 
+              <td>
+                       
+                                    
+         <?php
+                $i=1;  
+                $part="";
+                $BAL=0;
+                $sql1 = "Select * from s_salma  where CANCELL='0'  and  SDATE>='" . $_GET["dtfrom"] . "' and GRAND_TOT>TOTPAY and SDATE<='" . $_GET["dtto"] . "' ";  
+                if($_GET['cuscode']!=""){
+                     $sql1.=" and C_CODE='".$_GET['cuscode']."'"; 
+                }
+                
+                if($_GET['cus_type'] !="ALL"){
+                     if($_GET['cus_type'] =="WHOLESALE"){
+                         $sql1.=" and (cus_type='".$_GET['cus_type']."' or cus_type='BOTH' )";
+                     }else{
+                         $sql1.=" and cus_type='".$_GET['cus_type']."'";
+                     }
+                }
+                
+              
+                $sql1.=" order by  C_CODE,SDATE asc";
+                
+                
+                foreach ($conn->query($sql1) as $row) {
+                      
+                    ?>
+     
+
+    <table class="tb" width="1000px;"  >
+        <tr>
+
+            <td colspan="5">Customer Name :<?php echo $row['CUS_NAME'] ?></td>
+             
+            <td  colspan="1" class="right">Date:   <?php echo $row['SDATE'] ?></td>
+        </tr>
+         <tr>
+
+            <td colspan="5">City :<?php echo $row1['ADD1'] ?> </td>
+            
+            <td colspan="1" class="right" >Invoice No: <?php echo" <a href=\"invoice_print_half.php?refno=" . $row['REF_NO']. "\" target=\"_blank\"  >".$row['REF_NO']."</a>";?></td>
+        </tr>
+         <tr>
+     <td colspan="5" class="left">Vehicle No: &nbsp;&nbsp; <?php echo $row['dele_no']; ?></td>
+              
+            <td colspan="1" class="right"></td>
+           
+        </tr>
+        
+        <tr >
+
+            <!--<th width="30px;">No</th>-->
+            <th width="80px;">CODE</th>
+            <th width="200px;">PRODUCT</th>
+            <th width="100px;">RATE</th> 
+            <th width="80px;">Qty</th> 
+            <th width="80px;">DIS</th> 
+            <th width="100px;">SUB TOTAL</th>
+        </tr>
+        <?php
+        $i=1;  
+        $part="";
+        $qty=0;
+        $sql1 = "Select * from t_invo where refno='" . $row['REF_NO'] . "'    order by id asc";   
+        foreach ($conn->query($sql1) as $row1) {
+            $sql_smas = "SELECT * from s_mas where STK_NO='".$row1['STK_NO']."'";
+            $result_smas = $conn->query($sql_smas);
+            $row_smas= $result_smas->fetch(); 
+            
+            if($row1['type']=="dag"){ 
+            ?>
+            <tr>
+  
+                
+                <td class="left" ><?php echo $row1['jobno']; ?> </td>
+                <td class="left" ><?php echo $row1['make'].' '.$row1['size'].' '.$row1['design'].' SN- '.$row1['serialno']; ?> </td>
+                <td class="right"><?php echo number_format($row1['selling'], 2, ".", ","); ?></td> 
+                <td class="right"><?php echo number_format($row1['qty'], 0, ".", ","); ?></td>
+                <td class="right"><?php echo number_format($row1['dis'], 2, ".", ","); ?></td> 
+                 <td class="right"><?php echo number_format($row1['subtot'], 2, ".", ","); ?></td> 
+            </tr>
+            
+             <?php    }else if($row1['type']=="product"){ ?>
+                  <tr>
+  
+                
+                <td class="left" ><?php echo $row1['stk_no']; ?> </td>
+                <td class="left" ><?php echo $row1['name']; ?> </td>
+                <td class="right"><?php echo number_format($row1['selling'], 2, ".", ","); ?></td> 
+                <td class="right"><?php echo number_format($row1['qty'], 0, ".", ","); ?></td>
+                <td class="right"><?php echo number_format($row1['dis'], 2, ".", ","); ?></td> 
+                 <td class="right"><?php echo number_format($row1['subtot'], 2, ".", ","); ?></td> 
+            </tr>
+                 <?php    }else if($row1['type']=="service"){ 
+                ?>
+                <tr> 
+                <td class="left" ><?php echo $row1['vehicleno']; ?> </td>  
+                <td class="left" ><?php     $remark="SERVICE CHARGES - ".$row1['employee'];
+                echo $remark;  ?> </td> 
+                 <td class="right" ><?php echo $row1['selling']; ?> </td> 
+                <td class="right" >1 </td> 
+                 <td class="right" ><?php echo $row1['dis']; ?> </td> 
+                <td class="right" ><?php echo $row1['subtot']; ?> </td> 
+                 </tr>
+        <?php }?>
+        
+            <?php
+            $i=$i+1;
+             $part=$row1['type'];
+             $qty=$qty+$row1['QTY'];
+        }
+        ?>
+
+      
+    
+  
+     
+   
+    <tr>
+
+           <td  class="right" colspan='4' rowspan="3">
+               <?php
+               if($row['GRAND_TOT']-$row['TOTPAY']=="0.00"){ 
+                 echo "   <center><h1 style=\"color:red\">PAID</h1></center>";
+                 
+              }
+               ?>
+           </td> 
+           
+        <td  class="right" colspan='1' style='font-size:15px;'><b>TOTAL</b></td> 
+        <td class="right" style='font-size:20px;'><b><?php 
+        echo number_format($row['GRAND_TOT'], 2, ".", ",");
+
+        ?><b/></td>
+    </tr>
+     <tr>
+
+       
+        <td  class="right" colspan='1' style='font-size:15px;'><b>PAID</b></td> 
+        <td class="right" style='font-size:20px;'><b><?php 
+        echo number_format($row['TOTPAY'], 2, ".", ",");
+
+        ?><b/></td>
+    </tr>
+    <tr>
+
+       
+        <td  class="right" colspan='1' style='font-size:15px;'><b>BALANCE</b></td> 
+        <td class="right" style='font-size:20px;'><b><?php 
+        echo number_format($row['GRAND_TOT']-$row['TOTPAY'], 2, ".", ",");
+
+        ?><b/></td>
+    </tr>
+    <tr> <td colspan='6'>&nbsp;</td></tr>
+    <tr>
+        <td colspan="8">
+            <table class="tb2"   >
+         <tr style="background-color:#4aef84" > 
+            <th colspan="10">PAYMENT HISTORY</th>  
+        </tr>
+        <tr > 
+           
+            <th colspan="2">REFNO</th>
+            <th colspan="1">DATE</th>
+            <th colspan="2">AMOUNT</th>  
+            <th colspan="2">TYPE</th>  
+            <th colspan="2">CHK NO</th>  
+            <th colspan="2">CHK DATE</th>  
+        </tr>
+        
+        <?php
+        $i=1;  
+        $part="";
+        $qty=0;
+        $sql2 = "Select * from s_sttr where ST_INVONO='" . $row['REF_NO'] . "'    order by id asc";   
+        foreach ($conn->query($sql2) as $row2) {
+            
+            ?>
+            <tr>
+  
+                   <td class="left" colspan="2"><?php echo $row2['ST_REFNO']; ?> </td>
+                  <td class="center" colspan="1"><?php echo $row2['ST_DATE']; ?> </td>
+                    <td class="right" colspan="2"><?php echo number_format($row2['ST_PAID'], 2, ".", ","); ?></td> 
+                    <td class="center" colspan="2"><?php 
+                        if($row2['ST_FLAG'] =="CAS"){
+                            echo "CASH";  
+                        }else if($row2['ST_FLAG'] =="CHK"){    
+                            echo "CHEQUE";
+                        }else{
+                            echo "OTHER";
+                        } 
+                         ?> 
+                    </td>
+                    <td class="center" colspan="2"><?php 
+                      if($row2['ST_FLAG']=="CAS"){
+                            echo "";  
+                        }else if($row2['ST_FLAG']=="CHK"){    
+                           echo $row2['ST_CHNO']; 
+                        }else{
+                           echo $row2['ST_CHNO']; 
+                        } 
+                    ?>
+                    </td>
+                    <td class="center" colspan="2"><?php 
+                         if($row2['ST_FLAG']=="CAS"){
+                            echo "";  
+                        }else if($row2['ST_FLAG']=="CHK"){    
+                           echo $row2['st_chdate']; 
+                        }else{
+                           echo $row2['st_chdate']; 
+                        } 
+                        ?> 
+                 </td>
+            </tr>
+            
+             
+        <?php }?>
+         
+</table> 
+ 
+        </td>
+    </tr>
+    <tr> <td colspan='6'>&nbsp;</td></tr>
+    <tr> <td colspan='6'>&nbsp;</td></tr>
+    <tr> <td colspan='6'>&nbsp;</td></tr>
+    <tr> <td colspan='6'>&nbsp;</td></tr>
+</table>
+
+
+    
+
+
+
+ 
+    <?php  }
+    ?>  
+        
+                                        </td>
+                                    
+     </tr > 
+    </table>
+    <?php  }
     
     ?>
     
@@ -290,9 +584,10 @@ $row_invpara = $result_invpara->fetch();
                         
                         <td class="left" ><?php echo $row1['CA_REFNO']; ?> </td>
                         <td class="left" ><?php echo $row1['CA_DATE']; ?> </td>
+                         
                         <td class="left" ><?php echo $row1['pay_type']; ?> </td>
                          <td class="left" ><?php echo $rowven['NAME']; ?> </td>
-                        <td align="right"><?php echo number_format($row1['CA_AMOUNT'], 0, ".", ","); ?></td> 
+                        <td align="right"><?php echo number_format($row1['CA_AMOUNT'], 2, ".", ","); ?></td> 
                     </tr>
                     <?php
                     $i=$i+1;
@@ -309,6 +604,65 @@ $row_invpara = $result_invpara->fetch();
         
                 ?><b/></td>
             </tr>
+             <tr>
+                  <td colspan="9"><b>CASH ADVANCE</b></td>
+                    </tr>
+           
+                
+                <?php
+                     
+                    $tot3=0; 
+                    include './connection_sql.php';
+ 
+                    $sql = "select * from s_adva  where cancel='0' and paytype ='CASH' ";
+                    if($_GET['cuscode']!=""){
+                         $sql.=" and C_CODE='".$_GET['cuscode']."'"; 
+                    }
+                     if($_GET['check'] =="on"){
+                         $sql.=" and   C_DATE>='" . $_GET["dtfrom"] . "' and C_DATE<='" . $_GET["dtto"] . "'"; 
+                    }
+                    
+                     
+                     $sql.=" group by C_REFNO ";  
+                  
+                    foreach ($conn->query($sql) as $row) {
+
+                        $sqlR = "SELECT * FROM vendor where CODE='" . $row['C_CODE'] . "' ";  
+                        $resultR = $conn->query($sqlR); 
+                        $rowR = $resultR->fetch();
+                        ?>
+                        <tr>
+                            <td><?php echo $i; ?></td>     
+                            <td><?php echo $row['C_REFNO']; ?></td> 
+                            <td><?php echo $row['C_DATE']; ?></td>   
+                            <td colspan='2'><?php echo $rowR['NAME']; ?></td>    
+                            <td align="right"><?php echo number_format($row['C_PAYMENT'],2); ?></td>  
+                              
+                    </tr>
+
+                    <?php
+                    $i= $i+1;
+                    $tot3= $tot3+ $row['C_PAYMENT']; 
+                }
+                ?>
+          
+           
+            <tr>
+         
+                <td  align="right" colspan='5' style='font-size:20px;'><b>TOTAL ADVANCE</b></td> 
+                  
+                  
+                <td align="right" style='font-size:20px;'><b><?php 
+                echo number_format($tot3, 2, ".", ",");
+        
+                ?><b/></td> 
+                
+            </tr>
+              
+        
+        
+        
+        
              <?php   if($_GET['cuscode']==""){?>
                  <tr>
                   <td colspan="9"><b>EXPENSES</b></td>
@@ -404,10 +758,60 @@ $row_invpara = $result_invpara->fetch();
                 ?><b/></td> 
             </tr>
              <tr>
+                 <td colspan="9"><b>OT</b></td>
+            </tr>
+             <?php
+                   
+                    $tot3=0; 
+                    include './connection_sql.php';
+ 
+                    $sql = "select * from payment  where cancel='0' and type='OT'  ";
+                   
+                     if($_GET['check'] =="on"){
+                         $sql.=" and   sdate>='" . $_GET["dtfrom"] . "' and sdate<='" . $_GET["dtto"] . "'"; 
+                    }
+                     
+                    if($_GET['employee']!=""){
+                         $sql.=" and name='".$_GET['employee']."'"; 
+                    } 
+                    
+                 
+                    foreach ($conn->query($sql) as $row) {
+ 
+                        ?>
+                        <tr>
+                            <td><?php echo $i; ?></td>     
+                            <td><?php echo $row['refno']; ?></td> 
+                            <td><?php echo $row['sdate']; ?></td>   
+                            <td><?php echo $row['name']; ?></td>     
+                            <td><?php echo $row['remark']; ?></td>   
+                            <td align="right"><?php echo $row['amount']; ?></td>  
+                             
+                        </td>   
+
+
+                    </tr>
+
+                    <?php
+                    $i= $i+1; 
+                     $tot3= $tot3+$row['amount']; 
+                }
+                ?>
+          
+           
+            <tr>
+         
+                <td  align="right" colspan='5' style='font-size:20px;'><b>TOTAL OT</b></td> 
+                <td align="right" style='font-size:20px;'><b><?php 
+                echo number_format($tot3, 2, ".", ",");
+        
+                ?><b/></td> 
+            </tr>
+             <tr>
           
                 <td  align="right" colspan='5' style='font-size:20px;'><b>TOTAL BALANCE</b></td> 
                 <td align="right" style='font-size:20px;'><b><?php 
-                echo number_format($BAL-$tot1-$tot2, 2, ".", ",");
+                echo number_format($BAL+$tot3-$tot1-$tot2-$tot3, 2, ".", ",");
         
                 ?><b/></td>
             </tr>
@@ -433,7 +837,7 @@ $row_invpara = $result_invpara->fetch();
                     <th width="400px;">CUSTOMER</th>
                     <th width="120px;">CHEQUE NO</th> 
                     <th width="120px;">CHEQUE DATE</th> 
-                    <th width="120px;">CHEQUE AMOUNT</th> 
+                    <th width="120px;">SETTLE CHEQUE AMOUNT</th> 
                 </tr>
                 <?php
                 $i=1;  
@@ -467,7 +871,7 @@ $row_invpara = $result_invpara->fetch();
                         <td class="left" ><?php echo $rowven['NAME']; ?> </td>
                         <td class="left" ><?php echo $row1['ST_CHNO']; ?> </td>
                         <td class="left" ><?php echo $row1['st_chdate']; ?> </td> 
-                        <td align="right"><?php echo number_format($row1['ST_PAID'], 0, ".", ","); ?></td> 
+                        <td align="right"><?php echo number_format($row1['ST_PAID'], 2, ".", ","); ?></td> 
                     </tr>
                     <?php
                     $i=$i+1;
@@ -483,6 +887,60 @@ $row_invpara = $result_invpara->fetch();
                 echo number_format($BAL, 2, ".", ",");
         
                 ?><b/></td>
+            </tr>
+            <tr>
+                  <td colspan="9"><b>CHEQUE ADVANCE</b></td>
+                    </tr>
+           
+                
+                <?php
+                     
+                    $tot3=0; 
+                    include './connection_sql.php';
+ 
+                    $sql = "select * from s_adva  where cancel='0' and paytype ='CHEQUE' ";
+                    if($_GET['cuscode']!=""){
+                         $sql.=" and C_CODE='".$_GET['cuscode']."'"; 
+                    }
+                     if($_GET['check'] =="on"){
+                         $sql.=" and   C_DATE>='" . $_GET["dtfrom"] . "' and C_DATE<='" . $_GET["dtto"] . "'"; 
+                    }
+                    
+                     
+                     $sql.=" group by C_REFNO ";  
+                  
+                    foreach ($conn->query($sql) as $row) {
+
+                        $sqlR = "SELECT * FROM vendor where CODE='" . $row['C_CODE'] . "' ";  
+                        $resultR = $conn->query($sqlR); 
+                        $rowR = $resultR->fetch();
+                        ?>
+                        <tr>
+                            <td><?php echo $i; ?></td>     
+                            <td><?php echo $row['C_REFNO']; ?></td> 
+                            <td><?php echo $row['C_DATE']; ?></td>   
+                            <td colspan='3'><?php echo $rowR['NAME']; ?></td>    
+                            <td align="right"><?php echo number_format($row['C_PAYMENT'], 2, ".", ","); ?></td>  
+                              
+                    </tr>
+
+                    <?php
+                    $i= $i+1;
+                    $tot3= $tot3+ $row['C_PAYMENT']; 
+                }
+                ?>
+          
+           
+            <tr>
+         
+                <td  align="right" colspan='7' style='font-size:20px;'><b>TOTAL ADVANCE</b></td> 
+                  
+                  
+                <td align="right" style='font-size:20px;'><b><?php 
+                echo number_format($tot3, 2, ".", ",");
+        
+                ?><b/></td> 
+                
             </tr>
             
          <?php   if($_GET['cuscode']==""){?>
@@ -583,7 +1041,7 @@ $row_invpara = $result_invpara->fetch();
           
                 <td  align="right" colspan='7' style='font-size:20px;'><b>TOTAL BALANCE</b></td> 
                 <td align="right" style='font-size:20px;'><b><?php 
-                echo number_format($BAL-$tot1-$tot2, 2, ".", ",");
+                echo number_format($BAL+$tot3-$tot1-$tot2, 2, ".", ",");
         
                 ?><b/></td>
             </tr>
@@ -639,7 +1097,7 @@ $row_invpara = $result_invpara->fetch();
                         <td class="left" ><?php echo $row1['CA_DATE']; ?> </td>
                         <td class="left" ><?php echo $row1['pay_type']; ?> </td>
                          <td class="left" ><?php echo $rowven['NAME']; ?> </td>
-                        <td align="right"><?php echo number_format($row1['CA_AMOUNT'], 0, ".", ","); ?></td> 
+                        <td align="right"><?php echo number_format($row1['CA_AMOUNT'], 2, ".", ","); ?></td> 
                     </tr>
                     <?php
                     $i=$i+1;
@@ -784,7 +1242,7 @@ $row_invpara = $result_invpara->fetch();
                 $i=1;  
                 $part="";
                 $BAL=0;
-                $sql1 = "Select * from s_crec  where CANCELL='0'      ";  
+                $sql1 = "Select * from s_crec  where CANCELL='0'  and FLAG!='PAY'    ";  
                   if($_GET['check'] =="on"){
                      $sql1.=" and   CA_DATE>='" . $_GET["dtfrom"] . "' and CA_DATE<='" . $_GET["dtto"] . "'"; 
                  }
@@ -810,7 +1268,7 @@ $row_invpara = $result_invpara->fetch();
                         <td class="left" ><?php echo $row1['CA_DATE']; ?> </td>
                         <td class="left" ><?php echo $row1['pay_type']; ?> </td>
                          <td class="left" ><?php echo $rowven['NAME']; ?> </td>
-                        <td align="right"><?php echo number_format($row1['CA_AMOUNT'], 0, ".", ","); ?></td> 
+                        <td align="right"><?php echo number_format($row1['CA_AMOUNT'], 2, ".", ","); ?></td> 
                     </tr>
                     <?php
                     $i=$i+1;
@@ -827,6 +1285,116 @@ $row_invpara = $result_invpara->fetch();
         
                 ?><b/></td>
             </tr>
+                <tr>
+                  <td colspan="6"><b>CASH ADVANCE</b></td>
+                    </tr>
+           
+                
+                <?php
+                     
+                    $tot3=0; 
+                    include './connection_sql.php';
+ 
+                    $sql = "select * from s_adva  where cancel='0' and paytype ='CASH' ";
+                    if($_GET['cuscode']!=""){
+                         $sql.=" and C_CODE='".$_GET['cuscode']."'"; 
+                    }
+                     if($_GET['check'] =="on"){
+                         $sql.=" and   C_DATE>='" . $_GET["dtfrom"] . "' and C_DATE<='" . $_GET["dtto"] . "'"; 
+                    }
+                    
+                     
+                     $sql.=" group by C_REFNO ";  
+                  
+                    foreach ($conn->query($sql) as $row) {
+
+                        $sqlR = "SELECT * FROM vendor where CODE='" . $row['C_CODE'] . "' ";  
+                        $resultR = $conn->query($sqlR); 
+                        $rowR = $resultR->fetch();
+                        ?>
+                        <tr>
+                            <td><?php echo $i; ?></td>     
+                            <td><?php echo $row['C_REFNO']; ?></td> 
+                            <td><?php echo $row['C_DATE']; ?></td>   
+                            <td colspan='2'><?php echo $rowR['NAME']; ?></td>    
+                            <td align="right"><?php echo number_format($row['C_PAYMENT'],2); ?></td>  
+                              
+                    </tr>
+
+                    <?php
+                    $i= $i+1;
+                    $tot3= $tot3+ $row['C_PAYMENT']; 
+                }
+                ?>
+          
+           
+            <tr>
+         
+                <td  align="right" colspan='5' style='font-size:20px;'><b>TOTAL CASH ADVANCE</b></td> 
+                  
+                  
+                <td align="right" style='font-size:20px;'><b><?php 
+                echo number_format($tot3, 2, ".", ",");
+        
+                ?><b/></td> 
+                
+            </tr>
+            
+                <tr>
+                  <td colspan="6"><b>CHEQUE ADVANCE</b></td>
+                    </tr>
+           
+                
+                <?php
+                     
+                    $tot4=0; 
+                    include './connection_sql.php';
+ 
+                    $sql = "select * from s_adva  where cancel='0' and paytype ='CHEQUE' ";
+                    if($_GET['cuscode']!=""){
+                         $sql.=" and C_CODE='".$_GET['cuscode']."'"; 
+                    }
+                     if($_GET['check'] =="on"){
+                         $sql.=" and   C_DATE>='" . $_GET["dtfrom"] . "' and C_DATE<='" . $_GET["dtto"] . "'"; 
+                    }
+                    
+                     
+                     $sql.=" group by C_REFNO ";  
+                  
+                    foreach ($conn->query($sql) as $row) {
+
+                        $sqlR = "SELECT * FROM vendor where CODE='" . $row['C_CODE'] . "' ";  
+                        $resultR = $conn->query($sqlR); 
+                        $rowR = $resultR->fetch();
+                        ?>
+                        <tr>
+                            <td><?php echo $i; ?></td>     
+                            <td><?php echo $row['C_REFNO']; ?></td> 
+                            <td><?php echo $row['C_DATE']; ?></td>   
+                            <td colspan='2'><?php echo $rowR['NAME']; ?></td>    
+                            <td align="right"><?php echo number_format($row['C_PAYMENT'],2); ?></td>  
+                              
+                    </tr>
+
+                    <?php
+                    $i= $i+1;
+                    $tot4= $tot4+ $row['C_PAYMENT']; 
+                }
+                ?>
+          
+           
+            <tr>
+         
+                <td  align="right" colspan='5' style='font-size:20px;'><b>TOTAL CHEQUE ADVANCE</b></td> 
+                  
+                  
+                <td align="right" style='font-size:20px;'><b><?php 
+                echo number_format($tot4, 2, ".", ",");
+        
+                ?><b/></td> 
+                
+            </tr>
+            
             <?php   if($_GET['cuscode']==""){?>
                  <tr>
                   <td colspan="9"><b>EXPENSES</b></td>
@@ -924,7 +1492,7 @@ $row_invpara = $result_invpara->fetch();
           
                 <td  align="right" colspan='5' style='font-size:20px;'><b>Total Balance</b></td> 
                 <td align="right" style='font-size:20px;'><b><?php 
-                echo number_format($BAL-$tot1-$tot2, 2, ".", ",");
+                echo number_format($BAL+$tot3+$tot4-$tot1-$tot2, 2, ".", ",");
         
                 ?><b/></td>
             </tr>
@@ -932,14 +1500,14 @@ $row_invpara = $result_invpara->fetch();
     
     ?>
         </table>
-   <?php  }
-    
+    <?php
+    } 
     ?>
     
     <!--===========================================================================================-->
     
       <?php 
-    if($_GET['type']=="INVOICESUMMARY"){
+    if($_GET['type']=="INVOICE SUMMARY"){
         
                     $sql3 = "Select sum(GRAND_TOT) as AMOUNT,sum(TOTPAY) as PAY from s_salma  where CANCELL='0'  and  SDATE>='" . $_GET["dtfrom"] . "' and SDATE<='" . $_GET["dtto"] . "' ";  
                 if($_GET['cuscode']!=""){
@@ -999,7 +1567,7 @@ $row_invpara = $result_invpara->fetch();
     <table class="tb" width="1000px;"  >
         <tr>
 
-            <td colspan="5">Customer Name :<?php echo $row['CUS_NAME'] ?></td>
+            <td colspan="5" style="background-color:#0099ab;">Customer Name :<?php echo $row['CUS_NAME'] ?></td>
              
             <td  colspan="1" class="right">Date:   <?php echo $row['SDATE'] ?></td>
         </tr>
@@ -1064,7 +1632,8 @@ $row_invpara = $result_invpara->fetch();
                 ?>
                 <tr> 
                 <td class="left" ><?php echo $row1['vehicleno']; ?> </td>  
-                <td class="left" ><?php echo "SERVICE CHARGES"; ?> </td> 
+                <td class="left" ><?php     $remark="SERVICE CHARGES - ".$row1['employee'];
+                echo $remark;  ?> </td> 
                  <td class="right" ><?php echo $row1['selling']; ?> </td> 
                 <td class="right" >1 </td> 
                  <td class="right" ><?php echo $row1['dis']; ?> </td> 
@@ -1121,16 +1690,16 @@ $row_invpara = $result_invpara->fetch();
     </tr>
     <tr> <td colspan='6'>&nbsp;</td></tr>
     <tr>
-        <td colspan="8">
+        <td colspan="12">
             <table class="tb2"   >
          <tr style="background-color:#4aef84" > 
-            <th colspan="10">PAYMENT HISTORY</th>  
+            <th colspan="12">PAYMENT HISTORY</th>  
         </tr>
         <tr > 
            
             <th colspan="2">REFNO</th>
             <th colspan="1">DATE</th>
-            <th colspan="2">AMOUNT</th>  
+            <th colspan="3">AMOUNT</th>  
             <th colspan="2">TYPE</th>  
             <th colspan="2">CHK NO</th>  
             <th colspan="2">CHK DATE</th>  
@@ -1148,11 +1717,11 @@ $row_invpara = $result_invpara->fetch();
   
                    <td class="left" colspan="2"><?php echo $row2['ST_REFNO']; ?> </td>
                   <td class="center" colspan="1"><?php echo $row2['ST_DATE']; ?> </td>
-                    <td class="right" colspan="2"><?php echo number_format($row2['ST_PAID'], 0, ".", ","); ?></td> 
+                    <td class="right" colspan="3"><?php echo number_format($row2['ST_PAID'], 2, ".", ","); ?></td> 
                     <td class="center" colspan="2"><?php 
-                        if($row2['ST_FLAG']="CAS"){
+                        if($row2['ST_FLAG'] =="CAS"){
                             echo "CASH";  
-                        }else if($row2['ST_FLAG']="CHK"){    
+                        }else if($row2['ST_FLAG'] =="CHK"){    
                             echo "CHEQUE";
                         }else{
                             echo "OTHER";
@@ -1160,9 +1729,9 @@ $row_invpara = $result_invpara->fetch();
                          ?> 
                     </td>
                     <td class="center" colspan="2"><?php 
-                      if($row2['ST_FLAG']="CAS"){
+                      if($row2['ST_FLAG']=="CAS"){
                             echo "";  
-                        }else if($row2['ST_FLAG']="CHK"){    
+                        }else if($row2['ST_FLAG']=="CHK"){    
                            echo $row2['ST_CHNO']; 
                         }else{
                            echo $row2['ST_CHNO']; 
@@ -1170,9 +1739,9 @@ $row_invpara = $result_invpara->fetch();
                     ?>
                     </td>
                     <td class="center" colspan="2"><?php 
-                         if($row2['ST_FLAG']="CAS"){
+                         if($row2['ST_FLAG']=="CAS"){
                             echo "";  
-                        }else if($row2['ST_FLAG']="CHK"){    
+                        }else if($row2['ST_FLAG']=="CHK"){    
                            echo $row2['st_chdate']; 
                         }else{
                            echo $row2['st_chdate']; 
@@ -1214,7 +1783,7 @@ $row_invpara = $result_invpara->fetch();
     <!--===========================================================================================-->
  
   <?php 
-    if($_GET['type']=="INVOICEDETAIL"){
+    if($_GET['type']=="INVOICE DETAIL"){
         ?>
         <table class="tb" width="1000px;" >
                 <tr >
@@ -1259,7 +1828,7 @@ $row_invpara = $result_invpara->fetch();
                         <td class="left" ><?php echo $row1['SDATE']; ?> </td>
                          <td class="left" ><?php echo $row1['CUS_NAME']; ?> </td>
                          <td class="left" ><?php echo $row1['TYPE']; ?> </td>
-                        <td align="right"><?php echo number_format($row1['GRAND_TOT'], 0, ".", ","); ?></td> 
+                        <td align="right"><?php echo number_format($row1['GRAND_TOT'], 2, ".", ","); ?></td> 
                     </tr>
                     <?php
                     $i=$i+1;
@@ -1285,9 +1854,64 @@ $row_invpara = $result_invpara->fetch();
     ?>
     
       <!--===========================================================================================-->
+      
+      <?php 
+    if($_GET['type']=="SERIAL NO COUNT"){
+        ?>
+        <table class="tb" width="1000px;" >
+                <tr >
+        
+                    <th width="30px;">NO</th> 
+                    <th width="100px;">SERIAL NO</th> 
+                    <th width="120px;">COUNT</th> 
+                </tr>
+                <?php
+                $i=1;  
+                $part="";
+                $BAL=0;
+                $sql1 = "Select count(*) as count,serialno from dag_item  where cancel='0'    ";  
+                if($_GET['serialno']!=""){
+                     $sql1.=" and serialno='".$_GET['serialno']."'"; 
+                }
+                if($_GET['check'] =="on"){
+                         $sql1.=" and   sdate>='" . $_GET["dtfrom"] . "' and sdate<='" . $_GET["dtto"] . "'"; 
+                }
+                
+                
+               
+              
+                $sql1.=" group by  serialno asc";  
+                
+                
+                foreach ($conn->query($sql1) as $row1) {
+                      
+                    ?>
+                    <tr style="font-size:15px;">
+         
+        
+                        <td class="center"><?php echo $i ?></td>
+                         
+                        <td class="left" ><?php echo $row1['serialno']; ?> </td> 
+                        <td class="center" ><?php echo $row1['count']; ?> </td> 
+                    </tr>
+                    <?php
+                    $i=$i+1;
+                      
+                      
+                }
+                ?>
+          
+           
+             
+        </table>
+   <?php  }
+    
+    ?>
+    
+      <!--===========================================================================================-->
  
   <?php 
-    if($_GET['type']=="CUSTOMER SUMMERY"){
+    if($_GET['type']=="CUSTOMER SUMMARY"){
         ?>
         <table class="tb" width="1000px;" >
                 <tr >
@@ -1432,9 +2056,10 @@ $row_invpara = $result_invpara->fetch();
                     <th width="100px;">INVOICE DATE</th> 
                     <th width="400px;">CUSTOMER</th>
                     <th width="100px;">INVOICE AMOUNT</th> 
-                     <th width="100px;">INVOICE BALANCE</th> 
+                    <th width="100px;">INVOICE PAID</th> 
+                    <th width="100px;">INVOICE BALANCE</th> 
+                    <th width="100px;">RECEIPT DATE</th>
                     <th width="100px;">RECEIPT NO</th>
-                    <th width="100px;">RECEIPT Date</th>
                     <th width="120px;">RECEIPT AMOUNT</th> 
                 </tr>
                 <?php
@@ -1457,6 +2082,9 @@ $row_invpara = $result_invpara->fetch();
                 $sql1.=" order by  C_CODE,SDATE asc";
                 
                 $part="";
+                $bal=0;
+                $invtot=0;
+                $paid=0;
                 foreach ($conn->query($sql1) as $row1) {
                        $sql2 = "Select * from s_sttr  where ST_INVONO='" . $row1["REF_NO"] . "'   ";  
                        foreach ($conn->query($sql2) as $row2) {
@@ -1472,16 +2100,17 @@ $row_invpara = $result_invpara->fetch();
                             <td class="left" ><?php echo $row1['SDATE']; ?> </td>
                             <td class="left" ><?php echo $row1['CUS_NAME']; ?> </td>
                             <td class="right" ><?php echo $row1['GRAND_TOT']; ?> </td>
+                            <td class="right" ><?php echo number_format($row1['TOTPAY'],2); ?> </td>
                             <td class="right" ><?php echo number_format($row1['GRAND_TOT']-$row1['TOTPAY'],2); ?> </td>
-                             <td class="left" ><?php echo $row2['ST_REFNO']; ?> </td>
                             <td class="left" ><?php echo $row2['ST_DATE']; ?> </td>
-                            <td align="right"><?php echo number_format($row2['ST_PAID'], 0, ".", ","); ?></td> 
+                             <td class="left" ><?php echo $row2['ST_REFNO']; ?> </td>
+                            <td align="right" style="background-color:#52ebe4"><?php echo number_format($row2['ST_PAID'], 2, ".", ","); ?></td> 
                        <?php  }else{?>
                        <td class="center"><?php echo $i ?></td> 
-                          <td class="center" colspan="5"></td>  
-                            <td class="left" ><?php echo $row2['ST_REFNO']; ?> </td>
+                          <td class="center" colspan="6"></td>  
                             <td class="left" ><?php echo $row2['ST_DATE']; ?> </td>
-                            <td align="right"><?php echo number_format($row2['ST_PAID'], 0, ".", ","); ?></td> 
+                            <td class="left" ><?php echo $row2['ST_REFNO']; ?> </td>
+                            <td align="right" style="background-color:#52ebe4"><?php echo number_format($row2['ST_PAID'], 2, ".", ","); ?></td> 
                        <?php  }
                          ?>
                            
@@ -1490,7 +2119,9 @@ $row_invpara = $result_invpara->fetch();
                         $i=$i+1;
                         $part=$row2['ST_INVONO'];
                           
-                         $BAL=$BAL+$row2['ST_PAID'] ;
+                         $invtot=$invtot+$row1['GRAND_TOT'] ;
+                         $bal=$bal+($row1['GRAND_TOT']-$row1['TOTPAY']) ;
+                         $paid=$paid+$row2['ST_PAID'] ; 
                     }
                 }
                 ?>
@@ -1500,12 +2131,12 @@ $row_invpara = $result_invpara->fetch();
             <tr>
         
                 <td></td>
-                <td></td> 
-                <td  align="right" colspan='6' style='font-size:20px;'><b>TOTAL AMOUNT</b></td> 
-                <td align="right" style='font-size:20px;'><b><?php 
-                echo number_format($BAL, 2, ".", ",");
-        
-                ?><b/></td>
+                <td colspan='3'></td> 
+                <td align="right" style='font-size:20px;'><b><?php echo number_format($invtot, 2, ".", ",");?><b/></td>
+                 <td align="right" style='font-size:20px;'><b><?php echo number_format($paid, 2, ".", ",");?><b/></td>
+                 <td align="right" style='font-size:20px;'><b><?php echo number_format($bal, 2, ".", ",");?><b/></td>
+                 <td colspan='2'></td> 
+                <td align="right" style='font-size:20px;'><b><?php echo number_format($paid, 2, ".", ",");?><b/></td>
             </tr>
         </table>
    <?php  }
@@ -2478,16 +3109,34 @@ $row_invpara = $result_invpara->fetch();
                         $sqlR = "SELECT * FROM s_salma where REF_NO='" . $row['refno'] . "' ";  
                         $resultR = $conn->query($sqlR); 
                         $rowR = $resultR->fetch();
+                        
+                        $sqld = "select * from dag_item WHERE   cancel='0'    and  invno='" . $row['refno'] . "'";  
+                        $resultd = $conn->query($sqld); 
+                        $rowd = $resultd->fetch();
+                        
                         ?>
                         <tr>
                             <td><?php echo $i; ?></td>     
                             <td><?php echo $row['refno']; ?></td> 
                             <td><?php echo $row['sdate']; ?></td>   
                             <td><?php echo $rowR['CUS_NAME']; ?></td>   
-                            <td align="right"><?php echo $row['cost']; ?></td>   
-                            <td align="right"><?php echo $row['subtot']; ?></td>   
+                            <td align="right"><?php echo number_format($row['cost']-$rowR['uccost'],2); ?></td>   
+                            <td align="right"><?php echo number_format($row['subtot'],2); ?></td>   
                             <td align="right"><?php echo number_format($row['subtot']-$row['cost'],2); ?></td>   
-                            <td><?php echo $rowR['REMARK']; ?></td> 
+                            <?php
+                             $remark="";
+                             $color="";
+                             $rea="";
+                            if($rowd['reject']=='1'){ 
+                                 $remark=$rowR['REMARK'].' - '.'Rejected'.'';
+                                $color="#0099ab";
+                            } else{
+                                $remark=$rowR['REMARK'];
+                            }
+                            
+                           
+                            ?>
+                            <td style="background-color:<?php echo $color ?>"><?php echo $remark ?></td> 
                              
                         </td>   
 
@@ -2523,6 +3172,10 @@ $row_invpara = $result_invpara->fetch();
               
         </table>
         
+        
+        
+       
+        
         <!--=====================-->
         <table class="tb" width="1000px;" >
             <!--<tr>-->
@@ -2532,6 +3185,7 @@ $row_invpara = $result_invpara->fetch();
                         <th>#</th> 
                         <th>REF NO</th>
                         <th>DATE</th>   
+                        <th>NAME</th> 
                         <th>REMARK</th> 
                         <th>AMOUNT</th>  
                     </tr>
@@ -2550,45 +3204,58 @@ $row_invpara = $result_invpara->fetch();
                      
                  $tot1=0;
                     foreach ($conn->query($sql) as $row) {
- 
+            
                         ?>
                        <tr>
                              <?php  
                         
                                 if($cat!=$row['type']){
-                                   
-                                    echo "<td colspan='8'><b>  ". $row['type'] ."   </b></td>";
+                                    $sql_1 = "SELECT sum(amount) as tot from payment where cancel='0'  and type='".$row['type']."'  ";
+                                    if($_GET['check'] =="on"){
+                                         $sql_1.=" and   sdate>='" . $_GET["dtfrom"] . "' and sdate<='" . $_GET["dtto"] . "'"; 
+                                     }
+                                     $sql.=" group by type";
+                                    $result_1 = $conn->query($sql_1);
+                                    $row_1= $result_1->fetch(); 
+                                    
+                                    echo "<td colspan='5'><b>  ". $row['type'] ."   </b></td>";
+                                    echo "<td colspan='2' style=\"text-align:right\"><b>  ". $row_1['tot'] ."   </b></td>";
                                 } 
                         ?>
                              
                       </tr>
+                        
+                      
                         <tr>
                             
-                         	<?php  
-                         	
-                         	if($row['type']=="SALARY"){
-                         		if($row['workertype']=="FACTORY"){ ?>
-                         			 <td><?php echo $i; ?></td>     
-                         			<td><?php echo $row['refno']; ?></td> 
-                         			<td><?php echo $row['sdate']; ?></td>    
-                         			<td><?php echo $row['remark']; ?></td>   
-                         			<td align="right"><?php echo $row['amount']; ?></td>  
-                         			<?php  
-                         			$tot1= $tot1+$row['amount']; 
-                         		}
-                         	}else{?>
-                         	<td><?php echo $i; ?></td>     
-                         	    <td><?php echo $row['refno']; ?></td> 
-                         			<td><?php echo $row['sdate']; ?></td>    
-                         			<td><?php echo $row['remark']; ?></td>   
-                         			<td align="right"><?php echo $row['amount']; ?></td>  
+                            <?php  
+                            
+                            if($row['type']=="SALARY"){
+                                if($row['workertype']!="WORKER"){ ?>
+                                     <td><?php echo $i; ?></td>     
+                                    <td><?php echo $row['refno']; ?></td> 
+                                    <td><?php echo $row['sdate']; ?></td>    
+                                        <td><?php echo $row['name']; ?></td>    
+                                    <td><?php echo $row['remark']; ?></td>   
+                                    <td align="right"><?php echo $row['amount']; ?></td>  
+                                    <?php  
+                                    $tot1= $tot1+$row['amount']; 
+                                }
+                            }else{?>
+                            <td><?php echo $i; ?></td>     
+                                <td><?php echo $row['refno']; ?></td> 
+                                    <td><?php echo $row['sdate']; ?></td>    
+                                    <td><?php echo $row['name']; ?></td>    
+                                    <td><?php echo $row['remark']; ?></td>   
+                                    <td align="right"><?php echo $row['amount']; ?></td>  
                          <?php
                          $tot1= $tot1+$row['amount']; 
                          } 
-                         	?>
+                            ?>
                         
                         
                          </tr>
+                          
                      
                     <?php
                     $i= $i+1; 
@@ -2600,7 +3267,7 @@ $row_invpara = $result_invpara->fetch();
            
             <tr>
          
-                <td  align="right" colspan='4' style='font-size:20px;'><b>TOTAL AMOUNT</b></td> 
+                <td  align="right" colspan='5' style='font-size:20px;'><b>TOTAL AMOUNT</b></td> 
                 <td align="right" style='font-size:20px;'><b><?php 
                 echo number_format($tot1, 2, ".", ",");
         
@@ -2723,7 +3390,7 @@ $row_invpara = $result_invpara->fetch();
                     $tot=0; 
                     include './connection_sql.php';
  
-                    $sql = "select * from payment  where cancel='0' and type='SALARY' and workertype='WORKER'  ";
+                    $sql = "select * from payment  where cancel='0' and type='SALARY'    ";
                    
                      if($_GET['check'] =="on"){
                          $sql.=" and   sdate>='" . $_GET["dtfrom"] . "' and sdate<='" . $_GET["dtto"] . "'"; 
@@ -2731,6 +3398,9 @@ $row_invpara = $result_invpara->fetch();
                      
                     if($_GET['employee']!=""){
                          $sql.=" and name='".$_GET['employee']."'"; 
+                    }  
+                     if($_GET['emtype']!="ALL"){
+                         $sql.=" and workertype='".$_GET['emtype']."'"; 
                     } 
                     
                  
@@ -3308,12 +3978,34 @@ $row_invpara = $result_invpara->fetch();
                 $i=1;  
                 $part="";
                 $BAL=0;
+                $cat="";
+                $COST=0;
+                $SELLING=0;
+                $QTY=0;
+                $TOTQTY=0;
                 $sql1 = "Select * from s_mas  where QTYINHAND>0    ";  
                   
-                
+                if($_GET['itemtype'] !="ALL"){
+                          $sql1.=" and   TYPE ='" . $_GET["itemtype"] . "' "; 
+                    }
+                     
+                if($_GET['brand'] !="ALL"){
+                         $sql1.=" and   BRAND_NAME ='" . $_GET["brand"] . "' "; 
+                    }
+                         $sql1.=" order by BRAND_NAME "; 
                 foreach ($conn->query($sql1) as $row1) {
                       
                     ?>
+                     <tr>
+                             <?php  
+                        
+                                if($cat!=$row1['BRAND_NAME']){
+                                   
+                                    echo "<td colspan='8'><b>  ". $row1['BRAND_NAME'] ."   </b></td>";
+                                } 
+                        ?>
+                             
+                      </tr>
                     <tr style="font-size:13px;">
          
         
@@ -3324,22 +4016,44 @@ $row_invpara = $result_invpara->fetch();
                         <td class="left" ><?php echo $row1['BRAND_NAME']; ?> </td>
                          <td class="right" ><?php echo $row1['COST']; ?> </td>
                          <td class="right" ><?php echo $row1['SELLING']; ?> </td>
-                         <td class="right" style="background-color:#5af15a"><?php echo $row1['QTYINHAND']; ?> </td>
+                         <?php
+                         if($row1['CAT']="KG"){
+                            $QTY= $row1['QTYINHAND']/$row1['PERKG'];
+                         }else{
+                            $QTY= $row1['QTYINHAND'];
+                         }
+                         ?>
+                         
+                         <td class="right" style="background-color:#5af15a"><?php echo  number_format($QTY, 2, ".", ",") ; ?> </td>
                         <td align="right"><?php echo number_format($row1['COST']*$row1['QTYINHAND'], 2, ".", ","); ?></td> 
                     </tr>
                     <?php
                     $i=$i+1;
                       
                      $BAL=$BAL+$row1['COST']*$row1['QTYINHAND'] ;
+                     $COST=$COST+$row1['COST'] ;
+                      $SELLING=$SELLING+$row1['SELLING'] ;
+                       $TOTQTY=$TOTQTY+$QTY ;
+                      $cat=$row1['BRAND_NAME'];
                 }
                 ?>
           
            
             <tr>
         
-                <td></td>
-                <td></td> 
-                <td  align="right" colspan='5' style='font-size:20px;'><b>TOTAL AMOUNT</b></td> 
+                <td colspan='4'></td>
+                <td align="right" style='font-size:20px;'><b><?php 
+                echo number_format($COST, 2, ".", ",");
+        
+                ?><b/></td>
+                 <td align="right" style='font-size:20px;'><b><?php 
+                echo number_format($SELLING, 2, ".", ",");
+        
+                ?><b/></td>
+                 <td align="right" style='font-size:20px;'><b><?php 
+                echo number_format($TOTQTY, 2, ".", ",");
+        
+                ?><b/></td> 
                 <td align="right" style='font-size:20px;'><b><?php 
                 echo number_format($BAL, 2, ".", ",");
         
@@ -3350,10 +4064,351 @@ $row_invpara = $result_invpara->fetch();
     
     ?>
     
+     <!--===========================================================================================-->
+ 
+  <?php 
+    if($_GET['type']=="STOCK QTY"){
+        ?>
+        <table class="tb" width="1000px;" >
+                <tr >
+        
+                    <th width="30px;">NO</th>
+                    <th width="100px;">STOCK NO</th>
+                    <th width="300px;">DESCRIPTION</th>
+                     <th width="200px;">BRAND</th> 
+                    <th width="120px;">QTY INHAND</th> 
+                </tr>
+                <?php
+                $i=1;  
+                $part="";
+                $BAL=0;
+                $cat="";
+                $COST=0;
+                $SELLING=0;
+                $QTY=0;
+                $TOTQTY=0;
+                $sql1 = "Select * from s_mas  where QTYINHAND>0    ";  
+                  
+                if($_GET['itemtype'] !="ALL"){
+                          $sql1.=" and   TYPE ='" . $_GET["itemtype"] . "' "; 
+                    }
+                     
+                if($_GET['brand'] !="ALL"){
+                         $sql1.=" and   BRAND_NAME ='" . $_GET["brand"] . "' "; 
+                    }
+                    $sql1.=" order by BRAND_NAME "; 
+                         
+                foreach ($conn->query($sql1) as $row1) {
+                      
+                    ?>
+                     <tr>
+                             <?php  
+                        
+                                if($cat!=$row1['BRAND_NAME']){
+                                   
+                                    echo "<td colspan='8'><b>  ". $row1['BRAND_NAME'] ."   </b></td>";
+                                } 
+                        ?>
+                             
+                      </tr>
+                    <tr style="font-size:13px;">
+         
+        
+                        <td class="center"><?php echo $i ?></td>
+                        
+                        <td class="left" ><?php echo $row1['STK_NO']; ?> </td>
+                         <td class="left" ><?php echo $row1['DESCRIPT']; ?> </td>
+                        <td class="left" ><?php echo $row1['BRAND_NAME']; ?> </td> 
+                        <?php
+                         if($row1['CAT']="KG"){
+                            $QTY= $row1['QTYINHAND']/$row1['PERKG'];
+                         }else{
+                            $QTY= $row1['QTYINHAND'];
+                         }
+                         ?>
+                         
+                         <td class="right" style="background-color:#5af15a"><?php echo number_format($QTY, 2, ".", ","); ?> </td> 
+                    </tr>
+                    <?php
+                    $i=$i+1;
+                      
+                     $BAL=$BAL+$row1['COST']*$row1['QTYINHAND'] ;
+                     $COST=$COST+$row1['COST'] ;
+                      $SELLING=$SELLING+$row1['SELLING'] ;
+                       
+                       $TOTQTY=$TOTQTY+$QTY ;
+                      $cat=$row1['BRAND_NAME'];
+                }
+                ?>
+          
+           
+            <tr>
+        
+                <td colspan='4'></td>
+                 
+                  
+                 <td align="right" style='font-size:20px;'><b><?php 
+                echo number_format($TOTQTY, 2, ".", ",");
+        
+                ?><b/></td> 
+                 
+            </tr>
+        </table>
+   <?php  }
+    
+    ?>
+    
+    <!--=============================================================================-->
+     <?php 
+    if($_GET['type']=="ALL CHEQUE"){
+        ?>
+        <table class="tb" width="1000px;" >
+                <tr >
+        
+                    <th width="30px;">NO</th>
+                    <th width="100px;">REF NO</th>
+                    <th width="100px;">REF DATE</th>
+                    <th width="100px;">CHEQUE NO</th>
+                    <th width="100px;">CHEQUE DATE</th>
+                    <th width="100px;">TYPE</th>
+                    <th width="400px;">CUSTOMER</th>
+                    <th width="100px;">BANK</th>
+                    <th width="120px;">AMOUNT</th> 
+                </tr>
+                <?php
+                $i=1;  
+                $part="";
+                $BAL=0;
+                $sql1 = "Select * from s_invcheq     ";  
+                 if($_GET['check'] =="on"){
+                    $sql1.="where     Sdate>='" . $_GET["dtfrom"] . "' and Sdate<='" . $_GET["dtto"] . "'"; 
+                    if($_GET['cuscode']!=""){
+                         $sql1.=" and cus_code='".$_GET['cuscode']."'"; 
+                    }
+                 }else{
+                     
+                    if($_GET['cuscode']!=""){
+                         $sql1.=" where cus_code='".$_GET['cuscode']."'"; 
+                    }
+                 }
+                
+               
+              
+                $sql1.=" order by  cus_code,che_date asc";
+                 
+                
+                foreach ($conn->query($sql1) as $row1) {
+                       $cdate=date('Y-m-d');  
+                       $color="";
+                       if($row1['che_date']>= $cdate){
+                           $color='yellow';
+                       }
+                    ?>
+                    
+                    <tr style="font-size:13px;background-color:<?php echo $color ?>">
+         
+        
+                        <td class="center"><?php echo $i ?></td>
+                        
+                        <td class="left" ><?php echo $row1['refno']; ?> </td>
+                        <td class="left" ><?php echo $row1['Sdate']; ?> </td>
+                        <td class="left" ><?php echo $row1['cheque_no']; ?> </td>
+                      <td class="left" ><?php echo $row1['che_date']; ?> </td>
+                       
+                       <?php if($row1['trn_type']=="REC"){?>
+                       <td class="left" >RECEIPT</td>
+                      <?php  }else{?>
+                         <td class="left" >ADVANCE</td>
+                         <?php  }?>
+                         <td class="left" ><?php echo $row1['CUS_NAME']; ?> </td>
+                         <td class="left" ><?php echo $row1['bank']; ?> </td>
+                        <td align="right"><?php echo number_format($row1['che_amount'], 2, ".", ","); ?></td> 
+                    </tr>
+                    <?php
+                    $i=$i+1;
+                      
+                     $BAL=$BAL+$row1['che_amount'] ;
+                }
+                
+                ?>
+                 <tr>
+         
+                <td  align="right" colspan='8' style='font-size:20px;'><b>TOTAL AMOUNT</b></td> 
+                <td align="right" style='font-size:20px;'><b><?php 
+                echo number_format($BAL, 2, ".", ",");
+        
+                ?><b/></td>
+            </tr>
+            
+            </table>
+   <?php  }
+    
+    ?>
     
     <!--===================================================================================-->
     
+     <?php 
+    if($_GET['type']=="PENDING CHEQUE"){
+        ?>
+        <table class="tb" width="1000px;" >
+                <tr >
+        
+                    <th width="30px;">NO</th>
+                    <th width="100px;">REF NO</th>
+                    <th width="100px;">REF DATE</th>
+                    <th width="100px;">CHEQUE NO</th>
+                    <th width="100px;">CHEQUE DATE</th>
+                    <th width="100px;">TYPE</th>
+                    <th width="400px;">CUSTOMER</th>
+                    <th width="100px;">BANK</th>
+                    <th width="120px;">AMOUNT</th> 
+                </tr>
+                <?php
+                $i=1;  
+                $part="";
+                $BAL=0;
+                $sql1 = "Select * from s_invcheq  where   ret_refno='0' or ret_refno='1'     ";  
+                
+                if($_GET['cuscode']!=""){
+                     $sql1.=" where cus_code='".$_GET['cuscode']."'"; 
+                }
+               
+              
+                $sql1.=" order by  cus_code,che_date asc";
+                
+                
+                foreach ($conn->query($sql1) as $row1) {
+                       
+                    ?>
+                    
+                    <tr style="font-size:13px;">
+         
+        
+                        <td class="center"><?php echo $i ?></td>
+                        
+                        <td class="left" ><?php echo $row1['refno']; ?> </td>
+                        <td class="left" ><?php echo $row1['Sdate']; ?> </td>
+                        <td class="left" ><?php echo $row1['cheque_no']; ?> </td>
+                        <?php if($row1['che_date']>=date('Y-m-d')){?>
+                       <td class="left" style="background-color:<?php echo $color ?>" ><?php echo $row1['che_date']; ?> </td>
+                      <?php  }else{?>
+                         <td class="left" ><?php echo $row1['che_date']; ?> </td>
+                         <?php  }?>
+                      
+                       
+                       <?php if($row1['trn_type']=="REC"){?>
+                       <td class="left" >RECEIPT</td>
+                      <?php  }else{?>
+                         <td class="left" >ADVANCE</td>
+                         <?php  }?>
+                         <td class="left" ><?php echo $row1['CUS_NAME']; ?> </td>
+                         <td class="left" ><?php echo $row1['bank']; ?> </td>
+                        <td align="right"><?php echo number_format($row1['che_amount'], 2, ".", ","); ?></td> 
+                    </tr>
+                    <?php
+                    $i=$i+1;
+                      
+                     $BAL=$BAL+$row1['che_amount'] ;
+                }
+                
+                ?>
+                 <tr>
+         
+                <td  align="right" colspan='8' style='font-size:20px;'><b>TOTAL AMOUNT</b></td> 
+                <td align="right" style='font-size:20px;'><b><?php 
+                echo number_format($BAL, 2, ".", ",");
+        
+                ?><b/></td>
+            </tr>
+            
+            </table>
+   <?php  }
     
+    ?>
+    
+    <!--===========================================================================================-->
+    
+    <?php 
+    if($_GET['type']=="DEPOSITED CHEQUE"){
+        ?>
+        <table class="tb" width="1000px;" >
+                <tr >
+        
+                    <th width="30px;">NO</th>
+                    <th width="100px;">REF NO</th>
+                    <th width="100px;">REF DATE</th>
+                    <th width="100px;">CHEQUE NO</th>
+                    <th width="100px;">CHEQUE DATE</th>
+                    <th width="120px;">DEPOSITED NO</th> 
+                    <th width="120px;">DEPOSITED DATE</th> 
+                    <th width="100px;">TYPE</th>
+                    <th width="400px;">CUSTOMER</th>
+                    <th width="100px;">BANK</th>
+                    <th width="120px;">AMOUNT</th> 
+                </tr>
+                <?php
+                $i=1;  
+                $part="";
+                $BAL=0;
+                $sql1 = "Select * from s_invcheq  where   ret_refno !='0' and ret_refno !='1'    ";  
+                
+                if($_GET['cuscode']!=""){
+                     $sql1.=" where cus_code='".$_GET['cuscode']."'"; 
+                }
+               
+              
+                $sql1.=" order by  cus_code,che_date asc";
+                
+                
+                foreach ($conn->query($sql1) as $row1) {
+                        $sql_1 = "SELECT * from bankdepmas where refno='".$row1['ret_refno']."'";
+            $result_1 = $conn->query($sql_1);
+            $row_1= $result_1->fetch(); 
+                    ?>
+                    
+                    <tr style="font-size:13px;">
+         
+        
+                        <td class="center"><?php echo $i ?></td>
+                        
+                        <td class="left" ><?php echo $row1['refno']; ?> </td>
+                        <td class="left" ><?php echo $row1['Sdate']; ?> </td>
+                        <td class="left" ><?php echo $row1['cheque_no']; ?> </td>
+                      <td class="left" ><?php echo $row1['che_date']; ?> </td>
+                      <td class="left" ><?php echo $row1['ret_refno']; ?> </td>
+                      <td class="left" ><?php echo $row_1['bdate']; ?> </td>
+                       
+                       <?php if($row1['trn_type']=="REC"){?>
+                       <td class="left" >RECEIPT</td>
+                      <?php  }else{?>
+                         <td class="left" >ADVANCE</td>
+                         <?php  }?>
+                         <td class="left" ><?php echo $row1['CUS_NAME']; ?> </td>
+                         <td class="left" ><?php echo $row1['bank']; ?> </td>
+                        <td align="right"><?php echo number_format($row1['che_amount'], 2, ".", ","); ?></td> 
+                    </tr>
+                    <?php
+                    $i=$i+1;
+                      
+                     $BAL=$BAL+$row1['che_amount'] ;
+                }
+                
+                ?>
+                 <tr>
+         
+                <td  align="right" colspan='10' style='font-size:20px;'><b>TOTAL AMOUNT</b></td> 
+                <td align="right" style='font-size:20px;'><b><?php 
+                echo number_format($BAL, 2, ".", ",");
+        
+                ?><b/></td>
+            </tr>
+            
+            </table>
+   <?php  }
+    
+    ?>
+    
+    <!--===========================================================================================-->
     
 <div style='height:12px;'></div>
 <table width="1000px;">
